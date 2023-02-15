@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MarvelTopAppBar(
+fun ComicTopAppBar(
     title: String = "Screen",
     icon: ImageVector? = null,
     actionIcon: ImageVector? = null,

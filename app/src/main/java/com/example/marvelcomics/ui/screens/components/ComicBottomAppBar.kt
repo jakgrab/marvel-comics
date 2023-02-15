@@ -9,7 +9,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.*
 
 @Composable
-fun MarvelBottomAppBar() {
+fun ComicBottomAppBar(
+    onHomeIconClicked: () -> Unit,
+    onSearchIconClicked: () -> Unit
+) {
 
     var homeIconSelected by remember {
         mutableStateOf(false)
@@ -22,7 +25,10 @@ fun MarvelBottomAppBar() {
     BottomAppBar() {
         NavigationBarItem(
             selected = homeIconSelected,
-            onClick = { homeIconSelected = true },
+            onClick = {
+                homeIconSelected = true
+                onHomeIconClicked()
+            },
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Home,
@@ -32,7 +38,10 @@ fun MarvelBottomAppBar() {
         )
         NavigationBarItem(
             selected = searchIconSelected,
-            onClick = { searchIconSelected = true },
+            onClick = {
+                searchIconSelected = true
+                onSearchIconClicked()
+            },
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Search,

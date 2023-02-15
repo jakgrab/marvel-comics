@@ -14,12 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.marvelcomics.ui.screens.components.MarvelBottomAppBar
-import com.example.marvelcomics.ui.screens.components.MarvelTopAppBar
+import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
+import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.theme.MarvelComicsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,12 +30,12 @@ fun MainScreen() {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            MarvelTopAppBar(
+            ComicTopAppBar(
                 title = "Marvel Comics"
             )
         },
         bottomBar = {
-            MarvelBottomAppBar()
+            ComicBottomAppBar()
         }
     ) {
         Column(
