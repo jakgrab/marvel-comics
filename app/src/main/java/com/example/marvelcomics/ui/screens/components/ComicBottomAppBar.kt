@@ -10,8 +10,8 @@ import androidx.compose.runtime.*
 
 @Composable
 fun ComicBottomAppBar(
-    onHomeIconClicked: () -> Unit,
-    onSearchIconClicked: () -> Unit
+    onHomeIconClicked: () -> Unit = {},
+    onSearchIconClicked: () -> Unit = {}
 ) {
 
     var homeIconSelected by remember {

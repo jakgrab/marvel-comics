@@ -30,9 +30,8 @@ fun SearchScreen() {
         bottomBar = {
             ComicBottomAppBar(
                 onHomeIconClicked = {
-                    //navController homescreen
+                    // TODO navController homescreen
                 },
-                onSearchIconClicked = {}
             )
         }
     ) {
@@ -52,7 +51,7 @@ fun SearchScreen() {
             ComicTextField(
                 onSearch = { comicTitle ->
                     comicBookTitle = comicTitle
-                    // viewmodel.search
+                    // TODO viewmodel.searchForComic(comicTitle)
                 },
                 hideKeyboard = hideKeyboard,
                 onFocusClear = {
@@ -60,7 +59,9 @@ fun SearchScreen() {
                 }
             )
 
-            // if viewModel.comics is not null show comics
+            /* TODO if viewModel.comics is not null show comics
+            *   use the same LazyColumn as in the MainScreen
+            */
         }
     }
 }

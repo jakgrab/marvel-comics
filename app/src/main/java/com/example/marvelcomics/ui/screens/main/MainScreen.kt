@@ -17,6 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
 import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.theme.MarvelComicsTheme
@@ -35,7 +36,11 @@ fun MainScreen() {
             )
         },
         bottomBar = {
-            ComicBottomAppBar()
+            ComicBottomAppBar(
+                onSearchIconClicked = {
+                    //navController.navigate(SearchScreen...)
+                }
+            )
         }
     ) {
         Column(
@@ -71,7 +76,11 @@ fun ComicItem() {
                 " outside your window!"
 
     Card(
-        onClick = { /*TODO*/ },
+        onClick = {
+            /* TODO navController.navigate(ComicScreens.DetailsScreen)
+              *     or OnItemClicked() and then in LazyColumn navigate to details
+             */
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp),

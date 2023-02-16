@@ -1,10 +1,11 @@
 package com.example.marvelcomics.data.repository
 
 import com.example.marvelcomics.data.model.Comics
+import com.example.marvelcomics.data.wrapper.DataOrException
 
 interface ComicRepository {
 
-    suspend fun getComics(): Comics
+    suspend fun getComics(): DataOrException<Comics, Boolean, Exception>
 
-    suspend fun getComicsByTitle(title: String): Comics
+    suspend fun getComicsByTitle(title: String): DataOrException<Comics, Boolean, Exception>
 }
