@@ -28,6 +28,8 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     lateinit var comicsList: List<Result>
 
+    val fromMainScreen: Boolean? = false
+
     var isDataLoading by remember {
         mutableStateOf(false)
     }
@@ -92,7 +94,9 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
             AnimatedVisibility(visible = showFoundComics) {
                 ComicBooksList(comicsList = comicsList) { comicIndex ->
-                    navController.navigate(ComicScreens.DetailsScreen.name + "/$comicIndex")
+                    navController.navigate(
+                        ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                    )
                 }
             }
             AnimatedVisibility(visible = (!showFoundComics && isDataLoading)) {

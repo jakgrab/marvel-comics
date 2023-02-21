@@ -29,17 +29,40 @@ fun ComicNavigation() {
 
         val detailsRoute = ComicScreens.DetailsScreen.name
 
+//        composable(
+//            route = "$detailsRoute/{comicIndex}",
+//            arguments = listOf(
+//                navArgument(name = "comicIndex") {
+//                    type = NavType.IntType
+//                }
+//            )
+//        ) { navBack ->
+//            navBack.arguments?.getInt("comicIndex").let { index ->
+//                DetailsScreen(mainViewModel, navController, index)
+//            }
+//        }
+
         composable(
-            route = "$detailsRoute/{comicIndex}",
+            route = "$detailsRoute/{fromMainScreen}/{comicIndex}",
             arguments = listOf(
+                navArgument(name = "fromMainScreen") {
+                    type = NavType.BoolType
+                },
                 navArgument(name = "comicIndex") {
                     type = NavType.IntType
                 }
             )
         ) { navBack ->
-            navBack.arguments?.getInt("comicIndex").let { index ->
-                DetailsScreen(mainViewModel, navController, index)
-            }
+            val index = navBack.arguments?.getInt("comicIndex")
+            val fromMainScreen = navBack.arguments?.getBoolean("fromMainScreen")
+
+            DetailsScreen(
+                mainViewModel = mainViewModel,
+                navController = navController,
+                comicIndex = index,
+                fromMainScreen = fromMainScreen
+            )
+
         }
 
         composable(

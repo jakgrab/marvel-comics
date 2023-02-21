@@ -49,6 +49,8 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         comicsList = comicsData.value.data!!.data.results
     }
 
+    val fromMainScreen: Boolean? = true
+
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
@@ -71,7 +73,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
-        } else if (comicsList.isNotEmpty()){
+        } else if (comicsList.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -80,8 +82,10 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ComicBooksList(comicsList) {comicIndex ->
-                    navController.navigate(ComicScreens.DetailsScreen.name + "/$comicIndex")
+                ComicBooksList(comicsList) { comicIndex ->
+                    navController.navigate(
+                        ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                    )
                 }
             }
         }

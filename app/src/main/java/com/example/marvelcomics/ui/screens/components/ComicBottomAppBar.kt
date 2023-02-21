@@ -19,20 +19,10 @@ fun ComicBottomAppBar(
     searchSelected: Boolean = false
 ) {
 
-    var homeIconSelected by remember {
-        mutableStateOf(false)
-    }
-
-    var searchIconSelected by remember {
-        mutableStateOf(false)
-    }
-
     BottomAppBar(containerColor = MaterialTheme.colors.surface) {
         NavigationBarItem(
-            selected = homeSelected,//homeIconSelected,
+            selected = homeSelected,
             onClick = {
-                homeIconSelected = true
-                searchIconSelected = false
                 onHomeIconClicked()
             },
             icon = {
@@ -48,10 +38,8 @@ fun ComicBottomAppBar(
             )
         )
         NavigationBarItem(
-            selected = searchSelected,//searchIconSelected,
+            selected = searchSelected,
             onClick = {
-                searchIconSelected = true
-                homeIconSelected = false
                 onSearchIconClicked()
             },
             icon = {

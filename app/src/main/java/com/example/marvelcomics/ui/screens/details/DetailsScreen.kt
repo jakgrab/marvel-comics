@@ -31,9 +31,13 @@ import com.example.marvelcomics.ui.theme.MarvelComicsTheme
 fun DetailsScreen(
     mainViewModel: MainViewModel,
     navController: NavController,
+    fromMainScreen: Boolean?,
     comicIndex: Int?
 ) {
-    val comicsData = mainViewModel.comicsData.collectAsState()
+    val comicsData =
+        if (fromMainScreen == true) {
+            mainViewModel.comicsData.collectAsState()
+        } else mainViewModel.comicsDataByTitle.collectAsState()
 
     val title: String = comicsData.value.data!!.data.results[comicIndex!!].title
     val description =
