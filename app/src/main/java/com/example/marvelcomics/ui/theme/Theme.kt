@@ -48,9 +48,9 @@ fun MarvelComicsTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Comp
             window.navigationBarColor = colors.background.toArgb()
 
             WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightStatusBars = darkTheme
+                .isAppearanceLightStatusBars = !darkTheme
             WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightNavigationBars = darkTheme
+                .isAppearanceLightNavigationBars = !darkTheme
         }
     }
 

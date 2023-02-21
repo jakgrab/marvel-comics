@@ -3,7 +3,10 @@ package com.example.marvelcomics.ui.screens.search.components
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -12,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
@@ -67,7 +71,6 @@ fun ComicTextField(
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTextField(
@@ -75,6 +78,7 @@ fun MyTextField(
     valueState: MutableState<String>,
     errorState: MutableState<Boolean>,
     placeholderText: String,
+    leadingIcon: ImageVector = Icons.Rounded.Search,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Done,
     onAction: KeyboardActions = KeyboardActions.Default
@@ -88,6 +92,12 @@ fun MyTextField(
         textStyle = TextStyle(fontSize = 20.sp),
         placeholder = {
             Text(text = placeholderText, fontSize = 20.sp)
+        },
+        leadingIcon = {
+            Icon(
+                imageVector = leadingIcon,
+                contentDescription = "Search Icon"
+            )
         },
         isError = errorState.value,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),

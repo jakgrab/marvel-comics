@@ -3,7 +3,7 @@ package com.example.marvelcomics.ui.screens.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.marvelcomics.data.model.Comics
-import com.example.marvelcomics.data.repository.ComicRepositoryImpl
+import com.example.marvelcomics.data.repository.ComicRepository
 import com.example.marvelcomics.data.wrapper.DataOrException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val comicRepository: ComicRepositoryImpl) :
+class MainViewModel @Inject constructor(private val comicRepository: ComicRepository) :
     ViewModel() {
 
     private val _comicsData =

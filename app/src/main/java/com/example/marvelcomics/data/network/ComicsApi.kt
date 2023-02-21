@@ -7,17 +7,17 @@ import retrofit2.http.Query
 
 interface ComicsApi {
 
-    @GET
+    @GET("/v1/public/comics")
     suspend fun getComics(
         @Query("ts") ts: Int = 1,
-        @Query("apikey") apikey: String ="",
-        @Query("hash") hash: String = "",
+        @Query("apikey") apikey: String = BuildConfig.API_KEY,
+        @Query("hash") hash: String = BuildConfig.HASH,
         @Query("limit") limit: Int = 25,
         @Query("offset") offset: Int = 0,
         @Query("orderBy") orderBy: String = "-onsaleDate"
     ): Comics
 
-    @GET
+    @GET("/v1/public/comics")
     suspend fun getComicsByTitle(
         @Query("ts") ts: Int = 1,
         @Query("apikey") apikey: String = BuildConfig.API_KEY,
