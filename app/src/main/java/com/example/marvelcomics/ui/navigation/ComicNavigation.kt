@@ -29,19 +29,6 @@ fun ComicNavigation() {
 
         val detailsRoute = ComicScreens.DetailsScreen.name
 
-//        composable(
-//            route = "$detailsRoute/{comicIndex}",
-//            arguments = listOf(
-//                navArgument(name = "comicIndex") {
-//                    type = NavType.IntType
-//                }
-//            )
-//        ) { navBack ->
-//            navBack.arguments?.getInt("comicIndex").let { index ->
-//                DetailsScreen(mainViewModel, navController, index)
-//            }
-//        }
-
         composable(
             route = "$detailsRoute/{fromMainScreen}/{comicIndex}",
             arguments = listOf(

@@ -13,18 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
 import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.screens.main.MainViewModel
 import com.example.marvelcomics.ui.screens.utils.Utils
-import com.example.marvelcomics.ui.theme.MarvelComicsTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
@@ -70,6 +66,9 @@ fun DetailsScreen(
         },
         bottomBar = {
             ComicBottomAppBar(
+                onHomeIconClicked = {
+                    navController.navigate(ComicScreens.MainScreen.name)
+                },
                 onSearchIconClicked = {
                     navController.navigate(ComicScreens.SearchScreen.name)
                 }
@@ -95,23 +94,23 @@ fun DetailsScreen(
             sheetContent = {
                 BottomSheetContent(title, authors, description)
             },
-            sheetElevation = 0.dp
+            sheetElevation = 0.dp,
+            scrimColor = Color.Unspecified
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = it.calculateTopPadding(), start = 16.dp, end = 16.dp),
+                    .padding(top = it.calculateTopPadding()),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                //if (comicsData.value.data != null && comicIndex != null) {
                 val extension: String =
                     comicsData.value.data!!.data.results[comicIndex].thumbnail.extension
                 val imagePath: String =
                     comicsData.value.data!!.data.results[comicIndex].thumbnail.path
 
                 val detailsImageUrl = "$imagePath/detail.$extension"
-                //}
+
                 AsyncImage(
                     model = detailsImageUrl,
                     contentDescription = "Comic poster",
@@ -152,13 +151,5 @@ fun BottomSheetContent(
         Text(text = authors, color = Color.LightGray, style = MaterialTheme.typography.bodySmall)
         Spacer(modifier = Modifier.height(20.dp))
         Text(text = description, style = MaterialTheme.typography.bodyLarge)
-    }
-}
-
-@Preview
-@Composable
-fun DetailsPReview() {
-    MarvelComicsTheme {
-//        DetailsScreen(mainViewModel, navController)
     }
 }

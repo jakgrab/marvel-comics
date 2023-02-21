@@ -1,18 +1,19 @@
 package com.example.marvelcomics.ui.screens.search
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ImportContacts
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
@@ -28,22 +29,33 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     lateinit var comicsList: List<Result>
 
-    val fromMainScreen: Boolean? = false
+    val fromMainScreen = false
 
-    var isDataLoading by remember {
-        mutableStateOf(false)
-    }
     var showFoundComics by remember {
         mutableStateOf(false)
     }
 
+    var searchingForComic by remember {
+        mutableStateOf(false)
+    }
+
     if (comicsDataByTitle.value.loading == true) {
-        isDataLoading = true
         showFoundComics = false
     } else if (comicsDataByTitle.value.data != null) {
-        isDataLoading = false
         comicsList = comicsDataByTitle.value.data!!.data.results
+        searchingForComic = false
         showFoundComics = true
+    }
+
+    val noResultsFound by remember(comicsDataByTitle.value) {
+        val isDataNull = comicsDataByTitle.value.data == null
+
+        val isResultListEmpty: Boolean? = when (isDataNull) {
+            true -> null
+            false -> comicsDataByTitle.value.data!!.data.results.isEmpty()
+        }
+
+        mutableStateOf(isResultListEmpty)
     }
 
     var comicBookTitle by remember {
@@ -67,7 +79,13 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = it.calculateTopPadding(), start = 16.dp, end = 16.dp)
+                .background(androidx.compose.material.MaterialTheme.colors.background)
+                .padding(
+                    top = it.calculateTopPadding() + 16.dp,
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = it.calculateBottomPadding()
+                )
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
@@ -80,8 +98,10 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
             ComicTextField(
                 modifier = Modifier.fillMaxWidth(),
+                placeholderText = "Search for a comic book",
                 onSearch = { comicTitle ->
                     comicBookTitle = comicTitle
+                    searchingForComic = true
                     mainViewModel.getComicByTitle(comicBookTitle)
                 },
                 hideKeyboard = hideKeyboard,
@@ -99,11 +119,59 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     )
                 }
             }
-            AnimatedVisibility(visible = (!showFoundComics && isDataLoading)) {
-                Box(modifier = Modifier.size(120.dp), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
+
+            AnimatedVisibility(visible = (searchingForComic)) {
+                Loading()
             }
+
+            AnimatedVisibility(visible = noResultsFound == true) {
+                NoResultsFound()
+            }
+
+            AnimatedVisibility(visible = noResultsFound == null) {
+                InitialPrompt()
+            }
+        }
+    }
+}
+
+@Composable
+private fun NoResultsFound() {
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Text(
+            text = "No results found",
+            color = androidx.compose.material.MaterialTheme.colors.onBackground,
+            style = MaterialTheme.typography.titleLarge
+        )
+    }
+}
+
+@Composable
+private fun Loading() {
+    Box(modifier = Modifier.size(120.dp), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun InitialPrompt() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.ImportContacts,
+                contentDescription = "Comic book icon",
+                modifier = Modifier.size(100.dp),
+                tint = Color.DarkGray
+            )
+            Spacer(modifier = Modifier.height(50.dp))
+            Text(
+                text = "Start typing to find particular comics",
+                color = androidx.compose.material.MaterialTheme.colors.onBackground,
+                style = MaterialTheme.typography.titleLarge
+            )
         }
     }
 }

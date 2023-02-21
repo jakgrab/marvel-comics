@@ -1,5 +1,6 @@
 package com.example.marvelcomics.ui.screens.components
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
@@ -9,7 +10,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun ComicBottomAppBar(
@@ -28,13 +31,15 @@ fun ComicBottomAppBar(
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Home,
+                    modifier = Modifier.size(40.dp),
                     contentDescription = "home screen icon"
                 )
             },
+
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.Red,
                 unselectedIconColor = Color.LightGray,
-                indicatorColor = Color.Transparent
+                indicatorColor = MaterialTheme.colors.surface
             )
         )
         NavigationBarItem(
@@ -45,13 +50,14 @@ fun ComicBottomAppBar(
             icon = {
                 Icon(
                     imageVector = Icons.Rounded.Search,
+                    modifier = Modifier.size(40.dp),
                     contentDescription = "search screen icon"
                 )
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.Red,
                 unselectedIconColor = Color.LightGray,
-                indicatorColor = Color.Transparent
+                indicatorColor = MaterialTheme.colors.surface
             )
         )
     }

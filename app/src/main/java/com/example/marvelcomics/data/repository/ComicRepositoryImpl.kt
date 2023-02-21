@@ -22,7 +22,7 @@ class ComicRepositoryImpl @Inject constructor(private val comicsApi: ComicsApi) 
         val response = try {
             comicsApi.getComicsByTitle(title = title)
         } catch (e: Exception) {
-            Log.e("REPOSITORY", "EXCEPTION OCCURED $e")
+            Log.e("REPOSITORY", "EXCEPTION OCCURRED $e")
             return DataOrException(exception = e)
         }
         return DataOrException(data = response)

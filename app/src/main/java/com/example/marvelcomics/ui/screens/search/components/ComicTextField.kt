@@ -3,11 +3,10 @@ package com.example.marvelcomics.ui.screens.search.components
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ComicTextField(
     modifier: Modifier = Modifier,
+    placeholderText: String,
     onSearch: (String) -> Unit,
     hideKeyboard: Boolean,
     onFocusClear: () -> Unit,
@@ -50,7 +50,7 @@ fun ComicTextField(
         modifier = modifier,
         valueState = comicBookTitle,
         errorState = errorState,
-        placeholderText = "Type Comic Title",
+        placeholderText = placeholderText,
         onAction = KeyboardActions {
             if (!validState) {
                 errorState.value = true
@@ -104,6 +104,10 @@ fun MyTextField(
         keyboardActions = onAction,
         singleLine = true,
         maxLines = 1,
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
+        colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
+            textColor = MaterialTheme.colors.onBackground,
+            containerColor = MaterialTheme.colors.background
+        )
     )
 }
