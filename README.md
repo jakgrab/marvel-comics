@@ -1,5 +1,5 @@
 # Marvel Comics Mobile App
-
+  
 The "Marvel Comics" mobile app is an application that allows users to search and view comics from Marvel's REST API.
 
 ## Features
