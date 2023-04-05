@@ -22,29 +22,31 @@ import com.example.marvelcomics.ui.screens.utils.Utils
 
 @Composable
 fun ComicBooksList(
-    comicsList: ArrayList<Result>,
+    comicsList: List<Result>,
     isEndReached: Boolean = false,
     loadComics: () -> Unit = {},
     onComicClicked: (Int) -> Unit
 ) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         itemsIndexed(items = comicsList) { index, comic ->
-            Log.d("MainViewModel", "List size: ${comicsList.count()}" +
-                    " index: $index")
-            if (index >= comicsList.count() - 1) {
+            Log.d(
+                "MainViewModel", "List size: ${comicsList.count()}" +
+                        " index: $index"
+            )
+            if (index >= comicsList.count() - 1 && !isEndReached) {
                 loadComics()
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxWidth().height(100.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
                 ) {
                     CircularProgressIndicator(color = Color.Red, modifier = Modifier.size(40.dp))
                 }
             }
-
             ComicItem(comic) {
                 onComicClicked(index)
             }
-
         }
     }
 }

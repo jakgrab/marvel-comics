@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
@@ -24,12 +23,8 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val comicsData = mainViewModel.comicsData.collectAsState()
 
-    var comicsList: List<Result> = listOf()
-
-    var newComicsList = remember(comicsData) {
-        if (comicsData.value.data != null)
-            mutableStateOf(comicsData.value.data!!.data.results)
-        else mutableStateOf(arrayListOf<Result>())
+    val comicsList = remember(comicsData) {
+        mainViewModel.comicsList
     }
 
     var isDataLoading by remember {
@@ -40,7 +35,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         isDataLoading = true
     } else if (comicsData.value.data != null) {
         isDataLoading = false
-        comicsList = comicsData.value.data!!.data.results
+        //comicsList = comicsData.value.data!!.data.results
     }
 
     val fromMainScreen = true
@@ -67,7 +62,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
-        } else if (newComicsList.value.isNotEmpty()) {
+        } else if (comicsList.value.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -82,17 +77,16 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ComicBooksList(
-                    comicsList = newComicsList.value,//comicsList,
+                    comicsList = comicsList.value,
                     isEndReached = mainViewModel.isEndReached,
                     loadComics = {
-                        mainViewModel.getComicsPaginated()
-                    },
-                    onComicClicked = { comicIndex ->
-                        navController.navigate(
-                            ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
-                        )
+                        mainViewModel.testGetComicsWithPaging()
                     }
-                )
+                ) { comicIndex ->
+                    navController.navigate(
+                        ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                    )
+                }
             }
         }
     }

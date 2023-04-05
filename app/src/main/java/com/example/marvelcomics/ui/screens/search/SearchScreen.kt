@@ -28,9 +28,6 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     val comicsDataByTitle = mainViewModel.comicsDataByTitle.collectAsState()
 
     lateinit var comicsList: List<Result>
-    var newComicsList = remember(comicsDataByTitle) {
-        mutableStateOf(comicsDataByTitle.value.data!!.data.results)
-    }
 
     val fromMainScreen = false
 
@@ -116,7 +113,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             Spacer(modifier = Modifier.height(50.dp))
 
             AnimatedVisibility(visible = showFoundComics) {
-                ComicBooksList(comicsList = newComicsList.value) { comicIndex ->
+                ComicBooksList(comicsList = comicsList) { comicIndex ->
                     navController.navigate(
                         ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
                     )
