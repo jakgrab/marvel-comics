@@ -20,11 +20,17 @@ import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 @Composable
 fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
 
-    mainViewModel.getComics()
+    //mainViewModel.getComics()
 
     val comicsData = mainViewModel.comicsData.collectAsState()
 
-    lateinit var comicsList: List<Result>
+    var comicsList: List<Result> = listOf()
+
+    var newComicsList = remember(comicsData) {
+        if (comicsData.value.data != null)
+            mutableStateOf(comicsData.value.data!!.data.results)
+        else mutableStateOf(arrayListOf<Result>())
+    }
 
     var isDataLoading by remember {
         mutableStateOf(false)
@@ -61,11 +67,11 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
-        } else if (comicsList.isNotEmpty()) {
+        } else if (newComicsList.value.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(androidx.compose.material.MaterialTheme.colors.background)
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(
                         top = it.calculateTopPadding(),
                         start = 16.dp,
@@ -75,12 +81,20 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ComicBooksList(comicsList) { comicIndex ->
-                    navController.navigate(
-                        ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
-                    )
-                }
+                ComicBooksList(
+                    comicsList = newComicsList.value,//comicsList,
+                    isEndReached = mainViewModel.isEndReached,
+                    loadComics = {
+                        mainViewModel.getComicsPaginated()
+                    },
+                    onComicClicked = { comicIndex ->
+                        navController.navigate(
+                            ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                        )
+                    }
+                )
             }
         }
     }
 }
+

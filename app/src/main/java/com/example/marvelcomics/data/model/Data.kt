@@ -3,7 +3,7 @@ package com.example.marvelcomics.data.model
 data class Data(
     val count: Int,
     val limit: Int,
-    val offset: Int,
-    val results: List<Result>,
+    var offset: Int,
+    var results: ArrayList<Result>,
     val total: Int
 )
