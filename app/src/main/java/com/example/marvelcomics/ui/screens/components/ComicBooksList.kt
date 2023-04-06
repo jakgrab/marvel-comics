@@ -33,6 +33,11 @@ fun ComicBooksList(
                 "MainViewModel", "List size: ${comicsList.count()}" +
                         " index: $index"
             )
+
+            ComicItem(comic) {
+                onComicClicked(index)
+            }
+
             if (index >= comicsList.count() - 1 && !isEndReached) {
                 loadComics()
                 Box(
@@ -44,9 +49,7 @@ fun ComicBooksList(
                     CircularProgressIndicator(color = Color.Red, modifier = Modifier.size(40.dp))
                 }
             }
-            ComicItem(comic) {
-                onComicClicked(index)
-            }
+
         }
     }
 }
@@ -63,8 +66,7 @@ fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
     val description = comic.description ?: "No description available"
     val numAuthors: Int = comic.creators.available
 
-    val utils = Utils()
-    val authors = utils.getAuthors(numAuthors, comic)
+    val authors = Utils.getAuthors(numAuthors, comic)
 
     Card(
         onClick = {
