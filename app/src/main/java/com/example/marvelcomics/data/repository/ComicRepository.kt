@@ -6,7 +6,5 @@ import com.example.marvelcomics.data.wrapper.DataOrException
 interface ComicRepository {
 
     suspend fun getComics(offset: Int): DataOrException<Comics, Boolean, Exception>
-    suspend fun getComics2(offset: Int): Comics?
-
     suspend fun getComicsByTitle(title: String): DataOrException<Comics, Boolean, Exception>
 }
