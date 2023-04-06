@@ -19,8 +19,6 @@ import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 @Composable
 fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
 
-    //mainViewModel.getComics()
-
     val comicsData = mainViewModel.comicsData.collectAsState()
 
     val comicsList = remember(comicsData) {
@@ -35,7 +33,6 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         isDataLoading = true
     } else if (comicsData.value.data != null) {
         isDataLoading = false
-        //comicsList = comicsData.value.data!!.data.results
     }
 
     val fromMainScreen = true
@@ -68,7 +65,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
                     .padding(
-                        top = it.calculateTopPadding(),
+                        top = it.calculateTopPadding() + 10.dp,
                         start = 16.dp,
                         end = 16.dp,
                         bottom = it.calculateBottomPadding()
