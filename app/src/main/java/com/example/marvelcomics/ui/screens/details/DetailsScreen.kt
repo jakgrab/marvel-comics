@@ -77,48 +77,59 @@ fun DetailsScreen(
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
-    ) {
+    ) { paddingValues ->
         val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
         val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
             bottomSheetState = sheetState
         )
 
-        BottomSheetScaffold(
-            scaffoldState = bottomSheetScaffoldState,
-            sheetContent = {
-                BottomSheetContent(
-                    title = title,
-                    authors = authors,
-                    description = description,
-                    detailsUrl = detailsUrl,
-                    scrollState = scrollState
-                )
-            },
-            sheetShape = RoundedCornerShape(25.dp),
-            sheetPeekHeight = 200.dp,
-            sheetBackgroundColor = MaterialTheme.colors.surface
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = it.calculateTopPadding()),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+
+            val extension: String? =
+                comicsData?.thumbnail?.extension
+            val imagePath: String? =
+                comicsData?.thumbnail?.path
+
+            val detailsImageUrl = "$imagePath/detail.$extension"
+
+            AsyncImage(
+                model = detailsImageUrl,
+                contentDescription = "Comic poster",
+                modifier = Modifier.fillMaxHeight(),
+                alignment = Alignment.TopCenter
+            )
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(top = paddingValues.calculateTopPadding()),
+//                verticalArrangement = Arrangement.Top,
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//
+//            }
+            BottomSheetScaffold(
+                scaffoldState = bottomSheetScaffoldState,
+                modifier = Modifier.padding(top = 200.dp),
+                sheetContent = {
+                    BottomSheetContent(
+                        title = title,
+                        authors = authors,
+                        description = description,
+                        detailsUrl = detailsUrl,
+                        scrollState = scrollState,
+                        paddingValues = paddingValues
+                    )
+                },
+                sheetShape = RoundedCornerShape(25.dp),
+                sheetPeekHeight = 200.dp,
+                sheetBackgroundColor = MaterialTheme.colors.surface,
+                backgroundColor = Color.Transparent
             ) {
-                val extension: String? =
-                    comicsData?.thumbnail?.extension
-                val imagePath: String? =
-                    comicsData?.thumbnail?.path
 
-                val detailsImageUrl = "$imagePath/detail.$extension"
 
-                AsyncImage(
-                    model = detailsImageUrl,
-                    contentDescription = "Comic poster",
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
+
     }
 }
 
@@ -141,16 +152,23 @@ fun BottomSheetContent(
     authors: String,
     description: String,
     detailsUrl: String?,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    paddingValues: PaddingValues
 ) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .height(600.dp)
-            .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            .fillMaxSize()
+            //.fillMaxWidth()
+            //.height(600.dp)
+            .padding(
+                top = 20.dp,
+                start = 16.dp,
+                end = 16.dp,
+                bottom = paddingValues.calculateBottomPadding()
+            ),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
@@ -162,42 +180,45 @@ fun BottomSheetContent(
         ) {
             Text(text = title, style = MaterialTheme.typography.h5)
             Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = authors,
-                color = Color.LightGray,
-                style = MaterialTheme.typography.body2
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+
         }
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 150.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = description,
-                style = MaterialTheme.typography.body1
-            )
-            Spacer(modifier = Modifier.height(50.dp))
-            FindOutMoreFAB(
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(60.dp),
-                onClick = {
-                    if (detailsUrl != null) {
-                        uriHandler.openUri(detailsUrl)
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "No details link available",
-                            Toast.LENGTH_SHORT
-                        ).show()
+            if (authors.isNotEmpty())
+                Text(
+                    text = authors,
+                    color = Color.LightGray,
+                    style = MaterialTheme.typography.body2
+                )
+            if (description.isNotEmpty())
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.body1
+                )
+
+            Box(modifier = Modifier.padding(bottom = 20.dp)) {
+                FindOutMoreFAB(
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .height(60.dp),
+                    onClick = {
+                        if (detailsUrl != null) {
+                            uriHandler.openUri(detailsUrl)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "No details link available",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
