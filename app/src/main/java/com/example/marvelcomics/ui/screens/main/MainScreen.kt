@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
@@ -20,11 +19,11 @@ import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 @Composable
 fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
 
-    mainViewModel.getComics()
-
     val comicsData = mainViewModel.comicsData.collectAsState()
 
-    lateinit var comicsList: List<Result>
+    val comicsList = remember(comicsData) {
+        mainViewModel.comicsList
+    }
 
     var isDataLoading by remember {
         mutableStateOf(false)
@@ -34,7 +33,6 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         isDataLoading = true
     } else if (comicsData.value.data != null) {
         isDataLoading = false
-        comicsList = comicsData.value.data!!.data.results
     }
 
     val fromMainScreen = true
@@ -61,13 +59,13 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
-        } else if (comicsList.isNotEmpty()) {
+        } else if (comicsList.value.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(androidx.compose.material.MaterialTheme.colors.background)
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(
-                        top = it.calculateTopPadding(),
+                        top = it.calculateTopPadding() + 10.dp,
                         start = 16.dp,
                         end = 16.dp,
                         bottom = it.calculateBottomPadding()
@@ -75,7 +73,13 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ComicBooksList(comicsList) { comicIndex ->
+                ComicBooksList(
+                    comicsList = comicsList.value,
+                    isEndReached = mainViewModel.isEndReached,
+                    loadComics = {
+                        mainViewModel.testGetComicsWithPaging()
+                    }
+                ) { comicIndex ->
                     navController.navigate(
                         ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
                     )
@@ -84,3 +88,4 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         }
     }
 }
+

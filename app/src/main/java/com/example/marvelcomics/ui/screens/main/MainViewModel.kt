@@ -1,8 +1,12 @@
 package com.example.marvelcomics.ui.screens.main
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.marvelcomics.data.constants.Constants
 import com.example.marvelcomics.data.model.Comics
+import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.data.repository.ComicRepository
 import com.example.marvelcomics.data.wrapper.DataOrException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,13 +33,33 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
     val comicsData = _comicsData.asStateFlow()
     val comicsDataByTitle = _comicsDataByTitle.asStateFlow()
 
+    var comicsList: MutableState<List<Result>> = mutableStateOf(emptyList())
+
+    var currentPage: Int = 0
+    var isEndReached: Boolean = false
+
     init {
-        getComics()
+        testGetComicsWithPaging()
     }
 
-    fun getComics() {
-        viewModelScope.launch(Dispatchers.Default) {
-           _comicsData.value = comicRepository.getComics()
+    //new getComics fun
+    fun testGetComicsWithPaging() {
+        viewModelScope.launch {
+            _comicsData.value = comicRepository.getComics(
+                offset = currentPage * Constants.PAGE_SIZE
+            )
+
+            isEndReached = if (_comicsData.value.data != null) {
+                currentPage * Constants.PAGE_SIZE >= _comicsData.value.data!!.data.total
+            } else {
+                true
+            }
+            _comicsData.value.data?.data?.results?.let { newResults ->
+                if (newResults.isNotEmpty()) {
+                    comicsList.value = comicsList.value + newResults
+                    currentPage++
+                }
+            }
         }
     }
 
