@@ -11,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -52,15 +50,10 @@ fun DetailsScreen(
     val numAuthors: Int = comicsData?.creators?.available ?: 0
 
     val authors = Utils.getAuthors(numAuthors, comicsData)
+    val detailsUrl = comicsData?.urls?.get(0)?.url
 
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState(0)
-
-    val modalSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.HalfExpanded,
-        confirmStateChange = { it != ModalBottomSheetValue.Hidden },
-    )
-    val detailsUrl = comicsData?.urls?.get(0)?.url
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -85,49 +78,45 @@ fun DetailsScreen(
         },
         floatingActionButtonPosition = FabPosition.Center,
     ) {
-        BoxWithConstraints {
-            val sheetHeight = this.constraints.maxHeight * 0.8f
-            val coroutineScope = rememberCoroutineScope()
+        val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+        val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+            bottomSheetState = sheetState
+        )
 
-
-            ModalBottomSheetLayout(
-                sheetState = modalSheetState,
-                sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
-                sheetContent = {
-                    BottomSheetContent(
-                        modifier = Modifier.height(with(LocalDensity.current) {
-                            sheetHeight.toDp()
-                        }),
-                        title = title,
-                        authors = authors,
-                        description = description,
-                        detailsUrl = detailsUrl,
-                        scrollState = scrollState
-                    )
-                },
-                sheetElevation = 0.dp,
-                scrimColor = Color.Unspecified
+        BottomSheetScaffold(
+            scaffoldState = bottomSheetScaffoldState,
+            sheetContent = {
+                BottomSheetContent(
+                    title = title,
+                    authors = authors,
+                    description = description,
+                    detailsUrl = detailsUrl,
+                    scrollState = scrollState
+                )
+            },
+            sheetShape = RoundedCornerShape(25.dp),
+            sheetPeekHeight = 200.dp,
+            sheetBackgroundColor = MaterialTheme.colors.surface
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = it.calculateTopPadding()),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = it.calculateTopPadding()),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    val extension: String? =
-                        comicsData?.thumbnail?.extension
-                    val imagePath: String? =
-                        comicsData?.thumbnail?.path
+                val extension: String? =
+                    comicsData?.thumbnail?.extension
+                val imagePath: String? =
+                    comicsData?.thumbnail?.path
 
-                    val detailsImageUrl = "$imagePath/detail.$extension"
+                val detailsImageUrl = "$imagePath/detail.$extension"
 
-                    AsyncImage(
-                        model = detailsImageUrl,
-                        contentDescription = "Comic poster",
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                AsyncImage(
+                    model = detailsImageUrl,
+                    contentDescription = "Comic poster",
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
@@ -159,7 +148,8 @@ fun BottomSheetContent(
 
     Column(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .height(600.dp)
             .padding(top = 20.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
@@ -170,27 +160,28 @@ fun BottomSheetContent(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            Text(text = title, style = MaterialTheme.typography.titleLarge)
+            Text(text = title, style = MaterialTheme.typography.h5)
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = authors,
                 color = Color.LightGray,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.body2
             )
             Spacer(modifier = Modifier.height(20.dp))
         }
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 100.dp)
+                .padding(bottom = 150.dp)
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.body1
             )
+            Spacer(modifier = Modifier.height(50.dp))
             FindOutMoreFAB(
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
@@ -210,3 +201,4 @@ fun BottomSheetContent(
         }
     }
 }
+
