@@ -1,5 +1,6 @@
 package com.example.marvelcomics.ui.screens.search.components
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -8,38 +9,38 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.marvelcomics.ui.theme.SearchFieldBackgroundColor
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ComicTextField(
     modifier: Modifier = Modifier,
+    inputValue: MutableState<String>,
     placeholderText: String,
     onSearch: (String) -> Unit,
     hideKeyboard: Boolean,
     onFocusClear: () -> Unit,
+    isHintVisible: Boolean,
 ) {
-    val comicBookTitle = remember {
-        mutableStateOf("")
-    }
+
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val validState = remember(comicBookTitle.value) {
-        comicBookTitle.value.trim().isNotEmpty()
+    val validState = remember(inputValue.value) {
+        inputValue.value.trim().isNotEmpty()
     }
     val errorState = remember {
         mutableStateOf(false)
@@ -48,7 +49,7 @@ fun ComicTextField(
 
     MyTextField(
         modifier = modifier,
-        valueState = comicBookTitle,
+        valueState = inputValue,
         errorState = errorState,
         placeholderText = placeholderText,
         onAction = KeyboardActions {
@@ -56,12 +57,13 @@ fun ComicTextField(
                 errorState.value = true
                 return@KeyboardActions
             }
-            onSearch(comicBookTitle.value.trim())
-            comicBookTitle.value = ""
+            onSearch(inputValue.value.trim())
+            inputValue.value = ""
             keyboardController?.hide()
             focusManager.clearFocus()
             errorState.value = false
-        }
+        },
+        isHintVisible = isHintVisible,
     )
 
     if (hideKeyboard) {
@@ -81,7 +83,8 @@ fun MyTextField(
     leadingIcon: ImageVector = Icons.Rounded.Search,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Done,
-    onAction: KeyboardActions = KeyboardActions.Default
+    onAction: KeyboardActions = KeyboardActions.Default,
+    isHintVisible: Boolean,
 ) {
     TextField(
         value = valueState.value,
@@ -91,12 +94,19 @@ fun MyTextField(
         modifier = modifier,
         textStyle = TextStyle(fontSize = 20.sp),
         placeholder = {
-            Text(text = placeholderText, fontSize = 20.sp)
+            Text(
+                text = placeholderText,
+                fontSize = 20.sp,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
         },
         leadingIcon = {
             Icon(
                 imageVector = leadingIcon,
-                contentDescription = "Search Icon"
+                contentDescription = "Search Icon",
+                modifier = Modifier.size(40.dp),
+                tint = if (isHintVisible) Color.LightGray else Color.Gray
             )
         },
         isError = errorState.value,
@@ -107,7 +117,9 @@ fun MyTextField(
         shape = RoundedCornerShape(10.dp),
         colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.onBackground,
-            containerColor = MaterialTheme.colors.background
+            containerColor = SearchFieldBackgroundColor,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
         )
     )
 }
