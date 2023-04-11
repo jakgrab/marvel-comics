@@ -12,7 +12,9 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.marvelcomics.R
 
 @Composable
 fun ComicBottomAppBar(
@@ -32,7 +34,7 @@ fun ComicBottomAppBar(
                 Icon(
                     imageVector = Icons.Rounded.Home,
                     modifier = Modifier.size(40.dp),
-                    contentDescription = "home screen icon"
+                    contentDescription = stringResource(R.string.bottom_app_bar_home_icon_desc)
                 )
             },
 
@@ -51,7 +53,7 @@ fun ComicBottomAppBar(
                 Icon(
                     imageVector = Icons.Rounded.Search,
                     modifier = Modifier.size(40.dp),
-                    contentDescription = "search screen icon"
+                    contentDescription = stringResource(R.string.bottom_app_bar_search_icon_desc)
                 )
             },
             colors = NavigationBarItemDefaults.colors(

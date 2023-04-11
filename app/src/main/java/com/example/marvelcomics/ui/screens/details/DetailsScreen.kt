@@ -11,19 +11,18 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
@@ -46,21 +45,17 @@ fun DetailsScreen(
         mainViewModel.comicsDataByTitle.collectAsState().value.data?.data?.results?.get(comicIndex!!)
     }
 
-    val title: String = comicsData?.title ?: "No title available"
+    val title: String =
+        comicsData?.title ?: stringResource(R.string.details_screen_no_title_available)
     val description =
-        comicsData?.description ?: "Description not available"
+        comicsData?.description ?: stringResource(R.string.details_screen_no_desc_available)
     val numAuthors: Int = comicsData?.creators?.available ?: 0
 
     val authors = Utils.getAuthors(numAuthors, comicsData)
+    val detailsUrl = comicsData?.urls?.get(0)?.url
 
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState(0)
-
-    val modalSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.HalfExpanded,
-        confirmStateChange = { it != ModalBottomSheetValue.Hidden },
-    )
-    val detailsUrl = comicsData?.urls?.get(0)?.url
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -84,50 +79,45 @@ fun DetailsScreen(
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
-    ) {
-        BoxWithConstraints {
-            val sheetHeight = this.constraints.maxHeight * 0.8f
-            val coroutineScope = rememberCoroutineScope()
+    ) { paddingValues ->
+        val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+        val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+            bottomSheetState = sheetState
+        )
 
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
 
-            ModalBottomSheetLayout(
-                sheetState = modalSheetState,
-                sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            val extension: String? =
+                comicsData?.thumbnail?.extension
+            val imagePath: String? =
+                comicsData?.thumbnail?.path
+
+            val detailsImageUrl = "$imagePath/detail.$extension"
+
+            AsyncImage(
+                model = detailsImageUrl,
+                contentDescription = stringResource(id = R.string.details_screen_image_desc),
+                modifier = Modifier.fillMaxHeight(),
+                alignment = Alignment.TopCenter
+            )
+            BottomSheetScaffold(
+                scaffoldState = bottomSheetScaffoldState,
+                modifier = Modifier.padding(top = 200.dp),
                 sheetContent = {
                     BottomSheetContent(
-                        modifier = Modifier.height(with(LocalDensity.current) {
-                            sheetHeight.toDp()
-                        }),
                         title = title,
                         authors = authors,
                         description = description,
                         detailsUrl = detailsUrl,
-                        scrollState = scrollState
+                        scrollState = scrollState,
+                        paddingValues = paddingValues
                     )
                 },
-                sheetElevation = 0.dp,
-                scrimColor = Color.Unspecified
+                sheetShape = RoundedCornerShape(25.dp),
+                sheetPeekHeight = 200.dp,
+                sheetBackgroundColor = MaterialTheme.colors.surface,
+                backgroundColor = Color.Transparent
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = it.calculateTopPadding()),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    val extension: String? =
-                        comicsData?.thumbnail?.extension
-                    val imagePath: String? =
-                        comicsData?.thumbnail?.path
-
-                    val detailsImageUrl = "$imagePath/detail.$extension"
-
-                    AsyncImage(
-                        model = detailsImageUrl,
-                        contentDescription = "Comic poster",
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
             }
         }
     }
@@ -141,7 +131,7 @@ fun FindOutMoreFAB(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
     ) {
-        Text(text = "Find out more", color = Color.White)
+        Text(text = stringResource(R.string.details_screen_fab_text), color = Color.White)
     }
 }
 
@@ -152,7 +142,8 @@ fun BottomSheetContent(
     authors: String,
     description: String,
     detailsUrl: String?,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    paddingValues: PaddingValues
 ) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
@@ -160,7 +151,12 @@ fun BottomSheetContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            .padding(
+                top = 20.dp,
+                start = 16.dp,
+                end = 16.dp,
+                bottom = paddingValues.calculateBottomPadding()
+            ),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
@@ -170,43 +166,48 @@ fun BottomSheetContent(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            Text(text = title, style = MaterialTheme.typography.titleLarge)
+            Text(text = title, style = MaterialTheme.typography.h5)
             Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = authors,
-                color = Color.LightGray,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+
         }
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 100.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            FindOutMoreFAB(
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(60.dp),
-                onClick = {
-                    if (detailsUrl != null) {
-                        uriHandler.openUri(detailsUrl)
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "No details link available",
-                            Toast.LENGTH_SHORT
-                        ).show()
+            if (authors.isNotEmpty())
+                Text(
+                    text = authors,
+                    color = Color.LightGray,
+                    style = MaterialTheme.typography.body2
+                )
+            if (description.isNotEmpty())
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.body1
+                )
+
+            Box(modifier = Modifier.padding(bottom = 20.dp)) {
+                FindOutMoreFAB(
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .height(60.dp),
+                    onClick = {
+                        if (detailsUrl != null) {
+                            uriHandler.openUri(detailsUrl)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "No details link available",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
+

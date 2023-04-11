@@ -8,3 +8,5 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
 val DarkThemeCard = Color(0xFF363636)
+val SearchFieldBackgroundColor = Color(0xFFF7F7F7)
+val CancelTextColor = Color(0xFFB1B1B1)

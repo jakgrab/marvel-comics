@@ -1,6 +1,11 @@
 package com.example.marvelcomics.ui.screens.search
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -12,14 +17,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
 import com.example.marvelcomics.ui.screens.main.MainViewModel
 import com.example.marvelcomics.ui.screens.search.components.ComicTextField
+import com.example.marvelcomics.ui.theme.CancelTextColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +50,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     if (comicsDataByTitle.value.loading == true) {
         showFoundComics = false
     } else if (comicsDataByTitle.value.data != null) {
-        comicsList = comicsDataByTitle.value.data!!.data.results
+        comicsList = comicsDataByTitle.value.data?.data?.results ?: listOf()
         searchingForComic = false
         showFoundComics = true
     }
@@ -65,6 +73,23 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     var hideKeyboard by remember {
         mutableStateOf(false)
     }
+
+    val inputValue = remember {
+        mutableStateOf("")
+    }
+    var isInputEmpty by remember(inputValue.value) {
+        mutableStateOf(inputValue.value.isEmpty())
+    }
+
+    var searchFieldWidth by remember(isInputEmpty) {
+        mutableStateOf(1f)
+    }
+
+    searchFieldWidth = if (isInputEmpty) {
+        1f
+    } else 0.7f
+
+    val animateSearchFieldWidth by animateFloatAsState(targetValue = searchFieldWidth)
 
     Scaffold(
         bottomBar = {
@@ -95,20 +120,58 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            ComicTextField(
-                modifier = Modifier.fillMaxWidth(),
-                placeholderText = "Search for a comic book",
-                onSearch = { comicTitle ->
-                    comicBookTitle = comicTitle
-                    searchingForComic = true
-                    mainViewModel.getComicByTitle(comicBookTitle)
-                },
-                hideKeyboard = hideKeyboard,
-                onFocusClear = {
-                    hideKeyboard = false
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                ComicTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(fraction = animateSearchFieldWidth),
+                    inputValue = inputValue,
+                    placeholderText = stringResource(R.string.search_field_hint),
+                    onSearch = { comicTitle ->
+                        comicBookTitle = comicTitle
+                        searchingForComic = true
+                        mainViewModel.getComicByTitle(comicBookTitle)
+                    },
+                    hideKeyboard = hideKeyboard,
+                    onFocusClear = {
+                        hideKeyboard = false
+                    },
+                    isHintVisible = isInputEmpty,
+                )
+                AnimatedVisibility(
+                    visible = !isInputEmpty,
+                    enter = slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = 300,
+                            easing = LinearEasing
+                        ),
+                        initialOffsetX = { 50 }
+                    ),
+                    exit = slideOutHorizontally(
+                        animationSpec = tween(
+                            durationMillis = 300,
+                            easing = LinearEasing
+                        ),
+                        targetOffsetX = { -50 }
+                    )
+                )
+                {
+                    androidx.compose.material.Text(
+                        text = "Cancel",
+                        modifier = Modifier.clickable {
+                            inputValue.value = ""
+                            isInputEmpty = !isInputEmpty
+                        },
+                        color = CancelTextColor,
+                        maxLines = 1
+                    )
                 }
-            )
+            }
 
             Spacer(modifier = Modifier.height(50.dp))
 
@@ -139,7 +202,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 private fun NoResultsFound() {
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Text(
-            text = "No results found",
+            text = stringResource(R.string.no_results_found),
             color = androidx.compose.material.MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.titleLarge
         )
@@ -162,13 +225,13 @@ private fun InitialPrompt() {
         ) {
             Icon(
                 imageVector = Icons.Rounded.ImportContacts,
-                contentDescription = "Comic book icon",
+                contentDescription = stringResource(id = R.string.initial_prompt_icon_description),
                 modifier = Modifier.size(100.dp),
                 tint = Color.DarkGray
             )
             Spacer(modifier = Modifier.height(50.dp))
             Text(
-                text = "Start typing to find particular comics",
+                text = stringResource(R.string.search_screen_initial_prompt),
                 color = androidx.compose.material.MaterialTheme.colors.onBackground,
                 style = MaterialTheme.typography.titleLarge
             )
