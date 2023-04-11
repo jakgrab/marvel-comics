@@ -10,7 +10,7 @@ class Constants {
         const val PRIVATE_KEY = "d288984e618e4e54177df9f44d52ed76f819157e"
         const val BASE_URL = "https://gateway.marvel.com"
         const val HASH = "6edc18ab1a954d230c1f03c590d469d2"
-        const val PAGE_SIZE = 5
+        const val PAGE_SIZE = 25
         val ts = Timestamp(System.currentTimeMillis()).toString()
 
         fun hashMD5(): String {
