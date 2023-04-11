@@ -16,12 +16,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.marvelcomics.R
 import com.example.marvelcomics.ui.theme.SearchFieldBackgroundColor
 
 
@@ -104,7 +106,7 @@ fun MyTextField(
         leadingIcon = {
             Icon(
                 imageVector = leadingIcon,
-                contentDescription = "Search Icon",
+                contentDescription = stringResource(R.string.comic_text_field_icon_desc),
                 modifier = Modifier.size(40.dp),
                 tint = if (isHintVisible) Color.LightGray else Color.Gray
             )

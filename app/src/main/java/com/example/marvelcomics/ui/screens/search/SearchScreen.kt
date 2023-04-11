@@ -17,8 +17,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
@@ -129,7 +131,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth(fraction = animateSearchFieldWidth),
                     inputValue = inputValue,
-                    placeholderText = "Search for a comic book",
+                    placeholderText = stringResource(R.string.search_field_hint),
                     onSearch = { comicTitle ->
                         comicBookTitle = comicTitle
                         searchingForComic = true
@@ -200,7 +202,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 private fun NoResultsFound() {
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Text(
-            text = "No results found",
+            text = stringResource(R.string.no_results_found),
             color = androidx.compose.material.MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.titleLarge
         )
@@ -223,13 +225,13 @@ private fun InitialPrompt() {
         ) {
             Icon(
                 imageVector = Icons.Rounded.ImportContacts,
-                contentDescription = "Comic book icon",
+                contentDescription = stringResource(id = R.string.initial_prompt_icon_description),
                 modifier = Modifier.size(100.dp),
                 tint = Color.DarkGray
             )
             Spacer(modifier = Modifier.height(50.dp))
             Text(
-                text = "Start typing to find particular comics",
+                text = stringResource(R.string.search_screen_initial_prompt),
                 color = androidx.compose.material.MaterialTheme.colors.onBackground,
                 style = MaterialTheme.typography.titleLarge
             )

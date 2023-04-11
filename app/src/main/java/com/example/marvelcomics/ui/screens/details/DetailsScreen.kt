@@ -18,9 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
@@ -43,9 +45,10 @@ fun DetailsScreen(
         mainViewModel.comicsDataByTitle.collectAsState().value.data?.data?.results?.get(comicIndex!!)
     }
 
-    val title: String = comicsData?.title ?: "No title available"
+    val title: String =
+        comicsData?.title ?: stringResource(R.string.details_screen_no_title_available)
     val description =
-        comicsData?.description ?: "Description not available"
+        comicsData?.description ?: stringResource(R.string.details_screen_no_desc_available)
     val numAuthors: Int = comicsData?.creators?.available ?: 0
 
     val authors = Utils.getAuthors(numAuthors, comicsData)
@@ -93,7 +96,7 @@ fun DetailsScreen(
 
             AsyncImage(
                 model = detailsImageUrl,
-                contentDescription = "Comic poster",
+                contentDescription = stringResource(id = R.string.details_screen_image_desc),
                 modifier = Modifier.fillMaxHeight(),
                 alignment = Alignment.TopCenter
             )
@@ -128,7 +131,7 @@ fun FindOutMoreFAB(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
     ) {
-        Text(text = "Find out more", color = Color.White)
+        Text(text = stringResource(R.string.details_screen_fab_text), color = Color.White)
     }
 }
 

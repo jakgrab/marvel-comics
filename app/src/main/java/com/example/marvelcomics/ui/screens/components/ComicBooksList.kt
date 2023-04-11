@@ -13,9 +13,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.screens.utils.Utils
 
@@ -55,7 +57,7 @@ fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
 
     val imageUrl = "$imagePath/portrait_xlarge.$extension"
 
-    val description = comic.description ?: "No description available"
+    val description = comic.description ?: stringResource(R.string.no_description_available)
     val numAuthors: Int = comic.creators.available
 
     val authors = Utils.getAuthors(numAuthors, comic)

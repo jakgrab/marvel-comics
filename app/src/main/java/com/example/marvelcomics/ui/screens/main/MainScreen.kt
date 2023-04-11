@@ -8,8 +8,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.marvelcomics.R
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
@@ -43,7 +45,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         scaffoldState = scaffoldState,
         topBar = {
             ComicTopAppBar(
-                title = "Marvel Comics"
+                title = stringResource(R.string.main_screen_top_app_bar_title)
             )
         },
         bottomBar = {
