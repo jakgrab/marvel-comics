@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.example.marvelcomics.data.model.Result
@@ -94,12 +95,20 @@ fun TitleAndDescription(title: String, authors: String, description: String) {
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.h6
         )
-        Text(text = authors, color = Color.LightGray)
+        Text(
+            text = authors,
+            color = Color.LightGray,
+            maxLines = 2,
+            softWrap = true,
+            overflow = TextOverflow.Ellipsis
+        )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = description,
             color = MaterialTheme.colors.onBackground,
+            maxLines = 3,
             softWrap = true,
+            overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.subtitle2
         )
     }
