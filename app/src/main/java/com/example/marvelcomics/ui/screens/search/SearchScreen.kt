@@ -1,6 +1,5 @@
 package com.example.marvelcomics.ui.screens.search
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -194,7 +193,6 @@ private fun MarvelSearchField(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Log.d("MarvelSearchField", "Hide keyboard: $hideKeyboard")
         ComicTextField(
             modifier = Modifier
                 .fillMaxWidth(fraction = animateSearchFieldWidth),
