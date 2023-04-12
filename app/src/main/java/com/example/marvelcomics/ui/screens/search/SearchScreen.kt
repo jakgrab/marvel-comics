@@ -60,7 +60,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
         val isResultListEmpty: Boolean? = when (isDataNull) {
             true -> null
-            false -> comicsDataByTitle.value.data!!.data.results.isEmpty()
+            else -> comicsDataByTitle.value.data?.data?.results?.isEmpty()
         }
 
         mutableStateOf(isResultListEmpty)
@@ -127,6 +127,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+
                 ComicTextField(
                     modifier = Modifier
                         .fillMaxWidth(fraction = animateSearchFieldWidth),
@@ -142,35 +143,20 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                         hideKeyboard = false
                     },
                     isHintVisible = isInputEmpty,
+                    onSearchAfterDelay = { delayedInput ->
+                        mainViewModel.getComicByTitle(delayedInput)
+                    }
                 )
-                AnimatedVisibility(
-                    visible = !isInputEmpty,
-                    enter = slideInHorizontally(
-                        animationSpec = tween(
-                            durationMillis = 300,
-                            easing = LinearEasing
-                        ),
-                        initialOffsetX = { 50 }
-                    ),
-                    exit = slideOutHorizontally(
-                        animationSpec = tween(
-                            durationMillis = 300,
-                            easing = LinearEasing
-                        ),
-                        targetOffsetX = { -50 }
-                    )
+
+                SlideInClickableText(
+                    isInputEmpty = isInputEmpty,
+                    text = stringResource(id = R.string.cancel),
+                    onTextClicked = {
+                        inputValue.value = ""
+                        isInputEmpty = !isInputEmpty
+                    },
+                    textColor = CancelTextColor
                 )
-                {
-                    androidx.compose.material.Text(
-                        text = "Cancel",
-                        modifier = Modifier.clickable {
-                            inputValue.value = ""
-                            isInputEmpty = !isInputEmpty
-                        },
-                        color = CancelTextColor,
-                        maxLines = 1
-                    )
-                }
             }
 
             Spacer(modifier = Modifier.height(50.dp))
@@ -195,6 +181,43 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 InitialPrompt()
             }
         }
+    }
+}
+
+@Composable
+private fun SlideInClickableText(
+    isInputEmpty: Boolean,
+    modifier: Modifier = Modifier,
+    text: String,
+    onTextClicked: () -> Unit,
+    textColor: Color
+) {
+    AnimatedVisibility(
+        visible = !isInputEmpty,
+        enter = slideInHorizontally(
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = LinearEasing
+            ),
+            initialOffsetX = { 50 }
+        ),
+        exit = slideOutHorizontally(
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = LinearEasing
+            ),
+            targetOffsetX = { -50 }
+        )
+    )
+    {
+        Text(
+            text = text,
+            modifier = modifier.clickable {
+                onTextClicked()
+            },
+            color = textColor,
+            maxLines = 1
+        )
     }
 }
 

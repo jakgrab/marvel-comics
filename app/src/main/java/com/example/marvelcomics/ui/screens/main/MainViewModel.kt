@@ -35,15 +35,14 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
 
     var comicsList: MutableState<List<Result>> = mutableStateOf(emptyList())
 
-    var currentPage: Int = 0
+    private var currentPage: Int = 0
     var isEndReached: Boolean = false
 
     init {
-        testGetComicsWithPaging()
+        getComicsWithPaging()
     }
 
-    //new getComics fun
-    fun testGetComicsWithPaging() {
+    fun getComicsWithPaging() {
         viewModelScope.launch {
             _comicsData.value = comicRepository.getComics(
                 offset = currentPage * Constants.PAGE_SIZE

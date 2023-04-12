@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.marvelcomics.R
 import com.example.marvelcomics.ui.theme.SearchFieldBackgroundColor
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -37,6 +38,7 @@ fun ComicTextField(
     hideKeyboard: Boolean,
     onFocusClear: () -> Unit,
     isHintVisible: Boolean,
+    onSearchAfterDelay: (String) -> Unit
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -48,6 +50,12 @@ fun ComicTextField(
         mutableStateOf(false)
     }
     val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(key1 = inputValue.value) {
+        delay(100)
+        if (!validState) return@LaunchedEffect
+        onSearchAfterDelay(inputValue.value)
+    }
 
     MyTextField(
         modifier = modifier,
