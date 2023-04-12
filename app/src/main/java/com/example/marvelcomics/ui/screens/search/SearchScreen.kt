@@ -173,7 +173,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
             AnimatedVisibility(visible = showFoundComics) {
                 ComicBooksList(comicsList = comicsList) { comicIndex ->
@@ -212,7 +212,7 @@ private fun NoResultsFound() {
 @Composable
 private fun Loading() {
     Box(modifier = Modifier.size(120.dp), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(color = Color.Red)
     }
 }
 
