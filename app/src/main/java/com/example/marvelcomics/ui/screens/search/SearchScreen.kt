@@ -101,7 +101,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             MarvelSearchField(
                 animateSearchFieldWidth = animateSearchFieldWidth,
                 inputValue = inputValue,
-                isInputEmpty = searchingForComic,
+                isInputEmpty = isInputEmpty,
                 hideKeyboard = hideKeyboard,
                 onSearch = { comicTitle ->
                     comicBookTitle = comicTitle
