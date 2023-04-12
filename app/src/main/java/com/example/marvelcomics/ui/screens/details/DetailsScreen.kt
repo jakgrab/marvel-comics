@@ -157,56 +157,55 @@ fun BottomSheetContent(
                 end = 16.dp,
                 bottom = paddingValues.calculateBottomPadding()
             ),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
             Text(text = title, style = MaterialTheme.typography.h5)
             Spacer(modifier = Modifier.height(20.dp))
-
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
             if (authors.isNotEmpty())
                 Text(
                     text = authors,
                     color = Color.LightGray,
                     style = MaterialTheme.typography.body2
                 )
-            if (description.isNotEmpty())
+            if (description.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(15.dp))
                 Text(
                     text = description,
                     style = MaterialTheme.typography.body1
                 )
-
-            Box(modifier = Modifier.padding(bottom = 20.dp)) {
-                FindOutMoreFAB(
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(60.dp),
-                    onClick = {
-                        if (detailsUrl != null) {
-                            uriHandler.openUri(detailsUrl)
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "No details link available",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                )
             }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            FindOutMoreFAB(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(60.dp),
+                onClick = {
+                    if (detailsUrl != null) {
+                        uriHandler.openUri(detailsUrl)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "No details link available",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            )
         }
     }
 }
