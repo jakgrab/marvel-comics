@@ -80,7 +80,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                     comicsList = comicsList.value,
                     isEndReached = mainViewModel.isEndReached,
                     loadComics = {
-                        mainViewModel.testGetComicsWithPaging()
+                        mainViewModel.getComicsWithPaging()
                     }
                 ) { comicIndex ->
                     navController.navigate(
