@@ -52,7 +52,7 @@ fun ComicTextField(
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = inputValue.value) {
-        delay(500)
+        delay(100)
         if (!validState) return@LaunchedEffect
         onSearchAfterDelay(inputValue.value)
     }

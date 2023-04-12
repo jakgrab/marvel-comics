@@ -60,7 +60,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
         val isResultListEmpty: Boolean? = when (isDataNull) {
             true -> null
-            false -> comicsDataByTitle.value.data!!.data.results.isEmpty()
+            else -> comicsDataByTitle.value.data?.data?.results?.isEmpty()
         }
 
         mutableStateOf(isResultListEmpty)
@@ -143,7 +143,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                         hideKeyboard = false
                     },
                     isHintVisible = isInputEmpty,
-                    onSearchAfterDelay = {delayedInput ->
+                    onSearchAfterDelay = { delayedInput ->
                         mainViewModel.getComicByTitle(delayedInput)
                     }
                 )
@@ -210,7 +210,7 @@ private fun SlideInClickableText(
         )
     )
     {
-        androidx.compose.material.Text(
+        Text(
             text = text,
             modifier = modifier.clickable {
                 onTextClicked()
