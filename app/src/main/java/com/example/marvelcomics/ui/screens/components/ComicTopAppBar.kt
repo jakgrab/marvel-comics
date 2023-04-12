@@ -74,7 +74,8 @@ fun ComicTopAppBar(
                     Box {}
                 }
             },
-            colors = topAppBarColors
+            colors = topAppBarColors,
+            scrollBehavior = scrollBehavior
         )
     } else {
         CenterAlignedTopAppBar(

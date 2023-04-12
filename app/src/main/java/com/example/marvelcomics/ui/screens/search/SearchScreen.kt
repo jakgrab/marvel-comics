@@ -168,10 +168,6 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
-            //Spacer(modifier = Modifier.height(50.dp))
-
             AnimatedVisibility(visible = showFoundComics) {
                 ComicBooksList(comicsList = comicsList) { comicIndex ->
                     navController.navigate(

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,19 +48,28 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
     val fromMainScreen = true
 
     val scaffoldState = rememberScaffoldState()
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
+        state = topAppBarState
+    )
+
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         scaffoldState = scaffoldState,
         topBar = {
             ComicTopAppBar(
-                modifier = Modifier.shadow(
-                    elevation = 20.dp,
-                    shape = RectangleShape
-                ),
+                modifier = if (scrollBehavior.state.contentOffset < 0f) {
+                    Modifier.shadow(
+                        elevation = 20.dp,
+                        shape = RectangleShape
+                    )
+                } else Modifier,
                 isForMainScreen = true,
+                title = stringResource(R.string.main_screen_top_app_bar_title),
                 titleFontSize = 25.sp,
                 titleFontWeight = FontWeight.Bold,
-                title = stringResource(R.string.main_screen_top_app_bar_title)
+                scrollBehavior = scrollBehavior
             )
         },
 
