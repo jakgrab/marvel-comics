@@ -1,6 +1,5 @@
 package com.example.marvelcomics.ui.screens.main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -13,7 +12,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -53,13 +51,12 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         state = topAppBarState
     )
 
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         scaffoldState = scaffoldState,
         topBar = {
             ComicTopAppBar(
-                modifier = if (scrollBehavior.state.contentOffset < 0f) {
+                modifier = if (scrollBehavior.state.contentOffset < -10f) {
                     Modifier.shadow(
                         elevation = 20.dp,
                         shape = RectangleShape
