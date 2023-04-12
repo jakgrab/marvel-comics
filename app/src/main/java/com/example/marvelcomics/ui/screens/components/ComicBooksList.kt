@@ -24,15 +24,23 @@ import com.example.marvelcomics.ui.screens.utils.Utils
 @Composable
 fun ComicBooksList(
     comicsList: List<Result>,
+    modifier: Modifier = Modifier,
     isEndReached: Boolean = false,
     loadComics: () -> Unit = {},
     onComicClicked: (Int) -> Unit
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         itemsIndexed(items = comicsList) { index, comic ->
+            if (index == 0)
+                Spacer(modifier = Modifier.height(10.dp))
+
             ComicItem(comic) {
                 onComicClicked(index)
             }
+
             if (index >= comicsList.count() - 1 && !isEndReached) {
                 loadComics()
                 Box(

@@ -1,5 +1,6 @@
 package com.example.marvelcomics.ui.screens.main
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -8,9 +9,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.marvelcomics.R
 import com.example.marvelcomics.ui.navigation.ComicScreens
@@ -46,15 +52,22 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         scaffoldState = scaffoldState,
         topBar = {
             ComicTopAppBar(
+                modifier = Modifier.shadow(
+                    elevation = 20.dp,
+                    shape = RectangleShape
+                ),
+                isForMainScreen = true,
+                titleFontSize = 25.sp,
+                titleFontWeight = FontWeight.Bold,
                 title = stringResource(R.string.main_screen_top_app_bar_title)
             )
         },
+
         bottomBar = {
             ComicBottomAppBar(
                 onSearchIconClicked = {
                     navController.navigate(ComicScreens.SearchScreen.name)
-                },
-                homeSelected = true
+                }, homeSelected = true
             )
         },
     ) {
@@ -66,9 +79,9 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(androidx.compose.material.MaterialTheme.colors.background)
                     .padding(
-                        top = it.calculateTopPadding() + 10.dp,
+                        top = it.calculateTopPadding(),
                         start = 16.dp,
                         end = 16.dp,
                         bottom = it.calculateBottomPadding()
@@ -76,13 +89,11 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ComicBooksList(
-                    comicsList = comicsList.value,
+                ComicBooksList(comicsList = comicsList.value,
                     isEndReached = mainViewModel.isEndReached,
                     loadComics = {
                         mainViewModel.getComicsWithPaging()
-                    }
-                ) { comicIndex ->
+                    }) { comicIndex ->
                     navController.navigate(
                         ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
                     )
@@ -91,4 +102,3 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         }
     }
 }
-

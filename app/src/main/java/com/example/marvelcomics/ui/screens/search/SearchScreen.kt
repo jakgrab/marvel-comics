@@ -16,8 +16,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.marvelcomics.R
@@ -92,6 +96,50 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     val animateSearchFieldWidth by animateFloatAsState(targetValue = searchFieldWidth)
 
     Scaffold(
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .shadow(20.dp, RectangleShape)
+                    .background(androidx.compose.material.MaterialTheme.colors.background)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
+                    .height(60.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+
+                ComicTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(fraction = animateSearchFieldWidth),
+                    inputValue = inputValue,
+                    placeholderText = stringResource(R.string.search_field_hint),
+                    onSearch = { comicTitle ->
+                        comicBookTitle = comicTitle
+                        searchingForComic = true
+                        mainViewModel.getComicByTitle(comicBookTitle)
+                    },
+                    hideKeyboard = hideKeyboard,
+                    onFocusClear = {
+                        hideKeyboard = false
+                    },
+                    isHintVisible = isInputEmpty,
+                    onSearchAfterDelay = { delayedInput ->
+                        searchingForComic = true
+                        mainViewModel.getComicByTitle(delayedInput)
+                    }
+                )
+
+                SlideInClickableText(
+                    isInputEmpty = isInputEmpty,
+                    text = stringResource(id = R.string.cancel),
+                    onTextClicked = {
+                        inputValue.value = ""
+                        isInputEmpty = !isInputEmpty
+                    },
+                    textColor = CancelTextColor
+                )
+            }
+        },
         bottomBar = {
             ComicBottomAppBar(
                 onHomeIconClicked = {
@@ -120,46 +168,9 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
 
-                ComicTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(fraction = animateSearchFieldWidth),
-                    inputValue = inputValue,
-                    placeholderText = stringResource(R.string.search_field_hint),
-                    onSearch = { comicTitle ->
-                        comicBookTitle = comicTitle
-                        searchingForComic = true
-                        mainViewModel.getComicByTitle(comicBookTitle)
-                    },
-                    hideKeyboard = hideKeyboard,
-                    onFocusClear = {
-                        hideKeyboard = false
-                    },
-                    isHintVisible = isInputEmpty,
-                    onSearchAfterDelay = { delayedInput ->
-                        mainViewModel.getComicByTitle(delayedInput)
-                    }
-                )
 
-                SlideInClickableText(
-                    isInputEmpty = isInputEmpty,
-                    text = stringResource(id = R.string.cancel),
-                    onTextClicked = {
-                        inputValue.value = ""
-                        isInputEmpty = !isInputEmpty
-                    },
-                    textColor = CancelTextColor
-                )
-            }
-
-            Spacer(modifier = Modifier.height(60.dp))
+            //Spacer(modifier = Modifier.height(50.dp))
 
             AnimatedVisibility(visible = showFoundComics) {
                 ComicBooksList(comicsList = comicsList) { comicIndex ->
@@ -183,6 +194,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
         }
     }
 }
+
 
 @Composable
 private fun SlideInClickableText(
@@ -223,12 +235,27 @@ private fun SlideInClickableText(
 
 @Composable
 private fun NoResultsFound() {
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        Text(
-            text = stringResource(R.string.no_results_found),
-            color = androidx.compose.material.MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.titleLarge
-        )
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight(0.35f)
+                .padding(30.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_no_res_found),
+                contentDescription = stringResource(R.string.search_screen_no_res_found_icon_desc),
+                tint = Color.LightGray,
+                modifier = Modifier.fillMaxWidth(0.3f)
+            )
+            Text(
+                text = stringResource(R.string.no_results_found),
+                textAlign = TextAlign.Center,
+                color = androidx.compose.material.MaterialTheme.colors.onBackground,
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
     }
 }
 
