@@ -126,7 +126,7 @@ fun ComicThumbnail(imageUrl: String) {
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colors.primary,
+                    color = Color.Red,
                     modifier = Modifier.scale(0.4f)
                 )
             }
