@@ -1,5 +1,6 @@
 package com.example.marvelcomics.ui.screens.search.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -63,6 +64,7 @@ fun ComicTextField(
         errorState = errorState,
         placeholderText = placeholderText,
         onAction = KeyboardActions {
+            Log.d("MarvelSearchField", "My text field, onAction invoke")
             if (!validState) {
                 errorState.value = true
                 return@KeyboardActions
@@ -77,6 +79,7 @@ fun ComicTextField(
     )
 
     if (hideKeyboard) {
+        Log.d("MarvelSearchField", "Clear focus")
         focusManager.clearFocus()
         onFocusClear()
     }
