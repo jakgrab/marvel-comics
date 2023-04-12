@@ -97,48 +97,28 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     Scaffold(
         topBar = {
-            Row(
-                modifier = Modifier
-                    .shadow(20.dp, RectangleShape)
-                    .background(androidx.compose.material.MaterialTheme.colors.background)
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp)
-                    .height(60.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-
-                ComicTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(fraction = animateSearchFieldWidth),
-                    inputValue = inputValue,
-                    placeholderText = stringResource(R.string.search_field_hint),
-                    onSearch = { comicTitle ->
-                        comicBookTitle = comicTitle
-                        searchingForComic = true
-                        mainViewModel.getComicByTitle(comicBookTitle)
-                    },
-                    hideKeyboard = hideKeyboard,
-                    onFocusClear = {
-                        hideKeyboard = false
-                    },
-                    isHintVisible = isInputEmpty,
-                    onSearchAfterDelay = { delayedInput ->
-                        searchingForComic = true
-                        mainViewModel.getComicByTitle(delayedInput)
-                    }
-                )
-
-                SlideInClickableText(
-                    isInputEmpty = isInputEmpty,
-                    text = stringResource(id = R.string.cancel),
-                    onTextClicked = {
-                        inputValue.value = ""
-                        isInputEmpty = !isInputEmpty
-                    },
-                    textColor = CancelTextColor
-                )
-            }
+            MarvelSearchField(
+                animateSearchFieldWidth,
+                inputValue,
+                searchingForComic,
+                hideKeyboard,
+                onSearch = { comicTitle ->
+                    comicBookTitle = comicTitle
+                    searchingForComic = true
+                    mainViewModel.getComicByTitle(comicBookTitle)
+                },
+                onSearchAfterDelay = {delayedInput ->
+                    searchingForComic = true
+                    mainViewModel.getComicByTitle(delayedInput)
+                },
+                onFocusClear = {
+                    hideKeyboard = false
+                },
+                onTextClicked = {
+                    inputValue.value = ""
+                    isInputEmpty = !isInputEmpty
+                }
+            )
         },
         bottomBar = {
             ComicBottomAppBar(
@@ -188,6 +168,50 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 InitialPrompt()
             }
         }
+    }
+}
+
+@Composable
+private fun MarvelSearchField(
+    animateSearchFieldWidth: Float,
+    inputValue: MutableState<String>,
+    hideKeyboard: Boolean,
+    isInputEmpty: Boolean,
+    onSearch: (String) -> Unit,
+    onSearchAfterDelay: (String) -> Unit,
+    onFocusClear: () -> Unit,
+    onTextClicked: () -> Unit
+) {
+
+    Row(
+        modifier = Modifier
+            .shadow(20.dp, RectangleShape)
+            .background(androidx.compose.material.MaterialTheme.colors.background)
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 20.dp)
+            .height(60.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+
+        ComicTextField(
+            modifier = Modifier
+                .fillMaxWidth(fraction = animateSearchFieldWidth),
+            inputValue = inputValue,
+            placeholderText = stringResource(R.string.search_field_hint),
+            onSearch = onSearch,
+            hideKeyboard = hideKeyboard,
+            onFocusClear = onFocusClear,
+            isHintVisible = isInputEmpty,
+            onSearchAfterDelay = onSearchAfterDelay
+        )
+
+        SlideInClickableText(
+            isInputEmpty = isInputEmpty,
+            text = stringResource(id = R.string.cancel),
+            onTextClicked = onTextClicked,
+            textColor = CancelTextColor
+        )
     }
 }
 
