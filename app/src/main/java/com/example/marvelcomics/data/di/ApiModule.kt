@@ -1,6 +1,6 @@
 package com.example.marvelcomics.data.di
 
-import com.example.marvelcomics.data.constants.Constants.Companion.BASE_URL
+import com.example.marvelcomics.BuildConfig
 import com.example.marvelcomics.data.network.ComicsApi
 import com.example.marvelcomics.data.repository.ComicRepository
 import com.example.marvelcomics.data.repository.ComicRepositoryImpl
@@ -32,7 +32,7 @@ class ApiModule {
     @Singleton
     fun provideComicsApi(httpClient: OkHttpClient): ComicsApi {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
