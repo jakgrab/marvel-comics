@@ -1,6 +1,6 @@
 package com.example.marvelcomics.ui.screens.details
 
-import android.annotation.SuppressLint
+import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
@@ -16,10 +16,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.marvelcomics.R
@@ -30,7 +34,6 @@ import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.screens.main.MainViewModel
 import com.example.marvelcomics.ui.screens.utils.Utils
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun DetailsScreen(
@@ -162,34 +165,35 @@ fun BottomSheetContent(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(text = title, style = MaterialTheme.typography.h5)
-            Spacer(modifier = Modifier.height(20.dp))
-
-        }
-        Column(
-            modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.Start
         ) {
-            if (authors.isNotEmpty())
-                Text(
-                    text = authors,
-                    color = Color.LightGray,
-                    style = MaterialTheme.typography.body2
-                )
-            if (description.isNotEmpty())
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.body1
-                )
+            Column {
+                Text(text = title, style = MaterialTheme.typography.h5)
+                Spacer(modifier = Modifier.height(20.dp))
+                if (authors.isNotEmpty())
+                    Text(
+                        text = authors,
+                        color = Color.LightGray,
+                        style = MaterialTheme.typography.body2
+                    )
+                if (description.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(15.dp))
+                    HtmlText(
+                        style = MaterialTheme.typography.body1,
+                        text = description,
+                        color = Color.Black
+                    )
+                }
+            }
 
-            Box(modifier = Modifier.padding(bottom = 20.dp)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
                 FindOutMoreFAB(
                     modifier = Modifier
                         .fillMaxWidth(0.7f)
@@ -200,14 +204,38 @@ fun BottomSheetContent(
                         } else {
                             Toast.makeText(
                                 context,
-                                "No details link available",
+                                R.string.details_screen_no_details_available,
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
                 )
+                Spacer(modifier = Modifier.height(80.dp))
             }
         }
     }
 }
 
+@Composable
+private fun HtmlText(
+    style: TextStyle,
+    modifier: Modifier = Modifier,
+    text: String,
+    color: Color,
+    lineSpacing: Float = 1.2f
+) {
+    val fontSize = style.fontSize.value
+    AndroidView(
+        factory = { context ->
+            TextView(context).apply {
+                textSize = fontSize
+                setTextColor(color.toArgb())
+                setLineSpacing(1f, lineSpacing)
+            }
+        },
+        modifier = modifier,
+        update = {
+            it.text = HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_COMPACT)
+        }
+    )
+}
