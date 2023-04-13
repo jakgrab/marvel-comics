@@ -38,7 +38,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val comicsDataByTitle = mainViewModel.comicsDataByTitle.collectAsState()
 
-    lateinit var comicsList: List<Result>
+    var comicsList: List<Result> = listOf()
 
     val fromMainScreen = false
 
@@ -52,7 +52,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     if (comicsDataByTitle.value.loading == true) {
         showFoundComics = false
-    } else if (comicsDataByTitle.value.data != null) {
+    } else {
         comicsList = comicsDataByTitle.value.data?.data?.results ?: listOf()
         searchingForComic = false
         showFoundComics = true
@@ -80,7 +80,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     val inputValue = remember {
         mutableStateOf("")
     }
-    var isInputEmpty by remember(inputValue.value) {
+    val isInputEmpty by remember(inputValue.value) {
         mutableStateOf(inputValue.value.isEmpty())
     }
 
@@ -88,12 +88,9 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
         mutableStateOf(1f)
     }
 
-    searchFieldWidth = if (isInputEmpty) {
-        1f
-    } else 0.7f
+    searchFieldWidth = if (isInputEmpty) 1f else 0.7f
 
     val animateSearchFieldWidth by animateFloatAsState(targetValue = searchFieldWidth)
-
 
     val isKeyboardOpen by keyboardAsState()
 
@@ -117,8 +114,10 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     hideKeyboard = false
                 },
                 onTextClicked = {
-                    inputValue.value = ""
-                    isInputEmpty = !isInputEmpty
+//                    inputValue.value = ""
+//                    isInputEmpty = !isInputEmpty
+                    hideKeyboard = true
+                    mainViewModel.cancelSearch()
                 }
             )
         },

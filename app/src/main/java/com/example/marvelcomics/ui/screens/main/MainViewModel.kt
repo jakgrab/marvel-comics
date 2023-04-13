@@ -67,4 +67,6 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
             _comicsDataByTitle.value = comicRepository.getComicsByTitle(title)
         }
     }
+
+    fun cancelSearch() { _comicsDataByTitle.value.data = null }
 }

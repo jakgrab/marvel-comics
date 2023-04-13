@@ -79,6 +79,7 @@ fun ComicTextField(
     if (hideKeyboard) {
         focusManager.clearFocus()
         onFocusClear()
+        keyboardController?.hide()
     }
 }
 
