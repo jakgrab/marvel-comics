@@ -10,8 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ImportContacts
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -132,6 +130,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .imePadding()
                 .background(androidx.compose.material.MaterialTheme.colors.background)
                 .padding(
                     top = it.calculateTopPadding() + 16.dp,
@@ -257,7 +256,6 @@ private fun NoResultsFound() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier
-                .fillMaxHeight(0.35f)
                 .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
@@ -293,7 +291,7 @@ private fun InitialPrompt() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = Icons.Rounded.ImportContacts,
+                painter = painterResource(id = R.drawable.ic_book),
                 contentDescription = stringResource(id = R.string.initial_prompt_icon_description),
                 modifier = Modifier.size(100.dp),
                 tint = Color.DarkGray
