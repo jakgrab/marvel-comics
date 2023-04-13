@@ -184,7 +184,7 @@ fun BottomSheetContent(
                     HtmlText(
                         style = MaterialTheme.typography.body1,
                         text = description,
-                        color = Color.Black
+                        color = MaterialTheme.colors.onSurface
                     )
                 }
             }
