@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
+import com.example.marvelcomics.keyboardAsState
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
@@ -93,6 +94,9 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val animateSearchFieldWidth by animateFloatAsState(targetValue = searchFieldWidth)
 
+
+    val isKeyboardOpen by keyboardAsState()
+
     Scaffold(
         topBar = {
             MarvelSearchField(
@@ -105,7 +109,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     searchingForComic = true
                     mainViewModel.getComicByTitle(comicBookTitle)
                 },
-                onSearchAfterDelay = {delayedInput ->
+                onSearchAfterDelay = { delayedInput ->
                     searchingForComic = true
                     mainViewModel.getComicByTitle(delayedInput)
                 },
@@ -119,25 +123,26 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             )
         },
         bottomBar = {
-            ComicBottomAppBar(
-                onHomeIconClicked = {
-                    navController.navigate(ComicScreens.MainScreen.name)
-                },
-                searchSelected = true
-            )
+            if (!isKeyboardOpen)
+                ComicBottomAppBar(
+                    onHomeIconClicked = {
+                        navController.navigate(ComicScreens.MainScreen.name)
+                    },
+                    searchSelected = true
+                )
         }
-    ) {
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .imePadding()
                 .background(androidx.compose.material.MaterialTheme.colors.background)
                 .padding(
-                    top = it.calculateTopPadding() + 16.dp,
+                    top = innerPadding.calculateTopPadding() + 16.dp,
                     start = 16.dp,
                     end = 16.dp,
-                    bottom = it.calculateBottomPadding()
+                    //bottom = innerPadding.calculateBottomPadding()
                 )
+                .imePadding()
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
@@ -148,7 +153,10 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AnimatedVisibility(visible = showFoundComics) {
-                ComicBooksList(comicsList = comicsList) { comicIndex ->
+                ComicBooksList(
+                    comicsList = comicsList,
+                    modifier = Modifier.weight(1f)
+                ) { comicIndex ->
                     navController.navigate(
                         ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
                     )
