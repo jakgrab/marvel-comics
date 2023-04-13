@@ -10,8 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ImportContacts
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
+import com.example.marvelcomics.keyboardAsState
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
@@ -95,6 +94,9 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val animateSearchFieldWidth by animateFloatAsState(targetValue = searchFieldWidth)
 
+
+    val isKeyboardOpen by keyboardAsState()
+
     Scaffold(
         topBar = {
             MarvelSearchField(
@@ -107,7 +109,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     searchingForComic = true
                     mainViewModel.getComicByTitle(comicBookTitle)
                 },
-                onSearchAfterDelay = {delayedInput ->
+                onSearchAfterDelay = { delayedInput ->
                     searchingForComic = true
                     mainViewModel.getComicByTitle(delayedInput)
                 },
@@ -121,24 +123,26 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             )
         },
         bottomBar = {
-            ComicBottomAppBar(
-                onHomeIconClicked = {
-                    navController.navigate(ComicScreens.MainScreen.name)
-                },
-                searchSelected = true
-            )
+            if (!isKeyboardOpen)
+                ComicBottomAppBar(
+                    onHomeIconClicked = {
+                        navController.navigate(ComicScreens.MainScreen.name)
+                    },
+                    searchSelected = true
+                )
         }
-    ) {
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(androidx.compose.material.MaterialTheme.colors.background)
                 .padding(
-                    top = it.calculateTopPadding() + 16.dp,
+                    top = innerPadding.calculateTopPadding() + 16.dp,
                     start = 16.dp,
                     end = 16.dp,
-                    bottom = it.calculateBottomPadding()
+                    //bottom = innerPadding.calculateBottomPadding()
                 )
+                .imePadding()
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
@@ -149,7 +153,10 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AnimatedVisibility(visible = showFoundComics) {
-                ComicBooksList(comicsList = comicsList) { comicIndex ->
+                ComicBooksList(
+                    comicsList = comicsList,
+                    modifier = Modifier.weight(1f)
+                ) { comicIndex ->
                     navController.navigate(
                         ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
                     )
@@ -257,7 +264,6 @@ private fun NoResultsFound() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier
-                .fillMaxHeight(0.35f)
                 .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
@@ -293,7 +299,7 @@ private fun InitialPrompt() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = Icons.Rounded.ImportContacts,
+                painter = painterResource(id = R.drawable.ic_book),
                 contentDescription = stringResource(id = R.string.initial_prompt_icon_description),
                 modifier = Modifier.size(100.dp),
                 tint = Color.DarkGray
