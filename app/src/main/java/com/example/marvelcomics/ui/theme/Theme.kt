@@ -35,11 +35,8 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun MarvelComicsTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+
+    val colors = LightColorPalette
     val view = LocalView.current
 
     if (!view.isInEditMode) {
@@ -49,9 +46,9 @@ fun MarvelComicsTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Comp
             window.navigationBarColor = colors.background.toArgb()
 
             WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightStatusBars = !darkTheme
+                .isAppearanceLightStatusBars = true
             WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightNavigationBars = !darkTheme
+                .isAppearanceLightNavigationBars = true
         }
     }
 
