@@ -1,5 +1,6 @@
 package com.example.marvelcomics.ui.screens.details
 
+import android.content.Context
 import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
@@ -15,10 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -62,6 +65,9 @@ fun DetailsScreen(
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState(0)
 
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -83,6 +89,15 @@ fun DetailsScreen(
                 }
             )
         },
+        floatingActionButton = {
+            FindOutMoreFAB(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                detailsUrl = detailsUrl,
+                context = context,
+                uriHandler = uriHandler
+            )
+        },
+
         floatingActionButtonPosition = FabPosition.Center,
     ) { paddingValues ->
         val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -113,13 +128,12 @@ fun DetailsScreen(
                         title = title,
                         authors = authors,
                         description = description,
-                        detailsUrl = detailsUrl,
                         scrollState = scrollState,
                         paddingValues = paddingValues
                     )
                 },
                 sheetShape = RoundedCornerShape(25.dp),
-                sheetPeekHeight = 200.dp,
+                sheetPeekHeight = 250.dp,
                 sheetBackgroundColor = MaterialTheme.colors.surface,
                 backgroundColor = Color.Transparent
             ) {
@@ -129,7 +143,38 @@ fun DetailsScreen(
 }
 
 @Composable
-fun FindOutMoreFAB(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+fun FindOutMoreFAB(
+    modifier: Modifier = Modifier,
+    detailsUrl: String?,
+    context: Context,
+    uriHandler: UriHandler
+) {
+    CustomFAB(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .shadow(
+                elevation = 20.dp,
+                shape = RoundedCornerShape(10.dp),
+                ambientColor = Color.White
+            ),
+        onClick = {
+            if (detailsUrl != null) {
+                uriHandler.openUri(detailsUrl)
+            } else {
+                Toast.makeText(
+                    context,
+                    R.string.details_screen_no_details_available,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    )
+}
+
+
+@Composable
+fun CustomFAB(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     Button(
         onClick = { onClick() },
         modifier = modifier,
@@ -146,12 +191,9 @@ fun BottomSheetContent(
     title: String,
     authors: String,
     description: String,
-    detailsUrl: String?,
     scrollState: ScrollState,
     paddingValues: PaddingValues
 ) {
-    val context = LocalContext.current
-    val uriHandler = LocalUriHandler.current
 
     Column(
         modifier = modifier
@@ -169,51 +211,27 @@ fun BottomSheetContent(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            Column {
-                Text(text = title, style = MaterialTheme.typography.h5)
+            Text(text = title, style = MaterialTheme.typography.h5)
+            if (authors.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(20.dp))
-                if (authors.isNotEmpty())
-                    Text(
-                        text = authors,
-                        color = Color.LightGray,
-                        style = MaterialTheme.typography.body2
-                    )
-                if (description.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(15.dp))
-                    HtmlText(
-                        style = MaterialTheme.typography.body1,
-                        text = description,
-                        color = MaterialTheme.colors.onSurface
-                    )
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                FindOutMoreFAB(
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(60.dp),
-                    onClick = {
-                        if (detailsUrl != null) {
-                            uriHandler.openUri(detailsUrl)
-                        } else {
-                            Toast.makeText(
-                                context,
-                                R.string.details_screen_no_details_available,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                Text(
+                    text = authors,
+                    color = Color.LightGray,
+                    style = MaterialTheme.typography.body2
                 )
-                Spacer(modifier = Modifier.height(80.dp))
             }
+            if (description.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(15.dp))
+                HtmlText(
+                    style = MaterialTheme.typography.body1,
+                    text = description,
+                    color = MaterialTheme.colors.onSurface
+                )
+            }
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
