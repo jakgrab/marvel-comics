@@ -65,7 +65,6 @@ fun DetailsScreen(
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState(0)
 
-    val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
