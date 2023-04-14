@@ -192,7 +192,6 @@ private fun MarvelSearchField(
 
     Row(
         modifier = Modifier
-            .shadow(20.dp, RectangleShape)
             .background(androidx.compose.material.MaterialTheme.colors.background)
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 20.dp)
