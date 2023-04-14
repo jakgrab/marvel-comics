@@ -9,10 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.TextStyle
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,8 +18,7 @@ fun ComicTopAppBar(
     modifier: Modifier = Modifier,
     isForMainScreen: Boolean = false,
     title: String = "Screen",
-    titleFontSize: TextUnit = 20.sp,
-    titleFontWeight: FontWeight = FontWeight.Normal,
+    textStyle: TextStyle,
     icon: ImageVector? = null,
     actionIcon: ImageVector? = null,
     colors: TopAppBarColors? = null,
@@ -43,8 +39,7 @@ fun ComicTopAppBar(
             title = {
                 Text(
                     text = title,
-                    fontSize = titleFontSize,
-                    fontWeight = titleFontWeight,
+                    style = textStyle,
                     color = MaterialTheme.colors.onBackground
                 )
             },
@@ -83,8 +78,7 @@ fun ComicTopAppBar(
             title = {
                 Text(
                     text = title,
-                    fontSize = titleFontSize,
-                    fontWeight = titleFontWeight,
+                    style = textStyle,
                     color = MaterialTheme.colors.onBackground
                 )
             },

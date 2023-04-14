@@ -2,6 +2,7 @@ package com.example.marvelcomics.ui.screens.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
@@ -22,6 +23,7 @@ import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
 import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
+import com.example.marvelcomics.ui.theme.HeaderComicList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,8 +66,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 } else Modifier,
                 isForMainScreen = true,
                 title = stringResource(R.string.main_screen_top_app_bar_title),
-                titleFontSize = 25.sp,
-                titleFontWeight = FontWeight.Bold,
+                textStyle = MaterialTheme.typography.HeaderComicList,
                 scrollBehavior = scrollBehavior
             )
         },
