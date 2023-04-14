@@ -131,6 +131,7 @@ fun DetailsScreen(
                 modifier = Modifier.fillMaxHeight(),
                 alignment = Alignment.TopCenter
             )
+
             BottomSheetScaffold(
                 scaffoldState = bottomSheetScaffoldState,
                 modifier = Modifier.padding(top = 200.dp),
@@ -210,7 +211,6 @@ fun BottomSheetContent(
     coroutineScope: CoroutineScope,
     paddingValues: PaddingValues
 ) {
-
     Column(
         modifier = modifier
             .fillMaxSize()
