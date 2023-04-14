@@ -68,7 +68,6 @@ fun ComicTextField(
                 return@KeyboardActions
             }
             onSearch(inputValue.value.trim())
-            inputValue.value = ""
             keyboardController?.hide()
             focusManager.clearFocus()
             errorState.value = false
@@ -79,6 +78,7 @@ fun ComicTextField(
     if (hideKeyboard) {
         focusManager.clearFocus()
         onFocusClear()
+        keyboardController?.hide()
     }
 }
 
