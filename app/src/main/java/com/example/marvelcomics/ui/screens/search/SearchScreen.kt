@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
@@ -253,6 +254,7 @@ private fun SlideInClickableText(
             modifier = modifier.clickable {
                 onTextClicked()
             },
+            fontSize = 20.sp,
             color = textColor,
             maxLines = 1
         )
