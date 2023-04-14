@@ -38,7 +38,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val comicsDataByTitle = mainViewModel.comicsDataByTitle.collectAsState()
 
-    lateinit var comicsList: List<Result>
+    var comicsList: List<Result>? = null
 
     val fromMainScreen = false
 
@@ -52,21 +52,14 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     if (comicsDataByTitle.value.loading == true) {
         showFoundComics = false
-    } else if (comicsDataByTitle.value.data != null) {
-        comicsList = comicsDataByTitle.value.data?.data?.results ?: listOf()
+    } else {
+        comicsList = comicsDataByTitle.value.data?.data?.results
         searchingForComic = false
         showFoundComics = true
     }
 
-    val noResultsFound by remember(comicsDataByTitle.value) {
-        val isDataNull = comicsDataByTitle.value.data == null
-
-        val isResultListEmpty: Boolean? = when (isDataNull) {
-            true -> null
-            else -> comicsDataByTitle.value.data?.data?.results?.isEmpty()
-        }
-
-        mutableStateOf(isResultListEmpty)
+    val isResultEmpty by remember(comicsDataByTitle.value.data) {
+        mutableStateOf(comicsDataByTitle.value.data?.data?.results?.isEmpty())
     }
 
     var comicBookTitle by remember {
@@ -88,12 +81,9 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
         mutableStateOf(1f)
     }
 
-    searchFieldWidth = if (isInputEmpty) {
-        1f
-    } else 0.7f
+    searchFieldWidth = if (isInputEmpty) 1f else 0.7f
 
     val animateSearchFieldWidth by animateFloatAsState(targetValue = searchFieldWidth)
-
 
     val isKeyboardOpen by keyboardAsState()
 
@@ -119,6 +109,8 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 onTextClicked = {
                     inputValue.value = ""
                     isInputEmpty = !isInputEmpty
+                    hideKeyboard = true
+                    mainViewModel.cancelSearch()
                 }
             )
         },
@@ -152,14 +144,16 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnimatedVisibility(visible = showFoundComics) {
-                ComicBooksList(
-                    comicsList = comicsList,
-                    modifier = Modifier.weight(1f)
-                ) { comicIndex ->
-                    navController.navigate(
-                        ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
-                    )
+            AnimatedVisibility(visible = showFoundComics && !comicsList.isNullOrEmpty()) {
+                comicsList?.let {
+                    ComicBooksList(
+                        comicsList = it,
+                        modifier = Modifier.weight(1f)
+                    ) { comicIndex ->
+                        navController.navigate(
+                            ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                        )
+                    }
                 }
             }
 
@@ -167,11 +161,11 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 Loading()
             }
 
-            AnimatedVisibility(visible = noResultsFound == true) {
+            AnimatedVisibility(visible = isResultEmpty == true) {
                 NoResultsFound()
             }
 
-            AnimatedVisibility(visible = noResultsFound == null) {
+            AnimatedVisibility(visible = isResultEmpty == null) {
                 InitialPrompt()
             }
         }

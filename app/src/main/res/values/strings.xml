@@ -2,7 +2,7 @@
     <string name="app_name">MarvelComics</string>
     <string name="search_screen_initial_prompt">Start typing to find particular comics</string>
     <string name="initial_prompt_icon_description">"Comic book icon"</string>
-    <string name="no_results_found">There is no comic book with that name in out library. Check the spelling and try again.</string>
+    <string name="no_results_found">There is no comic book with that name in our library. Check the spelling and try again.</string>
     <string name="search_field_hint">Search for a comic book</string>
     <string name="no_description_available">No description available</string>
     <string name="main_screen_top_app_bar_title">Marvel Comics</string>
