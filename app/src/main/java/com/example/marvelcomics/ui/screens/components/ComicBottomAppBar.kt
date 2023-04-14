@@ -32,7 +32,7 @@ fun ComicBottomAppBar(
 
     BottomAppBar(
         modifier = Modifier.advancedShadow(
-            alpha = 0.2f,
+            alpha = 0.1f,
             cornersRadius = 10.dp,
             shadowBlurRadius = 15.dp,
             offsetY = (-5).dp
