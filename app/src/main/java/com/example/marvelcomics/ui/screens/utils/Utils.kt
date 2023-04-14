@@ -1,21 +1,22 @@
 package com.example.marvelcomics.ui.screens.utils
 
+import android.content.Context
+import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
 
 class Utils {
-
     companion object {
         fun getAuthors(
+            context: Context,
             numAuthors: Int,
             comic: Result?
         ): String {
             if (comic == null) return ""
-
+            val writtenBy = context.getString(R.string.written_by)
             return when (numAuthors) {
                 0 -> ""
-                1 -> comic.creators.items[0].name
                 else -> {
-                    return comic.creators.items.joinToString { author -> author.name }
+                    return "$writtenBy ${comic.creators.items.joinToString { author -> author.name }}"
                 }
             }
         }
