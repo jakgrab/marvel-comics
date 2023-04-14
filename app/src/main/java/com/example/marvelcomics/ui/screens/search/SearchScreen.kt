@@ -1,5 +1,6 @@
 package com.example.marvelcomics.ui.screens.search
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -38,7 +39,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val comicsDataByTitle = mainViewModel.comicsDataByTitle.collectAsState()
 
-    var comicsList: List<Result> = listOf()
+    var comicsList: List<Result>? = null
 
     val fromMainScreen = false
 
@@ -53,20 +54,24 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     if (comicsDataByTitle.value.loading == true) {
         showFoundComics = false
     } else {
-        comicsList = comicsDataByTitle.value.data?.data?.results ?: listOf()
+        comicsList = comicsDataByTitle.value.data?.data?.results
         searchingForComic = false
         showFoundComics = true
     }
 
-    val noResultsFound by remember(comicsDataByTitle.value) {
+    val isResultEmpty by remember(comicsDataByTitle.value.data) {
         val isDataNull = comicsDataByTitle.value.data == null
 
         val isResultListEmpty: Boolean? = when (isDataNull) {
             true -> null
             else -> comicsDataByTitle.value.data?.data?.results?.isEmpty()
         }
-
-        mutableStateOf(isResultListEmpty)
+        Log.d(
+            "Result",
+            "Result list is: ${comicsDataByTitle.value.data?.data?.results?.isEmpty()}," +
+                    " second result list is $isResultListEmpty"
+        )
+        mutableStateOf(comicsDataByTitle.value.data?.data?.results?.isEmpty())
     }
 
     var comicBookTitle by remember {
@@ -80,7 +85,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     val inputValue = remember {
         mutableStateOf("")
     }
-    val isInputEmpty by remember(inputValue.value) {
+    var isInputEmpty by remember(inputValue.value) {
         mutableStateOf(inputValue.value.isEmpty())
     }
 
@@ -114,8 +119,8 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     hideKeyboard = false
                 },
                 onTextClicked = {
-//                    inputValue.value = ""
-//                    isInputEmpty = !isInputEmpty
+                    inputValue.value = ""
+                    isInputEmpty = !isInputEmpty
                     hideKeyboard = true
                     mainViewModel.cancelSearch()
                 }
@@ -151,14 +156,16 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnimatedVisibility(visible = showFoundComics) {
-                ComicBooksList(
-                    comicsList = comicsList,
-                    modifier = Modifier.weight(1f)
-                ) { comicIndex ->
-                    navController.navigate(
-                        ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
-                    )
+            AnimatedVisibility(visible = showFoundComics && !comicsList.isNullOrEmpty()) {
+                comicsList?.let {
+                    ComicBooksList(
+                        comicsList = it,
+                        modifier = Modifier.weight(1f)
+                    ) { comicIndex ->
+                        navController.navigate(
+                            ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                        )
+                    }
                 }
             }
 
@@ -166,11 +173,11 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 Loading()
             }
 
-            AnimatedVisibility(visible = noResultsFound == true) {
+            AnimatedVisibility(visible = isResultEmpty == true) {
                 NoResultsFound()
             }
 
-            AnimatedVisibility(visible = noResultsFound == null) {
+            AnimatedVisibility(visible = isResultEmpty == null) {
                 InitialPrompt()
             }
         }
