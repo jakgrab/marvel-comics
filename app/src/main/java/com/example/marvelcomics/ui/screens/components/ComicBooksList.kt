@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -59,6 +60,7 @@ fun ComicBooksList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
+    val context = LocalContext.current
 
     val extension: String = comic.thumbnail.extension
     val imagePath: String = comic.thumbnail.path
@@ -68,7 +70,7 @@ fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
     val description = comic.description ?: stringResource(R.string.no_description_available)
     val numAuthors: Int = comic.creators.available
 
-    val authors = Utils.getAuthors(numAuthors, comic)
+    val authors = Utils.getAuthors(context, numAuthors, comic)
 
     Card(
         onClick = {
