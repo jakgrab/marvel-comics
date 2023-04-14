@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,6 +16,8 @@ import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -36,6 +40,9 @@ import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
 import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.screens.main.MainViewModel
 import com.example.marvelcomics.ui.screens.utils.Utils
+import com.example.marvelcomics.ui.theme.BottomSheetButtonColor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
@@ -64,6 +71,8 @@ fun DetailsScreen(
 
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState(0)
+
+    val coroutineScope = rememberCoroutineScope()
 
     val uriHandler = LocalUriHandler.current
 
@@ -104,7 +113,10 @@ fun DetailsScreen(
             bottomSheetState = sheetState
         )
 
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
 
             val extension: String? =
                 comicsData?.thumbnail?.extension
@@ -119,6 +131,7 @@ fun DetailsScreen(
                 modifier = Modifier.fillMaxHeight(),
                 alignment = Alignment.TopCenter
             )
+
             BottomSheetScaffold(
                 scaffoldState = bottomSheetScaffoldState,
                 modifier = Modifier.padding(top = 200.dp),
@@ -128,6 +141,8 @@ fun DetailsScreen(
                         authors = authors,
                         description = description,
                         scrollState = scrollState,
+                        sheetState = sheetState,
+                        coroutineScope = coroutineScope,
                         paddingValues = paddingValues
                     )
                 },
@@ -184,6 +199,7 @@ fun CustomFAB(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheetContent(
     modifier: Modifier = Modifier,
@@ -191,9 +207,10 @@ fun BottomSheetContent(
     authors: String,
     description: String,
     scrollState: ScrollState,
+    sheetState: BottomSheetState,
+    coroutineScope: CoroutineScope,
     paddingValues: PaddingValues
 ) {
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -206,6 +223,35 @@ fun BottomSheetContent(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
+        Box(
+            modifier
+                .fillMaxWidth()
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    coroutineScope.launch {
+                        if (sheetState.isCollapsed)
+                            sheetState.expand()
+                        else sheetState.collapse()
+                    }
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            BottomSheetButton(
+                modifier = Modifier
+                    .fillMaxWidth(0.2f)
+                    .height(5.dp)
+            ) {
+                coroutineScope.launch {
+                    if (sheetState.isCollapsed)
+                        sheetState.expand()
+                    else sheetState.collapse()
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -233,6 +279,19 @@ fun BottomSheetContent(
             Spacer(modifier = Modifier.height(100.dp))
         }
     }
+}
+
+@Composable
+private fun BottomSheetButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Button(
+        modifier = modifier,
+        onClick = onClick,
+        shape = RoundedCornerShape(40.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = BottomSheetButtonColor)
+    ) {}
 }
 
 @Composable
