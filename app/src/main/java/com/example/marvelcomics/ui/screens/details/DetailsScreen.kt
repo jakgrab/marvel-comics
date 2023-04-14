@@ -54,7 +54,9 @@ fun DetailsScreen(
         comicsData?.description ?: stringResource(R.string.details_screen_no_desc_available)
     val numAuthors: Int = comicsData?.creators?.available ?: 0
 
-    val authors = Utils.getAuthors(numAuthors, comicsData)
+    val context = LocalContext.current
+
+    val authors = Utils.getAuthors(context, numAuthors, comicsData)
     val detailsUrl = comicsData?.urls?.get(0)?.url
 
     val scaffoldState = rememberScaffoldState()

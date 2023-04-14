@@ -69,7 +69,6 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 scrollBehavior = scrollBehavior
             )
         },
-
         bottomBar = {
             ComicBottomAppBar(
                 onSearchIconClicked = {
