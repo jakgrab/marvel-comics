@@ -60,17 +60,6 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     }
 
     val isResultEmpty by remember(comicsDataByTitle.value.data) {
-        val isDataNull = comicsDataByTitle.value.data == null
-
-        val isResultListEmpty: Boolean? = when (isDataNull) {
-            true -> null
-            else -> comicsDataByTitle.value.data?.data?.results?.isEmpty()
-        }
-        Log.d(
-            "Result",
-            "Result list is: ${comicsDataByTitle.value.data?.data?.results?.isEmpty()}," +
-                    " second result list is $isResultListEmpty"
-        )
         mutableStateOf(comicsDataByTitle.value.data?.data?.results?.isEmpty())
     }
 
