@@ -14,9 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -187,7 +185,6 @@ private fun MarvelSearchField(
 
     Row(
         modifier = Modifier
-            .shadow(20.dp, RectangleShape)
             .background(androidx.compose.material.MaterialTheme.colors.background)
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 20.dp)
