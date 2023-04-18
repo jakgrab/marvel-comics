@@ -62,10 +62,11 @@ fun ComicBooksList(
 fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
     val context = LocalContext.current
 
-    val extension: String = comic.thumbnail.extension
-    val imagePath: String = comic.thumbnail.path
-
-    val imageUrl = "$imagePath/portrait_xlarge.$extension"
+    val imageUrl = if (comic.images.isNotEmpty()) {
+        val extension: String = comic.images[0].extension
+        val imagePath: String = comic.images[0].path
+        "$imagePath.$extension"
+    } else ""
 
     val description = comic.description ?: stringResource(R.string.no_description_available)
     val numAuthors: Int = comic.creators.available
@@ -86,17 +87,22 @@ fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp, pressedElevation = 25.dp)
     ) {
         Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start) {
-            ComicThumbnail(imageUrl)
-            TitleAndDescription(comic.title, authors, description)
+            ComicThumbnail(modifier = Modifier.weight(2f), imageUrl)
+            TitleAndDescription(modifier = Modifier.weight(3f), comic.title, authors, description)
         }
     }
 }
 
 
 @Composable
-fun TitleAndDescription(title: String, authors: String, description: String) {
+fun TitleAndDescription(
+    modifier: Modifier = Modifier,
+    title: String,
+    authors: String,
+    description: String
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxHeight()
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
@@ -127,9 +133,9 @@ fun TitleAndDescription(title: String, authors: String, description: String) {
 }
 
 @Composable
-fun ComicThumbnail(imageUrl: String) {
+fun ComicThumbnail(modifier: Modifier = Modifier, imageUrl: String) {
     SubcomposeAsyncImage(
-        model = imageUrl,
+        model = imageUrl.ifEmpty { R.drawable.placeholder },
         loading = {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -142,9 +148,16 @@ fun ComicThumbnail(imageUrl: String) {
             }
         },
         contentDescription = null,
-        contentScale = ContentScale.Fit,
-        modifier = Modifier
+        contentScale = ContentScale.Crop,
+        modifier = modifier
             .fillMaxHeight()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(
+                RoundedCornerShape(
+                    topStart = 20.dp,
+                    bottomStart = 20.dp,
+                    topEnd = 0.dp,
+                    bottomEnd = 0.dp
+                )
+            )
     )
 }
