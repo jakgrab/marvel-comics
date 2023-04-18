@@ -24,6 +24,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.marvelcomics.R
+import com.example.marvelcomics.ui.theme.InputTextColor
+import com.example.marvelcomics.ui.theme.PlaceholderColor
 import com.example.marvelcomics.ui.theme.SearchFieldBackgroundColor
 import kotlinx.coroutines.delay
 
@@ -126,7 +128,8 @@ fun MyTextField(
         maxLines = 1,
         shape = RoundedCornerShape(10.dp),
         colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
-            textColor = MaterialTheme.colors.onBackground,
+            textColor = InputTextColor,
+            placeholderColor = PlaceholderColor,
             containerColor = SearchFieldBackgroundColor,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
