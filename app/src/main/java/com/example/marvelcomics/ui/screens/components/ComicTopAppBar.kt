@@ -8,9 +8,8 @@ import androidx.compose.material.Text
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
@@ -23,8 +22,8 @@ fun ComicTopAppBar(
     title: String = "Screen",
     titleFontSize: TextUnit = 20.sp,
     titleFontWeight: FontWeight = FontWeight.Normal,
-    icon: ImageVector? = null,
-    actionIcon: ImageVector? = null,
+    icon: Painter? = null,
+    actionIcon: Painter? = null,
     colors: TopAppBarColors? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     onNavigationIconClicked: () -> Unit = {},
@@ -52,7 +51,7 @@ fun ComicTopAppBar(
                 if (icon != null) {
                     IconButton(onClick = { onNavigationIconClicked.invoke() }) {
                         Icon(
-                            imageVector = icon,
+                            painter = icon,
                             contentDescription = null,
                             tint = MaterialTheme.colors.onBackground
                         )
@@ -65,7 +64,7 @@ fun ComicTopAppBar(
                 if (actionIcon != null) {
                     IconButton(onClick = { onActionIconClicked.invoke() }) {
                         Icon(
-                            imageVector = actionIcon,
+                            painter = actionIcon,
                             contentDescription = null,
                             tint = MaterialTheme.colors.onBackground
                         )
@@ -92,7 +91,7 @@ fun ComicTopAppBar(
                 if (icon != null) {
                     IconButton(onClick = { onNavigationIconClicked.invoke() }) {
                         Icon(
-                            imageVector = icon,
+                            painter = icon,
                             contentDescription = null,
                             tint = MaterialTheme.colors.onBackground
                         )
@@ -105,7 +104,7 @@ fun ComicTopAppBar(
                 if (actionIcon != null) {
                     IconButton(onClick = { onActionIconClicked.invoke() }) {
                         Icon(
-                            imageVector = actionIcon,
+                            painter = actionIcon,
                             contentDescription = null,
                             tint = MaterialTheme.colors.onBackground
                         )
