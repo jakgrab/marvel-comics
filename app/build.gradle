@@ -74,13 +74,13 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
 
     // Local tests
-    testImplementation "androidx.test:core:1.4.0"
+    testImplementation "androidx.test:core:1.5.0"
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
     testImplementation "com.google.truth:truth:1.1.3"
     testImplementation "com.squareup.okhttp3:mockwebserver:4.9.1"
-    testImplementation "io.mockk:mockk:1.10.5"
+    testImplementation "io.mockk:mockk:1.13.5"
     debugImplementation "androidx.compose.ui:ui-test-manifest:1.4.1"
 
     // Instrumentation tests
@@ -91,14 +91,18 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:2.2.0"
     androidTestImplementation "com.google.truth:truth:1.1.3"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'android.test:core-ktx:1.4.0'
+    //androidTestImplementation 'android.test:core-ktx:1.4.0'
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:4.9.1"
-    androidTestImplementation "io.mockk:mockk:1.10.5"
+    androidTestImplementation "io.mockk:mockk:1.13.5"
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.3.3"
     debugImplementation "androidx.compose.ui:ui-tooling"
     debugImplementation "androidx.compose.ui:ui-test-manifest"
+
+//    testImplementation 'io.strikt:strikt-core:0.33.0'
+//    testImplementation 'io.strikt:strikt-mockk:0.33.0'
+//    androidTestImplementation 'io.strikt:strikt-core:0.33.0'
 
     // Compose navigation
     implementation "androidx.navigation:navigation-compose:2.5.3"
