@@ -10,9 +10,7 @@ import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.data.repository.ComicRepository
 import com.example.marvelcomics.data.wrapper.DataOrException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject

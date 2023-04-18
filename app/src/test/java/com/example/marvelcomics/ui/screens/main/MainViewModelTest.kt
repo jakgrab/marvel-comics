@@ -1,8 +1,16 @@
 package com.example.marvelcomics.ui.screens.main
 
+import com.example.marvelcomics.data.model.Characters
 import com.example.marvelcomics.data.model.Comics
+import com.example.marvelcomics.data.model.Creator
+import com.example.marvelcomics.data.model.Creators
 import com.example.marvelcomics.data.model.Data
+import com.example.marvelcomics.data.model.Events
+import com.example.marvelcomics.data.model.Item
 import com.example.marvelcomics.data.model.Result
+import com.example.marvelcomics.data.model.Series
+import com.example.marvelcomics.data.model.Stories
+import com.example.marvelcomics.data.model.Thumbnail
 import com.example.marvelcomics.data.repository.ComicRepository
 import com.example.marvelcomics.data.wrapper.DataOrException
 import com.example.marvelcomics.util.MainCoroutineRule
@@ -25,32 +33,21 @@ class MainViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-//    @ExperimentalCoroutinesApi
-//    private val dispatcher = StandardTestDispatcher()
-//
-//    @get:Rule
-//    val rule = InstantTaskExecutorRule()
-
     private lateinit var viewModel: MainViewModel
 
+    private var fakeResult = getResult()
 
-    private var fakeResult =
-        mockk<Result>(relaxed = true)
+    private var fakeData = getData(results = arrayListOf(fakeResult, fakeResult))
 
-    private var fakeData = mockk<Data>(relaxed = true)
+    private var fakeComics = getComics(data = fakeData)
 
-    private var fakeComics = mockk<Comics>(relaxed = true)
+    private val fakeDataOrException = getDataOrException(comics = fakeComics)
 
-    private val fakeDataOrException =
-        mockk<DataOrException<Comics, Boolean, Exception>>(relaxed = true)
+    private val fakeRepository: ComicRepository = mockk()
 
-    private val fakeRepository: ComicRepository = mockk {
-        coEvery { getComicsByTitle(any()) } returns fakeDataOrException
-    }
 
     @Before
     fun setup() {
-//        Dispatchers.setMain(dispatcher)
 
         fakeResult = fakeResult.copy(title = "Spider-man", description = "description")
         fakeData = fakeData.copy(results = arrayListOf(fakeResult, fakeResult, fakeResult))
@@ -70,18 +67,12 @@ class MainViewModelTest {
         viewModel = MainViewModel(comicRepository = fakeRepository)
     }
 
-//    @ExperimentalCoroutinesApi
-//    @After
-//    fun clean() {
-//        Dispatchers.resetMain()
-//    }
-
     @Test
-    fun `WHEN title starts with Spider RETURN Spider-man comics`() = runTest {
+    fun `When title starts with Spider return Spider-man comics`() = runTest {
         viewModel.getComicByTitle(title = "Spider")
         advanceUntilIdle()
-        val dataorexception = viewModel.comicsDataByTitle.value as DataOrException<Comics, Boolean, Exception>
-        val comics: Comics? = dataorexception.data
+        val dataOrException = viewModel.comicsDataByTitle.value
+        val comics: Comics? = dataOrException.data
         val data = comics?.data
         val results = data?.results
         val title = results?.get(0)?.title
@@ -90,10 +81,67 @@ class MainViewModelTest {
             title
         )
     }
-}
 
-class FakeDataOrException<Comics, Boolean, E: Exception>(
-    var data: Comics? = null,
-    var loading: Boolean? = null,
-    var exception: E? = null
-)
+    @Test
+    fun `When getting comics with paging ensure that comicsList is not empty`() = runTest {
+        viewModel.getComicsWithPaging()
+        advanceUntilIdle()
+        assert(
+            viewModel.comicsList.value.isNotEmpty()
+        )
+    }
+
+    private fun getDataOrException(comics: Comics): DataOrException<Comics, Boolean, Exception> {
+        return DataOrException(data = comics)
+    }
+
+    private fun getComics(data: Data): Comics {
+        return Comics(
+            code = 1,
+            copyright = ",",
+            data = data,
+            ""
+        )
+    }
+
+    private fun getData(results: ArrayList<Result>): Data {
+        return Data(1,1,1, results,1)
+    }
+
+    private fun getResult(): Result {
+        return Result(
+            characters = Characters(
+                0,
+                "",
+                listOf(Item("", "")),
+                1
+            ),
+            collectedIssues = listOf(),
+            collections = listOf(),
+            creators = Creators(
+                1,
+                items = listOf(Creator("","","")),
+                1
+            ),
+            dates = listOf(),
+            description = "fakeDescription",
+            digitalId = 1,
+            events = Events(1,"", listOf(),1),
+            format = "",
+            images = listOf(),
+            issueNumber = 1,
+            modified = "",
+            pageCount = 1,
+            prices = listOf(),
+            resourceURI = "",
+            series = Series("", ""),
+            stories = Stories(1,"", listOf(),1),
+            textObjects = listOf(),
+            thumbnail = Thumbnail("",""),
+            title = "fakeTitle",
+            urls = listOf(),
+            "",
+            listOf()
+        )
+    }
+}
