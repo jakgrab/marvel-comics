@@ -28,7 +28,6 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
@@ -42,7 +41,6 @@ import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.screens.main.MainViewModel
 import com.example.marvelcomics.ui.screens.utils.Utils
 import com.example.marvelcomics.ui.theme.BottomSheetButtonColor
-import com.example.marvelcomics.ui.theme.MarvelComicsTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -68,7 +66,7 @@ fun DetailsScreen(
 
     val context = LocalContext.current
 
-    val authors = Utils.getAuthors(context, numAuthors, comicsData)
+    val authors = Utils.getAuthorsWithoutWrittenBy( numAuthors, comicsData)
     val detailsUrl = comicsData?.urls?.get(0)?.url
 
     val scaffoldState = rememberScaffoldState()
