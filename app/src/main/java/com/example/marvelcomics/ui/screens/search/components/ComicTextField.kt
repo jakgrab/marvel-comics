@@ -109,6 +109,7 @@ fun MyTextField(
             Text(
                 text = placeholderText,
                 fontSize = 20.sp,
+                color = PlaceholderColor,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -129,7 +130,7 @@ fun MyTextField(
         shape = RoundedCornerShape(10.dp),
         colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
             textColor = InputTextColor,
-            placeholderColor = PlaceholderColor,
+            cursorColor = InputTextColor,
             containerColor = SearchFieldBackgroundColor,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent

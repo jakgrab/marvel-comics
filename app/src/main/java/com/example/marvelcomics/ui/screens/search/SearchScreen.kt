@@ -131,7 +131,6 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     top = innerPadding.calculateTopPadding() + 16.dp,
                     start = 16.dp,
                     end = 16.dp,
-                    //bottom = innerPadding.calculateBottomPadding()
                 )
                 .imePadding()
                 .clickable(
