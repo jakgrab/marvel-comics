@@ -1,0 +1,11 @@
+package com.example.core.repository
+
+import com.example.core.model.Comics
+import com.example.core.wrapper.DataOrException
+
+
+interface ComicRepository {
+
+    suspend fun getComics(offset: Int): DataOrException<Comics, Boolean, Exception>
+    suspend fun getComicsByTitle(title: String): DataOrException<Comics, Boolean, Exception>
+}
