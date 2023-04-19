@@ -5,12 +5,12 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -144,6 +144,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     top = innerPadding.calculateTopPadding() + 16.dp,
                     start = 16.dp,
                     end = 16.dp,
+                    bottom = innerPadding.calculateBottomPadding()
                 )
                 .imePadding()
                 .clickable(
@@ -155,7 +156,21 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnimatedVisibility(visible = showFoundComics && !comicsList.isNullOrEmpty()) {
+            AnimatedVisibility(
+                visible = showFoundComics &&
+                        !comicsList.isNullOrEmpty() &&
+                        inputValue.value.isNotEmpty() &&
+                        !searchingForComic,
+                enter = slideInVertically(
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = LinearEasing
+                    ),
+                    initialOffsetY = {
+                        it / 2
+                    }
+                )
+            ) {
                 comicsList?.let {
                     ComicBooksList(
                         comicsList = it,
@@ -168,15 +183,15 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 }
             }
 
-            AnimatedVisibility(visible = (searchingForComic)) {
+            if (searchingForComic) {
                 Loading()
             }
 
-            AnimatedVisibility(visible = isResultEmpty == true) {
+            if (isResultEmpty == true && !searchingForComic) {
                 NoResultsFound()
             }
 
-            AnimatedVisibility(visible = isResultEmpty == null) {
+            if ((isResultEmpty == null || inputValue.value.isEmpty()) && !searchingForComic) {
                 InitialPrompt()
             }
         }
@@ -292,7 +307,7 @@ private fun NoResultsFound() {
 
 @Composable
 private fun Loading() {
-    Box(modifier = Modifier.size(120.dp), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.size(200.dp), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(color = Color.Red)
     }
 }
