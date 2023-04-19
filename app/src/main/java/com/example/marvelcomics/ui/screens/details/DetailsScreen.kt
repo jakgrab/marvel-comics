@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -27,6 +28,7 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
@@ -40,6 +42,7 @@ import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.screens.main.MainViewModel
 import com.example.marvelcomics.ui.screens.utils.Utils
 import com.example.marvelcomics.ui.theme.BottomSheetButtonColor
+import com.example.marvelcomics.ui.theme.MarvelComicsTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -214,7 +217,7 @@ fun BottomSheetContent(
         modifier = modifier
             .fillMaxSize()
             .padding(
-                top = 20.dp,
+                top = 5.dp,
                 start = 16.dp,
                 end = 16.dp,
                 bottom = paddingValues.calculateBottomPadding()
@@ -239,8 +242,8 @@ fun BottomSheetContent(
         ) {
             BottomSheetButton(
                 modifier = Modifier
-                    .fillMaxWidth(0.2f)
-                    .height(5.dp)
+                    .fillMaxWidth(0.20f)
+                    .height(7.5.dp)
             ) {
                 coroutineScope.launch {
                     if (sheetState.isCollapsed)
@@ -285,12 +288,15 @@ private fun BottomSheetButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    Button(
-        modifier = modifier,
-        onClick = onClick,
-        shape = RoundedCornerShape(40.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = BottomSheetButtonColor)
-    ) {}
+    Box(
+        modifier = modifier
+            .background(
+                color = BottomSheetButtonColor,
+                shape = RoundedCornerShape(40.dp))
+            .clickable(
+                onClick = onClick
+            )
+    )
 }
 
 @Composable
