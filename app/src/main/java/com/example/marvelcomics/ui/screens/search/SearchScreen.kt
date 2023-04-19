@@ -10,11 +10,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -86,9 +90,18 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val isKeyboardOpen by keyboardAsState()
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MarvelSearchField(
+                modifier = if (scrollBehavior.state.contentOffset < -10) {
+                    Modifier.shadow(
+                        elevation = 20.dp, shape = RectangleShape
+                    )
+                } else Modifier,
                 animateSearchFieldWidth = animateSearchFieldWidth,
                 inputValue = inputValue,
                 isInputEmpty = isInputEmpty,
@@ -172,6 +185,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
 @Composable
 private fun MarvelSearchField(
+    modifier: Modifier = Modifier,
     animateSearchFieldWidth: Float,
     inputValue: MutableState<String>,
     hideKeyboard: Boolean,
@@ -183,7 +197,7 @@ private fun MarvelSearchField(
 ) {
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .background(androidx.compose.material.MaterialTheme.colors.background)
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 20.dp)
