@@ -119,16 +119,14 @@ fun DetailsScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-
-            val extension: String? =
-                comicsData?.thumbnail?.extension
-            val imagePath: String? =
-                comicsData?.thumbnail?.path
-
-            val detailsImageUrl = "$imagePath/detail.$extension"
+            val imageUrl = if (comicsData?.images?.isNotEmpty() == true) {
+                val extension: String = comicsData.images[0].extension
+                val imagePath: String = comicsData.images[0].path
+                "$imagePath.$extension"
+            } else ""
 
             AsyncImage(
-                model = detailsImageUrl,
+                model = imageUrl.ifEmpty { R.drawable.placeholder },
                 contentDescription = stringResource(id = R.string.details_screen_image_desc),
                 modifier = Modifier.fillMaxHeight(),
                 alignment = Alignment.TopCenter
