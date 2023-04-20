@@ -1,27 +1,34 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-parcelize'
-    id 'com.google.gms.google-services'
+}
+
+def getApiProperties(){
+    Properties properties = new Properties()
+    if (file("../apikey.properties").exists()){
+        properties.load(new FileInputStream(rootProject.file("apikey.properties")))
+    }
+    return properties
 }
 
 android {
-    namespace 'com.example.marvelcomics'
+    namespace 'com.example.core'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.marvelcomics"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
+        consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField "String", "PUBLIC_KEY", System.getenv("PUBLIC_KEY") ?: "\"${apiProperties.getProperty("PUBLIC_KEY")}\""
+        buildConfigField "String", "PRIVATE_KEY", System.getenv("PRIVATE_KEY") ?: "\"${apiProperties.getProperty("PRIVATE_KEY")}\""
+        buildConfigField "String", "BASE_URL", System.getenv("BASE_URL") ?: "\"${apiProperties.getProperty("BASE_URL")}\""
+        buildConfigField "String", "HASH", System.getenv("HASH") ?: "\"${apiProperties.getProperty("HASH")}\""
     }
 
     buildTypes {
@@ -37,35 +44,23 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.4.0'
-    }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
 }
 
 dependencies {
-    implementation(project(":feature-main"))
-
-    implementation platform('androidx.compose:compose-bom:2023.01.00')
-
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.activity:activity-compose:1.6.1'
-    implementation "androidx.compose.ui:ui"
-    implementation "androidx.compose.ui:ui-tooling-preview"
-    implementation 'androidx.compose.material:material'
     implementation 'androidx.core:core-ktx:1.9.0'
 
-    // Firebase
-    implementation platform('com.google.firebase:firebase-bom:31.4.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.1'
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    // OkHttp
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
+    implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
+
+    // GSON converter
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     // Dagger-HIlt
     implementation "com.google.dagger:hilt-android:$hilt_version"
