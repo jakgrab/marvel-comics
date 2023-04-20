@@ -116,14 +116,6 @@ fun DetailsScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-
-//            val extension: String? =
-//                comicsData?.thumbnail?.extension
-//            val imagePath: String? =
-//                comicsData?.thumbnail?.path
-//
-//            val detailsImageUrl = "$imagePath/detail.$extension"
-
             val imageUrl = if (comicsData?.images?.isNotEmpty() == true) {
                 val extension: String = comicsData.images[0].extension
                 val imagePath: String = comicsData.images[0].path
