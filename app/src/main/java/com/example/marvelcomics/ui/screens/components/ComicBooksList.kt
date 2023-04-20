@@ -21,6 +21,9 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.marvelcomics.R
 import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.ui.screens.utils.Utils
+import com.example.marvelcomics.ui.theme.ComicAuthorList
+import com.example.marvelcomics.ui.theme.ComicDescriptionList
+import com.example.marvelcomics.ui.theme.ComicTitle
 
 @Composable
 fun ComicBooksList(
@@ -111,11 +114,12 @@ fun TitleAndDescription(
         Text(
             text = title,
             color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.ComicTitle
         )
         Text(
             text = authors,
             color = Color.LightGray,
+            style = MaterialTheme.typography.ComicAuthorList,
             maxLines = 2,
             softWrap = true,
             overflow = TextOverflow.Ellipsis
@@ -124,10 +128,10 @@ fun TitleAndDescription(
         Text(
             text = description,
             color = MaterialTheme.colors.onBackground,
+            style = MaterialTheme.typography.ComicDescriptionList,
             maxLines = 3,
             softWrap = true,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.subtitle2
         )
     }
 }

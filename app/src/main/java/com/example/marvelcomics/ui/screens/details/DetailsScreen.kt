@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
@@ -40,6 +41,7 @@ import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.screens.main.MainViewModel
 import com.example.marvelcomics.ui.screens.utils.Utils
 import com.example.marvelcomics.ui.theme.BottomSheetButtonColor
+import com.example.marvelcomics.ui.theme.ComicTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -83,7 +85,8 @@ fun DetailsScreen(
                 icon = painterResource(id = R.drawable.ic_arrow),
                 onNavigationIconClicked = {
                     navController.popBackStack()
-                }
+                },
+                textStyle = MaterialTheme.typography.ComicTitle
             )
         },
         bottomBar = {
@@ -194,7 +197,11 @@ fun CustomFAB(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
     ) {
-        Text(text = stringResource(R.string.details_screen_fab_text), color = Color.White)
+        Text(
+            text = stringResource(R.string.details_screen_fab_text),
+            fontSize = 16.sp,
+            color = Color.White
+        )
     }
 }
 
