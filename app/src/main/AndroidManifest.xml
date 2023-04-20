@@ -20,7 +20,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.MarvelComics">
+            android:theme="@style/Theme.MarvelComics.MySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

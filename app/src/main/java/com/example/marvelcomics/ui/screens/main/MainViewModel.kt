@@ -11,7 +11,6 @@ import com.example.marvelcomics.data.model.Result
 import com.example.marvelcomics.data.repository.ComicRepository
 import com.example.marvelcomics.data.wrapper.DataOrException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -52,8 +51,12 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
                 offset = currentPage * Constants.PAGE_SIZE
             )
 
+            val maxComics: Int = _comicsData.value.data.let {
+                it?.data?.total ?: 0
+            }
+
             isEndReached = if (_comicsData.value.data != null) {
-                currentPage * Constants.PAGE_SIZE >= _comicsData.value.data!!.data.total
+                currentPage * Constants.PAGE_SIZE >= maxComics
             } else {
                 true
             }
@@ -67,7 +70,7 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
     }
 
     fun getComicByTitle(title: String) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             _comicsDataByTitle.value = comicRepository.getComicsByTitle(title)
         }
     }
