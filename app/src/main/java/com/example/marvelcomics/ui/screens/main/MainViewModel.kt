@@ -1,6 +1,7 @@
 package com.example.marvelcomics.ui.screens.main
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,6 +38,9 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
     private var currentPage: Int = 0
     var isEndReached: Boolean = false
 
+    private val _searchInputValue = mutableStateOf("")
+    val searchInputValue: State<String> = _searchInputValue
+
     init {
         getComicsWithPaging()
     }
@@ -71,7 +75,9 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
         }
     }
 
-    fun cancelSearch() {
-        _comicsDataByTitle.value.data = null
-    }
+    fun cancelSearch() { _comicsDataByTitle.value.data = null }
+
+    fun setSearchInputValue(value: String) { _searchInputValue.value = value }
+
+    fun clearSearchInputValue() { _searchInputValue.value = "" }
 }
