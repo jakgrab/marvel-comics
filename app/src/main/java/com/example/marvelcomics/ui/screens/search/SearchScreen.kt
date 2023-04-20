@@ -73,9 +73,8 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
         mutableStateOf(false)
     }
 
-    val inputValue = remember {
-        mutableStateOf("")
-    }
+    val inputValue = mainViewModel.searchInputValue
+
     var isInputEmpty by remember(inputValue.value) {
         mutableStateOf(inputValue.value.isEmpty())
     }
@@ -103,9 +102,13 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     )
                 } else Modifier,
                 animateSearchFieldWidth = animateSearchFieldWidth,
-                inputValue = inputValue,
+                //inputValue = inputValue,
+                inputValue = inputValue.value,
                 isInputEmpty = isInputEmpty,
                 hideKeyboard = hideKeyboard,
+                onValueChange = {searchInput ->
+                    mainViewModel.setSearchInputValue(searchInput)
+                },
                 onSearch = { comicTitle ->
                     comicBookTitle = comicTitle
                     searchingForComic = true
@@ -119,7 +122,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     hideKeyboard = false
                 },
                 onTextClicked = {
-                    inputValue.value = ""
+                    mainViewModel.clearSearchInputValue()
                     isInputEmpty = !isInputEmpty
                     hideKeyboard = true
                     mainViewModel.cancelSearch()
@@ -202,9 +205,10 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 private fun MarvelSearchField(
     modifier: Modifier = Modifier,
     animateSearchFieldWidth: Float,
-    inputValue: MutableState<String>,
+    inputValue: String,
     hideKeyboard: Boolean,
     isInputEmpty: Boolean,
+    onValueChange: (String) -> Unit,
     onSearch: (String) -> Unit,
     onSearchAfterDelay: (String) -> Unit,
     onFocusClear: () -> Unit,
@@ -225,6 +229,9 @@ private fun MarvelSearchField(
                 .fillMaxWidth(fraction = animateSearchFieldWidth),
             inputValue = inputValue,
             placeholderText = stringResource(R.string.search_field_hint),
+            onValueChange = {
+                onValueChange(it)
+            },
             onSearch = onSearch,
             hideKeyboard = hideKeyboard,
             onFocusClear = onFocusClear,

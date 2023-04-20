@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
@@ -41,6 +42,7 @@ import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
 import com.example.marvelcomics.ui.screens.main.MainViewModel
 import com.example.marvelcomics.ui.screens.utils.Utils
 import com.example.marvelcomics.ui.theme.BottomSheetButtonColor
+import com.example.marvelcomics.ui.theme.ComicTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -84,7 +86,8 @@ fun DetailsScreen(
                 icon = painterResource(id = R.drawable.ic_arrow),
                 onNavigationIconClicked = {
                     navController.popBackStack()
-                }
+                },
+                textStyle = MaterialTheme.typography.ComicTitle
             )
         },
         bottomBar = {
@@ -117,16 +120,14 @@ fun DetailsScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-
-            val extension: String? =
-                comicsData?.thumbnail?.extension
-            val imagePath: String? =
-                comicsData?.thumbnail?.path
-
-            val detailsImageUrl = "$imagePath/detail.$extension"
+            val imageUrl = if (comicsData?.images?.isNotEmpty() == true) {
+                val extension: String = comicsData.images[0].extension
+                val imagePath: String = comicsData.images[0].path
+                "$imagePath.$extension"
+            } else ""
 
             AsyncImage(
-                model = detailsImageUrl,
+                model = imageUrl.ifEmpty { R.drawable.placeholder },
                 contentDescription = stringResource(id = R.string.details_screen_image_desc),
                 modifier = Modifier.fillMaxHeight(),
                 alignment = Alignment.TopCenter
@@ -195,7 +196,11 @@ fun CustomFAB(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
     ) {
-        Text(text = stringResource(R.string.details_screen_fab_text), color = Color.White)
+        Text(
+            text = stringResource(R.string.details_screen_fab_text),
+            fontSize = 16.sp,
+            color = Color.White
+        )
     }
 }
 

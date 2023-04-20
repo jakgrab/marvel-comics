@@ -2,6 +2,7 @@ package com.example.marvelcomics.ui.screens.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
@@ -13,15 +14,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.marvelcomics.R
 import com.example.marvelcomics.ui.navigation.ComicScreens
 import com.example.marvelcomics.ui.screens.components.ComicBooksList
 import com.example.marvelcomics.ui.screens.components.ComicBottomAppBar
 import com.example.marvelcomics.ui.screens.components.ComicTopAppBar
+import com.example.marvelcomics.ui.theme.HeaderComicList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,8 +64,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 } else Modifier,
                 isForMainScreen = true,
                 title = stringResource(R.string.main_screen_top_app_bar_title),
-                titleFontSize = 25.sp,
-                titleFontWeight = FontWeight.Bold,
+                textStyle = MaterialTheme.typography.HeaderComicList,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -85,7 +84,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(androidx.compose.material.MaterialTheme.colors.background)
+                    .background(MaterialTheme.colors.background)
                     .padding(
                         top = it.calculateTopPadding(),
                         start = 16.dp,
