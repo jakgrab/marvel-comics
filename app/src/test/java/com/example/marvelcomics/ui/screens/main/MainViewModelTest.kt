@@ -48,23 +48,7 @@ class MainViewModelTest {
 
     @Before
     fun setup() {
-
-        fakeResult = fakeResult.copy(title = "Spider-man", description = "description")
-        fakeData = fakeData.copy(results = arrayListOf(fakeResult, fakeResult, fakeResult))
-        fakeComics = fakeComics.copy(data = fakeData)
-
-        fakeDataOrException.data = fakeComics
-
-        fakeRepository.apply {
-            coEvery {
-                getComics(0)
-            } returns DataOrException(data = fakeComics)
-
-            coEvery {
-                getComicsByTitle(any())
-            } returns fakeDataOrException
-        }
-        viewModel = MainViewModel(comicRepository = fakeRepository)
+        testSetup()
     }
 
     @Test
@@ -105,7 +89,7 @@ class MainViewModelTest {
     }
 
     private fun getData(results: ArrayList<Result>): Data {
-        return Data(1,1,1, results,1)
+        return Data(1, 1, 1, results, 1)
     }
 
     private fun getResult(): Result {
@@ -120,13 +104,13 @@ class MainViewModelTest {
             collections = listOf(),
             creators = Creators(
                 1,
-                items = listOf(Creator("","","")),
+                items = listOf(Creator("", "", "")),
                 1
             ),
             dates = listOf(),
             description = "fakeDescription",
             digitalId = 1,
-            events = Events(1,"", listOf(),1),
+            events = Events(1, "", listOf(), 1),
             format = "",
             images = listOf(),
             issueNumber = 1,
@@ -135,13 +119,32 @@ class MainViewModelTest {
             prices = listOf(),
             resourceURI = "",
             series = Series("", ""),
-            stories = Stories(1,"", listOf(),1),
+            stories = Stories(1, "", listOf(), 1),
             textObjects = listOf(),
-            thumbnail = Thumbnail("",""),
+            thumbnail = Thumbnail("", ""),
             title = "fakeTitle",
             urls = listOf(),
             "",
             listOf()
         )
+    }
+
+    private fun testSetup() {
+        fakeResult = fakeResult.copy(title = "Spider-man", description = "description")
+        fakeData = fakeData.copy(results = arrayListOf(fakeResult, fakeResult, fakeResult))
+        fakeComics = fakeComics.copy(data = fakeData)
+
+        fakeDataOrException.data = fakeComics
+
+        fakeRepository.apply {
+            coEvery {
+                getComics(0)
+            } returns DataOrException(data = fakeComics)
+
+            coEvery {
+                getComicsByTitle(any())
+            } returns fakeDataOrException
+        }
+        viewModel = MainViewModel(comicRepository = fakeRepository)
     }
 }
