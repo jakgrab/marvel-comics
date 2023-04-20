@@ -1,6 +1,7 @@
 package com.example.feature_main.ui.screens.main
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +11,6 @@ import com.example.core.model.Result
 import com.example.core.repository.ComicRepository
 import com.example.core.wrapper.DataOrException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -38,6 +38,9 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
     private var currentPage: Int = 0
     var isEndReached: Boolean = false
 
+    private val _searchInputValue = mutableStateOf("")
+    val searchInputValue: State<String> = _searchInputValue
+
     init {
         getComicsWithPaging()
     }
@@ -48,8 +51,12 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
                 offset = currentPage * Constants.PAGE_SIZE
             )
 
+            val maxComics: Int = _comicsData.value.data.let {
+                it?.data?.total ?: 0
+            }
+
             isEndReached = if (_comicsData.value.data != null) {
-                currentPage * Constants.PAGE_SIZE >= _comicsData.value.data!!.data.total
+                currentPage * Constants.PAGE_SIZE >= maxComics
             } else {
                 true
             }
@@ -63,10 +70,14 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
     }
 
     fun getComicByTitle(title: String) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             _comicsDataByTitle.value = comicRepository.getComicsByTitle(title)
         }
     }
 
     fun cancelSearch() { _comicsDataByTitle.value.data = null }
+
+    fun setSearchInputValue(value: String) { _searchInputValue.value = value }
+
+    fun clearSearchInputValue() { _searchInputValue.value = "" }
 }

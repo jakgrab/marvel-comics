@@ -34,8 +34,9 @@ import kotlinx.coroutines.delay
 @Composable
 fun ComicTextField(
     modifier: Modifier = Modifier,
-    inputValue: MutableState<String>,
+    inputValue: String,
     placeholderText: String,
+    onValueChange: (String) -> Unit,
     onSearch: (String) -> Unit,
     hideKeyboard: Boolean,
     onFocusClear: () -> Unit,
@@ -45,31 +46,35 @@ fun ComicTextField(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val validState = remember(inputValue.value) {
-        inputValue.value.trim().isNotEmpty()
+    val validState = remember(inputValue) {
+        inputValue.trim().isNotEmpty()
     }
+
     val errorState = remember {
         mutableStateOf(false)
     }
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(key1 = inputValue.value) {
+    LaunchedEffect(key1 = inputValue) {
         delay(100)
         if (!validState) return@LaunchedEffect
-        onSearchAfterDelay(inputValue.value)
+        onSearchAfterDelay(inputValue)
     }
 
     MyTextField(
         modifier = modifier,
-        valueState = inputValue,
+        inputValue = inputValue,
         errorState = errorState,
         placeholderText = placeholderText,
+        onValueChange = { input ->
+            onValueChange(input)
+        },
         onAction = KeyboardActions {
             if (!validState) {
                 errorState.value = true
                 return@KeyboardActions
             }
-            onSearch(inputValue.value.trim())
+            onSearch(inputValue.trim())
             keyboardController?.hide()
             focusManager.clearFocus()
             errorState.value = false
@@ -89,19 +94,20 @@ fun ComicTextField(
 @Composable
 fun MyTextField(
     modifier: Modifier = Modifier,
-    valueState: MutableState<String>,
+    inputValue: String,
     errorState: MutableState<Boolean>,
     placeholderText: String,
     leadingIcon: ImageVector = Icons.Rounded.Search,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Done,
+    onValueChange: (String) -> Unit,
     onAction: KeyboardActions = KeyboardActions.Default,
     isHintVisible: Boolean,
 ) {
     TextField(
-        value = valueState.value,
+        value = inputValue,
         onValueChange = { title ->
-            valueState.value = title
+            onValueChange(title)
         },
         modifier = modifier,
         textStyle = TextStyle(fontSize = 20.sp),
@@ -109,6 +115,7 @@ fun MyTextField(
             Text(
                 text = placeholderText,
                 fontSize = 20.sp,
+                color = PlaceholderColor,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -129,7 +136,7 @@ fun MyTextField(
         shape = RoundedCornerShape(10.dp),
         colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
             textColor = InputTextColor,
-            placeholderColor = PlaceholderColor,
+            cursorColor = InputTextColor,
             containerColor = SearchFieldBackgroundColor,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent

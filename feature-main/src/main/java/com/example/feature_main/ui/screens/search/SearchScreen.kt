@@ -5,6 +5,7 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,8 +15,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -69,9 +72,8 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
         mutableStateOf(false)
     }
 
-    val inputValue = remember {
-        mutableStateOf("")
-    }
+    val inputValue = mainViewModel.searchInputValue
+
     var isInputEmpty by remember(inputValue.value) {
         mutableStateOf(inputValue.value.isEmpty())
     }
@@ -86,13 +88,26 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val isKeyboardOpen by keyboardAsState()
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MarvelSearchField(
+                modifier = if (scrollBehavior.state.contentOffset < -10) {
+                    Modifier.shadow(
+                        elevation = 20.dp, shape = RectangleShape
+                    )
+                } else Modifier,
                 animateSearchFieldWidth = animateSearchFieldWidth,
-                inputValue = inputValue,
+                //inputValue = inputValue,
+                inputValue = inputValue.value,
                 isInputEmpty = isInputEmpty,
                 hideKeyboard = hideKeyboard,
+                onValueChange = {searchInput ->
+                    mainViewModel.setSearchInputValue(searchInput)
+                },
                 onSearch = { comicTitle ->
                     comicBookTitle = comicTitle
                     searchingForComic = true
@@ -106,7 +121,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     hideKeyboard = false
                 },
                 onTextClicked = {
-                    inputValue.value = ""
+                    mainViewModel.clearSearchInputValue()
                     isInputEmpty = !isInputEmpty
                     hideKeyboard = true
                     mainViewModel.cancelSearch()
@@ -131,7 +146,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     top = innerPadding.calculateTopPadding() + 16.dp,
                     start = 16.dp,
                     end = 16.dp,
-                    //bottom = innerPadding.calculateBottomPadding()
+                    bottom = innerPadding.calculateBottomPadding()
                 )
                 .imePadding()
                 .clickable(
@@ -143,7 +158,21 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnimatedVisibility(visible = showFoundComics && !comicsList.isNullOrEmpty()) {
+            AnimatedVisibility(
+                visible = showFoundComics &&
+                        !comicsList.isNullOrEmpty() &&
+                        inputValue.value.isNotEmpty() &&
+                        !searchingForComic,
+                enter = slideInVertically(
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = LinearEasing
+                    ),
+                    initialOffsetY = {
+                        it / 2
+                    }
+                )
+            ) {
                 comicsList?.let {
                     ComicBooksList(
                         comicsList = it,
@@ -156,15 +185,15 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                 }
             }
 
-            AnimatedVisibility(visible = (searchingForComic)) {
+            if (searchingForComic) {
                 Loading()
             }
 
-            AnimatedVisibility(visible = isResultEmpty == true) {
+            if (isResultEmpty == true && !searchingForComic) {
                 NoResultsFound()
             }
 
-            AnimatedVisibility(visible = isResultEmpty == null) {
+            if ((isResultEmpty == null || inputValue.value.isEmpty()) && !searchingForComic) {
                 InitialPrompt()
             }
         }
@@ -173,10 +202,12 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
 @Composable
 private fun MarvelSearchField(
+    modifier: Modifier = Modifier,
     animateSearchFieldWidth: Float,
-    inputValue: MutableState<String>,
+    inputValue: String,
     hideKeyboard: Boolean,
     isInputEmpty: Boolean,
+    onValueChange: (String) -> Unit,
     onSearch: (String) -> Unit,
     onSearchAfterDelay: (String) -> Unit,
     onFocusClear: () -> Unit,
@@ -184,7 +215,7 @@ private fun MarvelSearchField(
 ) {
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .background(androidx.compose.material.MaterialTheme.colors.background)
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 20.dp)
@@ -197,6 +228,9 @@ private fun MarvelSearchField(
                 .fillMaxWidth(fraction = animateSearchFieldWidth),
             inputValue = inputValue,
             placeholderText = stringResource(R.string.search_field_hint),
+            onValueChange = {
+                onValueChange(it)
+            },
             onSearch = onSearch,
             hideKeyboard = hideKeyboard,
             onFocusClear = onFocusClear,
@@ -279,7 +313,7 @@ private fun NoResultsFound() {
 
 @Composable
 private fun Loading() {
-    Box(modifier = Modifier.size(120.dp), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.size(200.dp), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(color = Color.Red)
     }
 }

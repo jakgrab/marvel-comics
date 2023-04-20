@@ -20,5 +20,18 @@ class Utils {
                 }
             }
         }
+
+        fun getAuthorsWithoutWrittenBy(
+            numAuthors: Int,
+            comic: Result?
+        ): String {
+            if (comic == null) return ""
+            return when (numAuthors) {
+                0 -> ""
+                else -> {
+                    return comic.creators.items.joinToString { author -> author.name }
+                }
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
@@ -40,6 +42,7 @@ import com.example.feature_main.ui.screens.components.ComicTopAppBar
 import com.example.feature_main.ui.screens.main.MainViewModel
 import com.example.feature_main.ui.screens.utils.Utils
 import com.example.feature_main.ui.theme.BottomSheetButtonColor
+import com.example.feature_main.ui.theme.ComicTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -65,7 +68,7 @@ fun DetailsScreen(
 
     val context = LocalContext.current
 
-    val authors = Utils.getAuthors(context, numAuthors, comicsData)
+    val authors = Utils.getAuthorsWithoutWrittenBy( numAuthors, comicsData)
     val detailsUrl = comicsData?.urls?.get(0)?.url
 
     val scaffoldState = rememberScaffoldState()
@@ -83,7 +86,8 @@ fun DetailsScreen(
                 icon = painterResource(id = R.drawable.ic_arrow),
                 onNavigationIconClicked = {
                     navController.popBackStack()
-                }
+                },
+                textStyle = MaterialTheme.typography.ComicTitle
             )
         },
         bottomBar = {
@@ -116,16 +120,14 @@ fun DetailsScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-
-            val extension: String? =
-                comicsData?.thumbnail?.extension
-            val imagePath: String? =
-                comicsData?.thumbnail?.path
-
-            val detailsImageUrl = "$imagePath/detail.$extension"
+            val imageUrl = if (comicsData?.images?.isNotEmpty() == true) {
+                val extension: String = comicsData.images[0].extension
+                val imagePath: String = comicsData.images[0].path
+                "$imagePath.$extension"
+            } else ""
 
             AsyncImage(
-                model = detailsImageUrl,
+                model = imageUrl.ifEmpty { R.drawable.placeholder },
                 contentDescription = stringResource(id = R.string.details_screen_image_desc),
                 modifier = Modifier.fillMaxHeight(),
                 alignment = Alignment.TopCenter
@@ -194,7 +196,11 @@ fun CustomFAB(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
     ) {
-        Text(text = stringResource(R.string.details_screen_fab_text), color = Color.White)
+        Text(
+            text = stringResource(R.string.details_screen_fab_text),
+            fontSize = 16.sp,
+            color = Color.White
+        )
     }
 }
 
@@ -214,7 +220,7 @@ fun BottomSheetContent(
         modifier = modifier
             .fillMaxSize()
             .padding(
-                top = 20.dp,
+                top = 5.dp,
                 start = 16.dp,
                 end = 16.dp,
                 bottom = paddingValues.calculateBottomPadding()
@@ -239,8 +245,8 @@ fun BottomSheetContent(
         ) {
             BottomSheetButton(
                 modifier = Modifier
-                    .fillMaxWidth(0.2f)
-                    .height(5.dp)
+                    .fillMaxWidth(0.20f)
+                    .height(7.5.dp)
             ) {
                 coroutineScope.launch {
                     if (sheetState.isCollapsed)
@@ -285,12 +291,15 @@ private fun BottomSheetButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    Button(
-        modifier = modifier,
-        onClick = onClick,
-        shape = RoundedCornerShape(40.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = BottomSheetButtonColor)
-    ) {}
+    Box(
+        modifier = modifier
+            .background(
+                color = BottomSheetButtonColor,
+                shape = RoundedCornerShape(40.dp))
+            .clickable(
+                onClick = onClick
+            )
+    )
 }
 
 @Composable
