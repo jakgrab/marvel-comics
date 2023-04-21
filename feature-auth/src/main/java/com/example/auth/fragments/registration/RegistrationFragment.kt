@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.auth.R
 import com.example.auth.databinding.FragmentRegistrationBinding
 import com.example.auth.utils.navigateToActivity
-import com.example.feature_main.MainActivity
+import com.example.core.constants.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,7 +53,7 @@ class RegistrationFragment : Fragment() {
             registrationViewModel.signUpNewUser(
                 onSuccess = {
                     Toast.makeText(this.context, "Account created", Toast.LENGTH_SHORT).show()
-                    context?.navigateToActivity(MainActivity::class.java)
+                    context?.navigateToActivity(Constants.MAIN_ACTIVITY_PATH)
                 },
                 onError = {
                     Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()

@@ -1,18 +1,15 @@
 package com.example.auth
 
-import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.auth.databinding.ActivityLoginBinding
 import com.example.auth.utils.navigateToActivity
-import com.example.feature_main.MainActivity
+import com.example.core.constants.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -55,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun isUserSignedIn(currentUser: FirebaseUser?) {
         if (currentUser!=null) {
-            this.navigateToActivity(MainActivity::class.java)
+            this.navigateToActivity(Constants.MAIN_ACTIVITY_PATH)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.feature_main.ui.screens.main
 
+import android.app.Activity
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +11,7 @@ import com.example.core.model.Comics
 import com.example.core.model.Result
 import com.example.core.repository.comic_repository.ComicRepository
 import com.example.core.wrapper.DataOrException
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,8 +19,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val comicRepository: ComicRepository) :
-    ViewModel() {
+class MainViewModel @Inject constructor(
+    private val comicRepository: ComicRepository,
+    private val auth: FirebaseAuth
+) : ViewModel() {
 
     private val _comicsData =
         MutableStateFlow<DataOrException<Comics, Boolean, Exception>>(
@@ -75,9 +79,20 @@ class MainViewModel @Inject constructor(private val comicRepository: ComicReposi
         }
     }
 
-    fun cancelSearch() { _comicsDataByTitle.value.data = null }
+    fun cancelSearch() {
+        _comicsDataByTitle.value.data = null
+    }
 
-    fun setSearchInputValue(value: String) { _searchInputValue.value = value }
+    fun setSearchInputValue(value: String) {
+        _searchInputValue.value = value
+    }
 
-    fun clearSearchInputValue() { _searchInputValue.value = "" }
+    fun clearSearchInputValue() {
+        _searchInputValue.value = ""
+    }
+
+    fun logOut(activity: Activity?) {
+        auth.signOut()
+        activity?.finish()
+    }
 }

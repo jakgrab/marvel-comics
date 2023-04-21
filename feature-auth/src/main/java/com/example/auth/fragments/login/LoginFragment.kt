@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.auth.databinding.FragmentLoginBinding
 import com.example.auth.utils.navigateToActivity
-import com.example.feature_main.MainActivity
+import com.example.core.constants.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -49,7 +49,7 @@ class LoginFragment : Fragment() {
             viewModel.signInUser(
                 onSuccess = {
                     Toast.makeText(requireContext(), "Logged in", Toast.LENGTH_SHORT).show()
-                    requireContext().navigateToActivity(MainActivity::class.java)
+                    requireContext().navigateToActivity(Constants.MAIN_ACTIVITY_PATH)
                 },
                 onError = {
                     Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
