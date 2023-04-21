@@ -18,3 +18,4 @@ rootProject.name = "MarvelComics"
 include ':app'
 include ':core'
 include ':feature-main'
+include ':feature-auth'

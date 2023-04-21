@@ -16,7 +16,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.core.R
+import com.example.feature_main.R
 import com.example.feature_main.ui.navigation.ComicScreens
 import com.example.feature_main.ui.screens.components.ComicBooksList
 import com.example.feature_main.ui.screens.components.ComicBottomAppBar

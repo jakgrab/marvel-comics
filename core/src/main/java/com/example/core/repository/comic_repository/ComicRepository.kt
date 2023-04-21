@@ -1,4 +1,4 @@
-package com.example.core.repository
+package com.example.core.repository.comic_repository
 
 import com.example.core.model.Comics
 import com.example.core.wrapper.DataOrException

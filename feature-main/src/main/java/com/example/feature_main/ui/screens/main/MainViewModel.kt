@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.constants.Constants
 import com.example.core.model.Comics
 import com.example.core.model.Result
-import com.example.core.repository.ComicRepository
+import com.example.core.repository.comic_repository.ComicRepository
 import com.example.core.wrapper.DataOrException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

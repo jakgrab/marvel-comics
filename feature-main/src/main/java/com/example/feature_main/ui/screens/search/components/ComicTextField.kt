@@ -23,7 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.core.R
+import com.example.feature_main.R
 import com.example.feature_main.ui.theme.InputTextColor
 import com.example.feature_main.ui.theme.PlaceholderColor
 import com.example.feature_main.ui.theme.SearchFieldBackgroundColor
