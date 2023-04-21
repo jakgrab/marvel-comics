@@ -1,9 +1,12 @@
 package com.example.feature_main.ui.screens.main
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,10 +16,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.core.R
+import com.example.feature_main.R
 import com.example.feature_main.ui.navigation.ComicScreens
 import com.example.feature_main.ui.screens.components.ComicBooksList
 import com.example.feature_main.ui.screens.components.ComicBottomAppBar
@@ -51,6 +55,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = topAppBarState
     )
+    val activity = LocalContext.current as? Activity
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -64,9 +69,14 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                     )
                 } else Modifier,
                 isForMainScreen = true,
+                actionIcon = Icons.Default.MoreVert,
+                showDropDownMenu = true,
                 title = stringResource(R.string.main_screen_top_app_bar_title),
                 textStyle = MaterialTheme.typography.HeaderComicList,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                onLogOutClicked = {
+                    mainViewModel.logOut(activity = activity)
+                }
             )
         },
         bottomBar = {
@@ -108,3 +118,4 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         }
     }
 }
+

@@ -1,5 +1,6 @@
 package com.example.feature_main.ui.screens.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -7,8 +8,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 
 
@@ -20,11 +27,13 @@ fun ComicTopAppBar(
     title: String = "Screen",
     textStyle: TextStyle,
     icon: Painter? = null,
-    actionIcon: Painter? = null,
+    actionIcon: ImageVector? = null,
+    showDropDownMenu: Boolean = false,
     colors: TopAppBarColors? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     onNavigationIconClicked: () -> Unit = {},
-    onActionIconClicked: () -> Unit = {}
+    onActionIconClicked: () -> Unit = {},
+    onLogOutClicked: () -> Unit = {}
 ) {
 
     val defaultTopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -32,6 +41,10 @@ fun ComicTopAppBar(
     )
 
     val topAppBarColors = colors ?: defaultTopAppBarColors
+
+    var isDropDownMenuVisible by remember {
+        mutableStateOf(false)
+    }
 
     if (isForMainScreen) {
         TopAppBar(
@@ -52,21 +65,30 @@ fun ComicTopAppBar(
                             tint = MaterialTheme.colors.onBackground
                         )
                     }
-                } else {
-                    Box {}
                 }
             },
             actions = {
                 if (actionIcon != null) {
-                    IconButton(onClick = { onActionIconClicked.invoke() }) {
+                    IconButton(
+                        onClick = {
+                            onActionIconClicked()
+                            if (showDropDownMenu) isDropDownMenuVisible = true
+                        }
+                    ) {
                         Icon(
-                            painter = actionIcon,
+                            imageVector = actionIcon,
                             contentDescription = null,
                             tint = MaterialTheme.colors.onBackground
                         )
                     }
-                } else {
-                    Box {}
+                    if (showDropDownMenu)
+                        Menu(
+                            expanded = isDropDownMenuVisible,
+                            onDismissRequest = {
+                                isDropDownMenuVisible = false
+                            },
+                            onLogOutClicked = onLogOutClicked
+                        )
                 }
             },
             colors = topAppBarColors,
@@ -99,7 +121,7 @@ fun ComicTopAppBar(
                 if (actionIcon != null) {
                     IconButton(onClick = { onActionIconClicked.invoke() }) {
                         Icon(
-                            painter = actionIcon,
+                            imageVector = actionIcon,
                             contentDescription = null,
                             tint = MaterialTheme.colors.onBackground
                         )
@@ -110,6 +132,24 @@ fun ComicTopAppBar(
             },
             colors = topAppBarColors,
             scrollBehavior = scrollBehavior
+        )
+    }
+}
+
+@Composable
+private fun Menu(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    onLogOutClicked: () -> Unit
+) {
+    DropdownMenu(
+        modifier = Modifier.background(Color.Red),
+        expanded = expanded,
+        onDismissRequest = onDismissRequest
+    ) {
+        DropdownMenuItem(
+            text = { androidx.compose.material3.Text("Log out") },
+            onClick = onLogOutClicked
         )
     }
 }
