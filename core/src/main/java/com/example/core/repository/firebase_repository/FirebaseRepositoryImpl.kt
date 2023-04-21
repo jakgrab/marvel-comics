@@ -1,25 +1,44 @@
 package com.example.core.repository.firebase_repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 
 class FirebaseRepositoryImpl : FirebaseRepository {
 
-    override fun signUpNewUser(email: String, password: String, auth: FirebaseAuth): Boolean {
-        var result = false
+    override suspend fun signUpNewUser(
+        email: String,
+        password: String,
+        auth: FirebaseAuth,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ){
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                result = task.isSuccessful
+                Log.d("Firebase", "Signed up successfully")
+                if(task.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError(task.exception.toString())
+                }
             }
-        return result
     }
 
-    override fun signInUser(email: String, password: String, auth: FirebaseAuth): Boolean {
-        var result = false
+    override suspend fun signInUser(
+        email: String,
+        password: String,
+        auth: FirebaseAuth,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                result = task.isSuccessful
+                Log.d("Firebase", "Signed in successfully")
+                if(task.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError(task.exception.toString())
+                }
             }
-        return result
     }
 
 }

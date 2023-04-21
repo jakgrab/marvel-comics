@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.feature_main.MainActivity"
             android:windowSoftInputMode="adjustResize">
 <!--            android:theme="@style/Theme.MarvelComics.MySplash">-->
         </activity>

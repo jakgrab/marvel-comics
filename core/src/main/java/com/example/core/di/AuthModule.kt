@@ -1,6 +1,5 @@
 package com.example.core.di
 
-import com.example.core.repository.firebase_repository.FirebaseRepository
 import com.example.core.repository.firebase_repository.FirebaseRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -15,14 +14,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AuthModule {
 
-
     @Singleton
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth = Firebase.auth
-    
+
     @Singleton
     @Provides
-    fun provideFirebaseRepository(): FirebaseRepository {
-        return FirebaseRepositoryImpl()
-    }
+    fun provideFirebaseRepository(): FirebaseRepositoryImpl = FirebaseRepositoryImpl()
+
 }

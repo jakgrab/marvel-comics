@@ -1,4 +1,4 @@
-package com.example.marvelcomics
+package com.example.feature_main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

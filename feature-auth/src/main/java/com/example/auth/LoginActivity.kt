@@ -1,5 +1,6 @@
 package com.example.auth
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +11,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.auth.databinding.ActivityLoginBinding
+import com.example.auth.utils.navigateToActivity
+import com.example.feature_main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -37,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
-        isUserSignedIn()
+        isUserSignedIn(currentUser)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -47,7 +53,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun isUserSignedIn() {
-
+    private fun isUserSignedIn(currentUser: FirebaseUser?) {
+        if (currentUser!=null) {
+            this.navigateToActivity(MainActivity::class.java)
+        }
     }
+
 }

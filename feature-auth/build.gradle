@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -34,6 +37,8 @@ android {
 }
 
 dependencies {
+    implementation project(':core')
+    implementation project(':feature-main')
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
@@ -54,6 +59,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 //    implementation 'com.firebaseui:firebase-ui-auth'
+    // Dagger-HIlt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
 
 }
