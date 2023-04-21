@@ -20,6 +20,7 @@
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.MarvelComics.LoginSplashScreen">
+            <!--            android:theme="@style/Theme.MarvelComics">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

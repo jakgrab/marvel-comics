@@ -19,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
 
@@ -34,7 +33,6 @@ class LoginActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        val navController = findNavController(R.id.nav_host_fragment_content_login)
     }
 
     override fun onStart() {
@@ -42,13 +40,6 @@ class LoginActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
         isUserSignedIn(currentUser)
     }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_login)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }
-
 
     private fun isUserSignedIn(currentUser: FirebaseUser?) {
         if (currentUser!=null) {

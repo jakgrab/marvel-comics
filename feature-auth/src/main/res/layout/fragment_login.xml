@@ -12,15 +12,15 @@
 
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="307dp"
-        android:layout_marginBottom="53dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:hint="@string/email_hint"
-        app:layout_constraintBottom_toTopOf="@+id/etPassword"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +31,7 @@
         android:layout_marginBottom="118dp"
         android:inputType="textPassword"
         android:hint="@string/password_hint"
-        app:layout_constraintBottom_toTopOf="@+id/etEmail"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
