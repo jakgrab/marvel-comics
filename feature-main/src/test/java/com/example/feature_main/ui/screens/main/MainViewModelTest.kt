@@ -87,12 +87,12 @@ class MainViewModelTest {
         )
     }
 
-    private fun getData(results: ArrayList<com.example.core.model.Result>): Data {
+    private fun getData(results: ArrayList<Result>): Data {
         return Data(1, 1, 1, results, 1)
     }
 
     private fun getResult(): Result {
-        return com.example.core.model.Result(
+        return Result(
             characters = Characters(
                 0,
                 "",
