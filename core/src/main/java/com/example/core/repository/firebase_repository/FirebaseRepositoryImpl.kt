@@ -1,6 +1,5 @@
 package com.example.core.repository.firebase_repository
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 
 class FirebaseRepositoryImpl : FirebaseRepository {
@@ -14,7 +13,6 @@ class FirebaseRepositoryImpl : FirebaseRepository {
     ){
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                Log.d("Firebase", "Signed up successfully")
                 if(task.isSuccessful) {
                     onSuccess()
                 } else {
@@ -32,7 +30,6 @@ class FirebaseRepositoryImpl : FirebaseRepository {
     ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                Log.d("Firebase", "Signed in successfully")
                 if(task.isSuccessful) {
                     onSuccess()
                 } else {
