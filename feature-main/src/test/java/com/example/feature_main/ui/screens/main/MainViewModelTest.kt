@@ -1,19 +1,18 @@
-package com.example.marvelcomics.ui.screens.main
-
-import com.example.marvelcomics.data.model.Characters
-import com.example.marvelcomics.data.model.Comics
-import com.example.marvelcomics.data.model.Creator
-import com.example.marvelcomics.data.model.Creators
-import com.example.marvelcomics.data.model.Data
-import com.example.marvelcomics.data.model.Events
-import com.example.marvelcomics.data.model.Item
-import com.example.marvelcomics.data.model.Result
-import com.example.marvelcomics.data.model.Series
-import com.example.marvelcomics.data.model.Stories
-import com.example.marvelcomics.data.model.Thumbnail
-import com.example.marvelcomics.data.repository.ComicRepository
-import com.example.marvelcomics.data.wrapper.DataOrException
-import com.example.marvelcomics.util.MainCoroutineRule
+package com.example.feature_main.ui.screens.main
+import com.example.core.model.Characters
+import com.example.core.model.Comics
+import com.example.core.model.Creator
+import com.example.core.model.Creators
+import com.example.core.model.Data
+import com.example.core.model.Events
+import com.example.core.model.Item
+import com.example.core.model.Result
+import com.example.core.model.Series
+import com.example.core.model.Stories
+import com.example.core.model.Thumbnail
+import com.example.core.repository.ComicRepository
+import com.example.core.wrapper.DataOrException
+import com.example.feature_main.util.MainCoroutineRule
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -88,12 +87,12 @@ class MainViewModelTest {
         )
     }
 
-    private fun getData(results: ArrayList<Result>): Data {
+    private fun getData(results: ArrayList<com.example.core.model.Result>): Data {
         return Data(1, 1, 1, results, 1)
     }
 
     private fun getResult(): Result {
-        return Result(
+        return com.example.core.model.Result(
             characters = Characters(
                 0,
                 "",
