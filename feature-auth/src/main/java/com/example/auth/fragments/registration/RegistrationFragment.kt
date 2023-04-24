@@ -40,15 +40,15 @@ class RegistrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.etEmail.doOnTextChanged { text, _, _, _ ->
+        binding.tietEmail.doOnTextChanged { text, _, _, _ ->
             registrationViewModel.setUserEmail(inputEmail = text.toString())
         }
 
-        binding.etPassword.doOnTextChanged { text, _, _, _ ->
+        binding.tietPassword.doOnTextChanged { text, _, _, _ ->
             registrationViewModel.setUserPassword(inputPassword = text.toString())
         }
 
-        binding.etRepeatedPassword.doOnTextChanged { text, _, _, _ ->
+        binding.tietRepeatedPassword.doOnTextChanged { text, _, _, _ ->
             registrationViewModel.setUserRepeatedPassword(inputRepeatedPassword = text.toString())
         }
 
@@ -64,7 +64,7 @@ class RegistrationFragment : Fragment() {
             )
         }
 
-        binding.btGoBack.setOnClickListener {
+        binding.btSignIn.setOnClickListener {
             findNavController().navigate(R.id.action_RegistrationFragment_to_LoginFragment)
         }
     }

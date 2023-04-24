@@ -94,12 +94,12 @@
             android:clickable="true"
             android:text="@string/sign_in"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btSignUp"
+            app:layout_constraintBottom_toTopOf="@id/btCreateAccount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btSignUp"
+            android:id="@+id/btCreateAccount"
             style="@style/RegisterButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="60dp"

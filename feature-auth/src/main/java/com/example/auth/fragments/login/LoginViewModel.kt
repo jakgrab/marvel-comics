@@ -42,5 +42,8 @@ class LoginViewModel @Inject constructor(
             )
         }
     }
+    private fun validateEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 }
 

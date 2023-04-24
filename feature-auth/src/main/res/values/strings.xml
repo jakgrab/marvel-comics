@@ -11,4 +11,6 @@
     <string name="sign_up">Create Account</string>
     <string name="create_account">Crate Account</string>
     <string name="go_back">Back To Login</string>
+    <string name="register">Register</string>
+    <string name="repeat_password">Repeat password</string>
 </resources>
