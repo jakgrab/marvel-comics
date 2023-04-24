@@ -5,4 +5,7 @@
     <color name="colorAccent">#3A496C</color>
     <color name="colorAccent2">#CC50A8</color>
     <color name="colorGray">#6C6C6C</color>
+    <color name="lightGray">#7E7E7E</color>
+    <color name="marvelRed">#FF0000</color>
+    <color name="almostBlack">#2C2323</color>
 </resources>

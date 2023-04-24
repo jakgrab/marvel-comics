@@ -8,7 +8,7 @@
     <string name="email_hint">Type your email address here</string>
     <string name="password_hint">A strong password</string>
     <string name="sign_in">Sign In</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="sign_up">Create Account</string>
     <string name="create_account">Crate Account</string>
     <string name="go_back">Back To Login</string>
 </resources>
