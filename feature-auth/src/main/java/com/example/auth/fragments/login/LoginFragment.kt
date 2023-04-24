@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.auth.R
 import com.example.auth.databinding.FragmentLoginBinding
 import com.example.auth.utils.navigateToActivity
 import com.example.core.constants.Constants
@@ -29,7 +31,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         return binding.root
 
     }
@@ -37,11 +39,11 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.etEmail.doOnTextChanged { text, _, _, _ ->
+        binding.tietEmail.doOnTextChanged { text, _, _, _ ->
             viewModel.setUserEmail(inputEmail = text.toString())
         }
 
-        binding.etPassword.doOnTextChanged { text, _, _, _ ->
+        binding.tietPassword.doOnTextChanged { text, _, _, _ ->
             viewModel.setUserPassword(inputPassword = text.toString())
         }
 
@@ -58,7 +60,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.btSignUp.setOnClickListener {
-            findNavController().navigate(com.example.auth.R.id.action_LoginFragment_to_RegistrationFragment)
+            findNavController().navigate(R.id.action_LoginFragment_to_RegistrationFragment)
         }
     }
 
