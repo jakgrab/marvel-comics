@@ -13,4 +13,6 @@
     <string name="go_back">Back To Login</string>
     <string name="register">Register</string>
     <string name="repeat_password">Repeat password</string>
+    <string name="marvel_comics">Marvel Comics</string>
+    <string name="go_back_to_login_page_arrow">Go back to login page arrow</string>
 </resources>

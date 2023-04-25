@@ -64,7 +64,7 @@ class RegistrationFragment : Fragment() {
             )
         }
 
-        binding.btSignIn.setOnClickListener {
+        binding.arrowBack.setOnClickListener {
             findNavController().navigate(R.id.action_RegistrationFragment_to_LoginFragment)
         }
     }

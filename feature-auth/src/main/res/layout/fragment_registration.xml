@@ -15,6 +15,20 @@
         android:padding="16dp"
         tools:context=".fragments.login.LoginFragment">
 
+        <ImageView
+            android:id="@+id/arrowBack"
+            android:layout_width="30dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_arrow"
+            android:scaleType="fitXY"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/go_back_to_login_page_arrow">
+
+        </ImageView>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +49,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-            app:layout_constraintBottom_toTopOf="@+id/btSignIn"
+            app:layout_constraintBottom_toTopOf="@+id/btCreateAccount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -56,8 +70,8 @@
                     style="@style/LoginTextFieldStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
                     android:hint="@string/email_hint"
+                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/almostBlack"
                     android:textSize="20sp" />
@@ -71,16 +85,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilEmail"
-                app:passwordToggleEnabled="true"
-                >
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietPassword"
                     style="@style/LoginTextFieldStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
                     android:hint="@string/password_hint"
+                    android:imeOptions="actionNext"
                     android:inputType="textPassword"
                     android:textColor="@color/almostBlack"
                     android:textSize="20sp" />
@@ -94,8 +107,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilEmail"
-                app:passwordToggleEnabled="true"
-                >
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietRepeatedPassword"
@@ -121,22 +133,21 @@
             android:gravity="center"
             android:text="@string/sign_up"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btSignIn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btSignIn"
-            style="@style/RegisterButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginVertical="20dp"
-            android:clickable="true"
-            android:text="@string/sign_in"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-             />
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            android:id="@+id/btSignIn"-->
+        <!--            style="@style/RegisterButtonStyle"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="60dp"-->
+        <!--            android:layout_marginVertical="20dp"-->
+        <!--            android:clickable="true"-->
+        <!--            android:text="@string/sign_in"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--             />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
