@@ -53,15 +53,23 @@ class RegistrationFragment : Fragment() {
         }
 
         binding.btCreateAccount.setOnClickListener {
-            registrationViewModel.signUpNewUser(
-                onSuccess = {
-                    Toast.makeText(this.context, "Account created", Toast.LENGTH_SHORT).show()
-                    context?.navigateToActivity(Constants.MAIN_ACTIVITY_PATH)
-                },
-                onError = {
-                    Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
-                }
-            )
+            if(registrationViewModel.validateUserData()) {
+                registrationViewModel.signUpNewUser(
+                    onSuccess = {
+                        Toast.makeText(this.context, "Account created", Toast.LENGTH_SHORT).show()
+                        context?.navigateToActivity(Constants.MAIN_ACTIVITY_PATH)
+                    },
+                    onError = {
+                        Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
+                    }
+                )
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Email or password contain errors",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         binding.arrowBack.setOnClickListener {

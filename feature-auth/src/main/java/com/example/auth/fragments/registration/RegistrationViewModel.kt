@@ -53,5 +53,21 @@ class RegistrationViewModel @Inject constructor(
             )
         }
     }
+
+    fun validateUserData(): Boolean {
+        return validateEmail() && validatePassword() && doPasswordsMatch()
+    }
+
+    private fun validateEmail(): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email.value).matches()
+    }
+
+    private fun validatePassword(): Boolean {
+        return password.value.isNotEmpty() && password.value.count() >= 6
+    }
+
+    private fun doPasswordsMatch(): Boolean {
+        return password.value == repeatedPassword.value
+    }
 }
 
