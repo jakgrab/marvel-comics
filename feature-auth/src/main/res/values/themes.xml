@@ -17,17 +17,33 @@
     <style name="LoginButtonStyle">
         <item name="backgroundTint">@color/marvelRed</item>
         <item name="colorButtonNormal">@color/white</item>
-        <item name="cornerRadius">10dp</item>
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+    </style>
 
-    </style><style name="RegisterButtonStyle">
+    <style name="RegisterButtonStyle">
         <item name="backgroundTint">@color/lightGray</item>
         <item name="colorButtonNormal">@color/white</item>
-        <item name="cornerRadius">10dp</item>
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height</item>
     </style>
 
     <style name="LoginTextFieldStyle" >
         <item name="backgroundTint">#F7F7F7</item>
         <item name="hintTextColor">#B1B1B1</item>
-        <item name="indicatorColor"></item>
+        <item name="android:textColor">@color/almostBlack</item>
+        <item name="android:textSize">@dimen/input_text_text_size</item>
+    </style>
+
+    <style name="HeaderTitleStyle" >
+        <item name="android:textSize">@dimen/register_text_size</item>
+        <item name="color">@color/almostBlack</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="android:layout_marginTop">100dp</item>
     </style>
 </resources>

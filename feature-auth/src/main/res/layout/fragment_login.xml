@@ -12,21 +12,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:padding="@dimen/constraint_layout_padding"
         tools:context=".fragments.login.LoginFragment">
 
         <TextView
+            android:id="@+id/tvHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/marvel_comics"
-            android:textColor="@color/almostBlack"
-            android:textSize="50sp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </TextView>
+            style="@style/HeaderTitleStyle"
+            android:text="@string/marvel_comics"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -57,8 +51,6 @@
                     style="@style/LoginTextFieldStyle"
                     android:hint="@string/email_hint"
                     android:inputType="textEmailAddress"
-                    android:textSize="20sp"
-                    android:textColor="@color/almostBlack"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,7 +61,8 @@
                 android:layout_marginVertical="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tilEmail">
+                app:layout_constraintTop_toBottomOf="@+id/tilEmail"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietPassword"
@@ -78,8 +71,6 @@
                     style="@style/LoginTextFieldStyle"
                     android:hint="@string/password_hint"
                     android:inputType="textPassword"
-                    android:textSize="20sp"
-                    android:textColor="@color/almostBlack"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,9 +79,6 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btSignIn"
             style="@style/LoginButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginVertical="20dp"
             android:clickable="true"
             android:text="@string/sign_in"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -102,8 +90,6 @@
             android:id="@+id/btCreateAccount"
             style="@style/RegisterButtonStyle"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="20dp"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/sign_up"

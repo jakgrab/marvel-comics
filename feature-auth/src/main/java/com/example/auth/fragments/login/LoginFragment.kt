@@ -48,15 +48,23 @@ class LoginFragment : Fragment() {
         }
 
         binding.btSignIn.setOnClickListener {
-            viewModel.signInUser(
-                onSuccess = {
-                    Toast.makeText(requireContext(), "Logged in", Toast.LENGTH_SHORT).show()
-                    requireContext().navigateToActivity(Constants.MAIN_ACTIVITY_PATH)
-                },
-                onError = {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                }
-            )
+            if (viewModel.validateUserData()) {
+                viewModel.signInUser(
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "Logged in", Toast.LENGTH_SHORT).show()
+                        requireContext().navigateToActivity(Constants.MAIN_ACTIVITY_PATH)
+                    },
+                    onError = {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
+                )
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Email or password contain errors",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         binding.btCreateAccount.setOnClickListener {

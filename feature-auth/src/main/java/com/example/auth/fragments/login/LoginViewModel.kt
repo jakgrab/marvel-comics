@@ -37,13 +37,23 @@ class LoginViewModel @Inject constructor(
                 auth,
                 onSuccess = onSuccess,
                 onError = {
-                 onError(it)
+                    onError(it)
                 }
             )
         }
     }
+
+    fun validateUserData(): Boolean {
+        return validateEmail(email.value) && validatePassword(password.value)
+    }
+
     private fun validateEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
+
+    private fun validatePassword(password: String): Boolean {
+        return password.isNotEmpty() && password.count() >= 6
+    }
+
 }
 
