@@ -19,12 +19,12 @@
 
         <ImageView
             android:id="@+id/arrowBack"
-            android:layout_width="30dp"
-            android:layout_height="15dp"
+            android:layout_width="@dimen/arrow_back_width"
+            android:layout_height="@dimen/arrow_back_height"
             android:src="@drawable/ic_arrow"
             android:scaleType="fitXY"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="@dimen/arrow_back_margin_top"
+            android:layout_marginStart="@dimen/arrow_back_margin_start"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/go_back_to_login_page_arrow">
@@ -32,18 +32,13 @@
         </ImageView>
 
         <TextView
+            android:id="@+id/tvHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            style="@style/HeaderTitleStyle"
             android:text="@string/register"
-            android:textColor="@color/almostBlack"
-            android:textSize="50sp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            />
 
-        </TextView>
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -54,7 +49,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btCreateAccount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/tvHeader">
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -99,8 +94,7 @@
                     android:text="@={registrationViewModel.password}"
                     android:imeOptions="actionNext"
                     android:inputType="textPassword"
-                    android:textColor="@color/almostBlack"
-                    android:textSize="20sp" />
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -122,8 +116,7 @@
                     android:text="@={registrationViewModel.repeatedPassword}"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:textColor="@color/almostBlack"
-                    android:textSize="20sp" />
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -131,8 +124,6 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btCreateAccount"
             style="@style/LoginButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
             android:layout_marginBottom="20dp"
             android:clickable="true"
             android:gravity="center"
