@@ -1,4 +1,4 @@
-package com.example.core.repository
+package com.example.core.repository.comic_repository
 
 import android.util.Log
 import com.example.core.model.Comics

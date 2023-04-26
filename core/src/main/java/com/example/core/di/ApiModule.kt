@@ -2,8 +2,8 @@ package com.example.core.di
 
 import com.example.core.BuildConfig
 import com.example.core.network.ComicsApi
-import com.example.core.repository.ComicRepository
-import com.example.core.repository.ComicRepositoryImpl
+import com.example.core.repository.comic_repository.ComicRepository
+import com.example.core.repository.comic_repository.ComicRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

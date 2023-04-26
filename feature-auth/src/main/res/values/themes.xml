@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.MarvelComics" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorGray</item>
+        <item name="colorPrimaryDark">@color/colorGray</item>
+        <item name="colorAccent">@color/colorAccent2</item>
+        <item name="android:textColorPrimary">#000</item>
+        <item name="actionButtonStyle">@style/AppTheme.Widget.ActionButton</item>
+        <item name="titleTextColor">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.Widget.ActionButton" parent="Widget.AppCompat.Button">
+        <item name="colorPrimary">#C61313</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="LoginButtonStyle">
+        <item name="backgroundTint">@color/marvelRed</item>
+        <item name="colorButtonNormal">@color/white</item>
+        <item name="cornerRadius">10dp</item>
+
+    </style><style name="RegisterButtonStyle">
+        <item name="backgroundTint">@color/lightGray</item>
+        <item name="colorButtonNormal">@color/white</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
+    <style name="LoginTextFieldStyle" >
+        <item name="backgroundTint">#F7F7F7</item>
+        <item name="hintTextColor">#B1B1B1</item>
+        <item name="indicatorColor"></item>
+    </style>
+</resources>

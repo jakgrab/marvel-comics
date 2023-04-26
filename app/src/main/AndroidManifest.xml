@@ -16,9 +16,8 @@
         android:theme="@style/Theme.MarvelComics"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.auth.LoginActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.MarvelComics.LoginSplashScreen">
             <intent-filter>
@@ -27,6 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.feature_main.MainActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
+
 
 </manifest>

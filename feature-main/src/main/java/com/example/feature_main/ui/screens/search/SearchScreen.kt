@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.core.model.Result
-import com.example.core.R
+import com.example.feature_main.R
 import com.example.feature_main.ui.navigation.ComicScreens
 import com.example.feature_main.ui.screens.components.ComicBooksList
 import com.example.feature_main.ui.screens.components.ComicBottomAppBar

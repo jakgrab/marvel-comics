@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
-import com.example.core.R
+import com.example.feature_main.R
 import com.example.core.model.Result
 import com.example.feature_main.ui.screens.utils.Utils
 import com.example.feature_main.ui.theme.ComicAuthorList
