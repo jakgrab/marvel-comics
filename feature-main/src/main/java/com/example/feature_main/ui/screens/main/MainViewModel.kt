@@ -12,7 +12,8 @@ import com.example.core.model.Result
 import com.example.core.repository.comic_repository.ComicRepository
 import com.example.core.sign_in.GoogleAuthUiClient
 import com.example.core.wrapper.DataOrException
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val comicRepository: ComicRepository,
-    private val auth: FirebaseAuth,
     private val googleAuthUiClient: GoogleAuthUiClient
 ) : ViewModel() {
 
@@ -94,7 +94,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun logOut(activity: Activity?) {
-        auth.signOut()
+        Firebase.auth.signOut()
         googleAuthUiClient.signOut(
             onSuccess = {
             },
