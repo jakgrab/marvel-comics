@@ -60,6 +60,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
+    // Google auth
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+
     // Dagger-HIlt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"

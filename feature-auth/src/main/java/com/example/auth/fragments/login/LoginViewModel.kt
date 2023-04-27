@@ -3,6 +3,7 @@ package com.example.auth.fragments.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.repository.firebase_repository.FirebaseRepositoryImpl
+import com.example.core.sign_in.SignInResult
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,11 +13,13 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginRepository: FirebaseRepositoryImpl,
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
 ) : ViewModel() {
 
-    private val password: MutableStateFlow<String> = MutableStateFlow("")
-    private val email: MutableStateFlow<String> = MutableStateFlow("")
+    val password: MutableStateFlow<String> = MutableStateFlow("")
+    val email: MutableStateFlow<String> = MutableStateFlow("")
+
+    val isSignInWithGoogleSuccessful = MutableStateFlow(false)
 
     fun setUserEmail(inputEmail: String) {
         email.value = inputEmail
@@ -32,16 +35,26 @@ class LoginViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             loginRepository.signInUser(
-                email.value,
-                password.value,
-                auth,
+                email = email.value,
+                password = password.value,
+                auth = auth,
                 onSuccess = onSuccess,
                 onError = {
-                 onError(it)
+                    onError(it)
                 }
             )
         }
     }
+
+
+    fun onSignInResult(result: SignInResult) {
+        isSignInWithGoogleSuccessful.value = result.data != null
+    }
+
+    fun resetSignInWithGoogleState() {
+        isSignInWithGoogleSuccessful.value = false
+    }
+
     private fun validateEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
