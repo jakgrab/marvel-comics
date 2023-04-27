@@ -14,7 +14,6 @@ import com.example.auth.databinding.ActivityLoginBinding
 import com.example.auth.fragments.login.LoginViewModel
 import com.example.auth.utils.navigateToActivity
 import com.example.core.constants.Constants
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -25,7 +24,6 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var auth: FirebaseAuth
 
     private val viewModel by viewModels<LoginViewModel>()
 
@@ -39,13 +37,11 @@ class LoginActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         setContentView(binding.root)
-
-        auth = Firebase.auth
     }
 
     override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
+        val currentUser = Firebase.auth.currentUser
         isUserSignedIn(currentUser)
     }
 
