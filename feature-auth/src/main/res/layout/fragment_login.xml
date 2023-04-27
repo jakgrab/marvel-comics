@@ -7,6 +7,9 @@
 
     <data>
 
+        <variable
+            name="loginViewModel"
+            type="com.example.auth.fragments.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,8 +28,7 @@
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </TextView>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -52,14 +54,14 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietEmail"
+                    style="@style/LoginTextFieldStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/LoginTextFieldStyle"
                     android:hint="@string/email_hint"
                     android:inputType="textEmailAddress"
-                    android:textSize="20sp"
+                    android:text="@={loginViewModel.email}"
                     android:textColor="@color/almostBlack"
-                    />
+                    android:textSize="20sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -73,14 +75,14 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietPassword"
+                    style="@style/LoginTextFieldStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/LoginTextFieldStyle"
                     android:hint="@string/password_hint"
                     android:inputType="textPassword"
-                    android:textSize="20sp"
+                    android:text="@={loginViewModel.password}"
                     android:textColor="@color/almostBlack"
-                    />
+                    android:textSize="20sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -90,13 +92,12 @@
             style="@style/LoginButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginVertical="20dp"
             android:clickable="true"
             android:text="@string/sign_in"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btCreateAccount"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toTopOf="@id/btCreateAccount"
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btCreateAccount"
@@ -107,9 +108,20 @@
             android:clickable="true"
             android:gravity="center"
             android:text="@string/sign_up"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toTopOf="@id/btGoogleSignIn"
+             />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btGoogleSignIn"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+        </com.google.android.gms.common.SignInButton>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
