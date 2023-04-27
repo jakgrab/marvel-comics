@@ -144,6 +144,8 @@ class MainViewModelTest {
                 getComicsByTitle(any())
             } returns fakeDataOrException
         }
-        viewModel = MainViewModel(comicRepository = fakeRepository)
+
+//        val googleAuthUiClient = GoogleAuthUiClient()
+//        viewModel = MainViewModel(comicRepository = fakeRepository)
     }
 }

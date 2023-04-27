@@ -2,7 +2,6 @@ package com.example.core.sign_in
 
 import android.content.Intent
 import android.content.IntentSender
-import android.util.Log
 import com.example.core.constants.Constants
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient

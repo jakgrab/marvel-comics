@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.example.feature_main.R
@@ -32,7 +31,6 @@ import com.example.feature_main.ui.screens.utils.Utils
 import com.example.feature_main.ui.theme.ComicAuthorList
 import com.example.feature_main.ui.theme.ComicDescriptionList
 import com.example.feature_main.ui.theme.ComicTitle
-import com.example.feature_main.ui.theme.MarvelComicsTheme
 
 @Composable
 fun ComicBooksList(
@@ -85,6 +83,13 @@ fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
 
     val authors = Utils.getAuthors(context, numAuthors, comic)
 
+    var isFavouriteClicked by remember {
+        mutableStateOf(false)
+    }
+
+    val starColor by
+    animateColorAsState(targetValue = if (isFavouriteClicked) Color(0xFFF1C12F) else Color.DarkGray)
+
     Card(
         onClick = {
             onComicClicked()
@@ -100,31 +105,58 @@ fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
     ) {
         Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start) {
             ComicThumbnail(modifier = Modifier.weight(2f), imageUrl)
-            TitleAndDescription(modifier = Modifier.weight(3f), comic.title, authors, description)
+            ComicInfo(
+                modifier = Modifier.weight(3f),
+                title = comic.title,
+                authors = authors,
+                description = description,
+                starColor = starColor,
+                onFavouriteClicked = { isFavouriteClicked = !isFavouriteClicked }
+            )
         }
     }
 }
 
 
 @Composable
-fun TitleAndDescription(
+fun ComicInfo(
     modifier: Modifier = Modifier,
     title: String,
     authors: String,
-    description: String
+    description: String,
+    starColor: Color,
+    onFavouriteClicked: () -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .padding(16.dp),
+            .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        Text(
-            text = title,
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.ComicTitle
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
+            Column(Modifier.weight(4f)) {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colors.onBackground,
+                    style = MaterialTheme.typography.ComicTitle
+                )
+            }
+            Column(Modifier.weight(1f)) {
+                FavouriteStar(
+                    modifier = Modifier.size(40.dp),
+                    starColor = starColor,
+                    onClick = onFavouriteClicked
+                )
+            }
+        }
+
         Text(
             text = authors,
             color = Color.LightGray,
@@ -176,32 +208,13 @@ fun ComicThumbnail(modifier: Modifier = Modifier, imageUrl: String) {
 }
 
 @Composable
-fun FavouriteStar(starColor: Color, onClick: () -> Unit) {
-    IconButton(onClick = { /*TODO*/ }) {
-        Icon(imageVector = Icons.Default.Favorite, tint = starColor, contentDescription = null)
-    }
-}
-
-@Preview
-@Composable
-fun TitleAndDescriptionPreview() {
-    MarvelComicsTheme {
-        var clicked by remember {
-            mutableStateOf(false)
-        }
-        val starColor by animateColorAsState(if (clicked) Color.Yellow else Color.DarkGray)
-        Card(
-            modifier = Modifier.size(200.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
-        ) {
-            Column {
-                FavouriteStar(starColor, onClick = {clicked = !clicked})
-                TitleAndDescription(
-                    title = "Spider man",
-                    authors = "dupa",
-                    description = "In the galaxy far far away dupa dupa dupa dupa duap"
-                )
-            }
-        }
+fun FavouriteStar(modifier: Modifier = Modifier, starColor: Color, onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(
+            modifier = modifier,
+            imageVector = Icons.Default.Star,
+            tint = starColor,
+            contentDescription = null
+        )
     }
 }
