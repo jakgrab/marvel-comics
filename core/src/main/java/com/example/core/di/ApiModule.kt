@@ -4,6 +4,8 @@ import com.example.core.BuildConfig
 import com.example.core.network.ComicsApi
 import com.example.core.repository.comic_repository.ComicRepository
 import com.example.core.repository.comic_repository.ComicRepositoryImpl
+import com.example.core.repository.firebase_repository.FirebaseRepository
+import com.example.core.repository.firebase_repository.FirebaseRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,5 +45,11 @@ class ApiModule {
     @Singleton
     fun provideComicRepository(comicsApi: ComicsApi): ComicRepository {
         return ComicRepositoryImpl(comicsApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseRepository(): FirebaseRepository {
+        return FirebaseRepositoryImpl()
     }
 }

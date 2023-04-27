@@ -10,6 +10,7 @@ import com.example.core.constants.Constants
 import com.example.core.data.model.Comics
 import com.example.core.data.model.Result
 import com.example.core.repository.comic_repository.ComicRepository
+import com.example.core.repository.firebase_repository.FirebaseRepository
 import com.example.core.sign_in.GoogleAuthUiClient
 import com.example.core.wrapper.DataOrException
 import com.google.firebase.auth.ktx.auth
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val comicRepository: ComicRepository,
-    private val googleAuthUiClient: GoogleAuthUiClient
+    private val googleAuthUiClient: GoogleAuthUiClient,
+    private val firebaseRepository: FirebaseRepository
 ) : ViewModel() {
 
     private val _comicsData =
@@ -40,6 +42,7 @@ class MainViewModel @Inject constructor(
     val comicsDataByTitle = _comicsDataByTitle.asStateFlow()
 
     var comicsList: MutableState<List<Result>> = mutableStateOf(emptyList())
+    var comicsListByTitle: MutableState<List<Result>> = mutableStateOf(emptyList())
 
     private var currentPage: Int = 0
     var isEndReached: Boolean = false
@@ -68,7 +71,10 @@ class MainViewModel @Inject constructor(
             }
             _comicsData.value.data?.data?.results?.let { newResults ->
                 if (newResults.isNotEmpty()) {
-                    comicsList.value = comicsList.value + newResults
+                    comicsList.value = comicsList.value + newResults.mapIndexed{ index, it ->
+                        if(index%3 == 0) it.isFavourite = true
+                        it
+                    }
                     currentPage++
                 }
             }
@@ -77,7 +83,17 @@ class MainViewModel @Inject constructor(
 
     fun getComicByTitle(title: String) {
         viewModelScope.launch {
+
             _comicsDataByTitle.value = comicRepository.getComicsByTitle(title)
+
+            _comicsDataByTitle.value.data?.data?.results?.let { newResults ->
+                if (newResults.isNotEmpty()) {
+                    comicsListByTitle.value = newResults.mapIndexed{ index, it ->
+                        if(index%3 == 0) it.isFavourite = true
+                        it
+                    }
+                }
+            }
         }
     }
 

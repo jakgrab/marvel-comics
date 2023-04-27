@@ -29,5 +29,6 @@ data class Result(
     //val upc: String,
     val urls: List<Url>,
     val variantDescription: String,
-    val variants: List<Variant>
+    val variants: List<Variant>,
+    var isFavourite: Boolean = false
 )
