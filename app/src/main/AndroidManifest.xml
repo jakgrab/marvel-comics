@@ -18,7 +18,7 @@
         <activity
             android:name="com.example.auth.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.MarvelComics.LoginSplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

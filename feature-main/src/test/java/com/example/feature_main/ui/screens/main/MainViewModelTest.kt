@@ -10,7 +10,7 @@ import com.example.core.data.model.Result
 import com.example.core.data.model.Series
 import com.example.core.data.model.Stories
 import com.example.core.data.model.Thumbnail
-import com.example.core.repository.ComicRepository
+import com.example.core.repository.comic_repository.ComicRepository
 import com.example.core.wrapper.DataOrException
 import com.example.feature_main.util.MainCoroutineRule
 import io.mockk.coEvery

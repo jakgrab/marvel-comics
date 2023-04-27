@@ -1,6 +1,7 @@
 package com.example.auth
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -10,9 +11,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.example.auth.databinding.ActivityLoginBinding
+import com.example.auth.fragments.login.LoginViewModel
 import com.example.auth.utils.navigateToActivity
 import com.example.core.constants.Constants
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -23,7 +24,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var auth: FirebaseAuth
+
+    private val viewModel by viewModels<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -35,15 +37,11 @@ class LoginActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         setContentView(binding.root)
-
-        auth = Firebase.auth
-
-        val navController = findNavController(R.id.nav_host_fragment_content_login)
     }
 
     override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
+        val currentUser = Firebase.auth.currentUser
         isUserSignedIn(currentUser)
     }
 
@@ -53,11 +51,9 @@ class LoginActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-
     private fun isUserSignedIn(currentUser: FirebaseUser?) {
-        if (currentUser!=null) {
+        if (currentUser != null || viewModel.isSignInWithGoogleSuccessful.value) {
             this.navigateToActivity(Constants.MAIN_ACTIVITY_PATH)
         }
     }
-
 }
