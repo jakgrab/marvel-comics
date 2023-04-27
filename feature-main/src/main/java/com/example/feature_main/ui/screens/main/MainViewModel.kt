@@ -83,7 +83,6 @@ class MainViewModel @Inject constructor(
 
     fun getComicByTitle(title: String) {
         viewModelScope.launch {
-
             _comicsDataByTitle.value = comicRepository.getComicsByTitle(title)
 
             _comicsDataByTitle.value.data?.data?.results?.let { newResults ->

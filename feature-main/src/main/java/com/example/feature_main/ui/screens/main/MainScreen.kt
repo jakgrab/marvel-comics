@@ -121,9 +121,6 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                         comicsList.value[index].apply {
                             isFavourite = !isFavourite
                         }
-                        val newList = comicsList.value
-                        comicsList.value = listOf()
-                        comicsList.value = newList
                     }
                 )
             }
