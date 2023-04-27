@@ -105,7 +105,8 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ComicBooksList(comicsList = comicsList.value,
+                ComicBooksList(
+                    comicsList = comicsList.value,
                     isEndReached = mainViewModel.isEndReached,
                     loadComics = {
                         mainViewModel.getComicsWithPaging()

@@ -18,7 +18,9 @@ interface FirebaseRepository {
         onError: (String) -> Unit,
     )
 
-    suspend fun createNewDocument()
+    fun getUsersFavouriteComics(userId: String)
 
-    fun getUserOrCreateNew()
+    fun deleteUsersFavouriteComics()
+
+    fun addOrUpdateFavouriteComics()
 }

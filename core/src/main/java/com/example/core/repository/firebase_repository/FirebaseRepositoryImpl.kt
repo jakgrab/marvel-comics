@@ -1,10 +1,9 @@
 package com.example.core.repository.firebase_repository
 
+import android.util.Log
 import com.example.core.data.firestore_data.UserComicsData
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 
 class FirebaseRepositoryImpl : FirebaseRepository {
 
@@ -45,16 +44,29 @@ class FirebaseRepositoryImpl : FirebaseRepository {
             }
     }
 
-    override suspend fun createNewDocument() {
-        FirebaseFirestore.getInstance().apply {
-            this.collection(COLLECTION_NAME)
-                .document(DOCUMENT_NAME)
-                .update("userComics", UserComicsData())
 
-        }
+    override fun getUsersFavouriteComics(userId: String) {
+        FirebaseFirestore.getInstance()
+            .collection(COLLECTION_NAME)
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener {
+                Log.d("FireStore", "Successfully got users data")
+            }.addOnFailureListener {
+                Log.d("FireStore", "Successfully got users data")
+            }
+
     }
 
-    override fun getUserOrCreateNew() {
+    override fun addOrUpdateFavouriteComics() {
+        FirebaseFirestore.getInstance()
+            .collection(COLLECTION_NAME)
+            .add(UserComicsData(
+
+            ))
+    }
+
+    override fun deleteUsersFavouriteComics() {
         TODO("Not yet implemented")
     }
 }
