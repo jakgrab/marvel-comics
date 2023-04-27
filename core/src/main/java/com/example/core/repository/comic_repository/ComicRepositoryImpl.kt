@@ -1,7 +1,7 @@
 package com.example.core.repository.comic_repository
 
 import android.util.Log
-import com.example.core.model.Comics
+import com.example.core.data.model.Comics
 import com.example.core.network.ComicsApi
 import com.example.core.wrapper.DataOrException
 import javax.inject.Inject

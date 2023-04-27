@@ -1,7 +1,7 @@
 package com.example.feature_main.ui.screens.utils
 
 import android.content.Context
-import com.example.core.model.Result
+import com.example.core.data.model.Result
 import com.example.feature_main.R
 
 class Utils {

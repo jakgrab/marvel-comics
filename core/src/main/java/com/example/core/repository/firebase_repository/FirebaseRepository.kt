@@ -17,4 +17,8 @@ interface FirebaseRepository {
         onSuccess: () -> Unit,
         onError: (String) -> Unit,
     )
+
+    suspend fun createNewDocument()
+
+    fun getUserOrCreateNew()
 }

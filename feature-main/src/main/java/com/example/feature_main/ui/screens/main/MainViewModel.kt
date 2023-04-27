@@ -7,8 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.constants.Constants
-import com.example.core.model.Comics
-import com.example.core.model.Result
+import com.example.core.data.model.Comics
+import com.example.core.data.model.Result
 import com.example.core.repository.comic_repository.ComicRepository
 import com.example.core.wrapper.DataOrException
 import com.google.firebase.auth.FirebaseAuth
