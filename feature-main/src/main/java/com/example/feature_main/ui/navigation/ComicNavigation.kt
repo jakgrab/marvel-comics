@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.feature_main.ui.screens.details.DetailsScreen
+import com.example.feature_main.ui.screens.favourite.FavouriteScreen
 import com.example.feature_main.ui.screens.main.MainScreen
 import com.example.feature_main.ui.screens.main.MainViewModel
 import com.example.feature_main.ui.screens.search.SearchScreen
@@ -55,5 +56,9 @@ fun ComicNavigation() {
         composable(
             route = ComicScreens.SearchScreen.name
         ) { SearchScreen(mainViewModel, navController) }
+
+        composable(route = ComicScreens.FavouriteScreen.name) {
+            FavouriteScreen(mainViewModel = mainViewModel, navController = navController)
+        }
     }
 }

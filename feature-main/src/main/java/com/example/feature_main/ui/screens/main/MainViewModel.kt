@@ -48,7 +48,7 @@ class MainViewModel @Inject constructor(
     var comicsList: MutableState<List<Result>> = mutableStateOf(emptyList())
     var comicsListByTitle: MutableState<List<Result>> = mutableStateOf(emptyList())
 
-    private var favouritesList = mutableStateListOf<ComicsData>()
+    var favouritesList = mutableStateListOf<ComicsData>()
     private lateinit var favouriteComicsIdList: List<Int>
 
     private var currentPage: Int = 0

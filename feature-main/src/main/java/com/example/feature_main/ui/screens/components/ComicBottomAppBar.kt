@@ -2,6 +2,8 @@ package com.example.feature_main.ui.screens.components
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -23,8 +25,10 @@ import com.example.feature_main.R
 fun ComicBottomAppBar(
     onHomeIconClicked: () -> Unit = {},
     onSearchIconClicked: () -> Unit = {},
+    onFavouriteIconClicked: () -> Unit = {},
     homeSelected: Boolean = false,
-    searchSelected: Boolean = false
+    searchSelected: Boolean = false,
+    favouriteSelected: Boolean = false
 ) {
 
     BottomAppBar(
@@ -65,6 +69,22 @@ fun ComicBottomAppBar(
                     painter = painterResource(R.drawable.ic_search),
                     modifier = Modifier.size(20.dp),
                     contentDescription = stringResource(R.string.bottom_app_bar_search_icon_desc)
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.Red,
+                unselectedIconColor = Color.LightGray,
+                indicatorColor = MaterialTheme.colors.surface
+            )
+        )
+        NavigationBarItem(
+            selected = favouriteSelected,
+            onClick = { onFavouriteIconClicked() },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    modifier = Modifier.size(20.dp),
+                    contentDescription = "Favourites screen icon"
                 )
             },
             colors = NavigationBarItemDefaults.colors(

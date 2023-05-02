@@ -136,6 +136,9 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     onHomeIconClicked = {
                         navController.navigate(ComicScreens.MainScreen.name)
                     },
+                    onFavouriteIconClicked = {
+                        navController.navigate(ComicScreens.FavouriteScreen.name)
+                    },
                     searchSelected = true
                 )
         }

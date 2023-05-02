@@ -84,7 +84,11 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             ComicBottomAppBar(
                 onSearchIconClicked = {
                     navController.navigate(ComicScreens.SearchScreen.name)
-                }, homeSelected = true
+                },
+                onFavouriteIconClicked = {
+                    navController.navigate(ComicScreens.FavouriteScreen.name)
+                },
+                homeSelected = true
             )
         },
     ) {
@@ -118,16 +122,14 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                         )
                     },
                     onFavouriteClicked = { index ->
-//                        comicsList.value[index].apply {
-//                            isFavourite = !isFavourite
-//                        }
                         val comic = comicsList.value[index]
 
-                        when(comic.isFavourite) {
+                        when (comic.isFavourite) {
                             true -> {
                                 comic.isFavourite = false
                                 mainViewModel.deleteFromFavourites(comic)
                             }
+
                             false -> {
                                 comic.isFavourite = true
                                 mainViewModel.addComicToFavourites(comic)

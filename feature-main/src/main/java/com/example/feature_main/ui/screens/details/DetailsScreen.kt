@@ -97,6 +97,9 @@ fun DetailsScreen(
                 },
                 onSearchIconClicked = {
                     navController.navigate(ComicScreens.SearchScreen.name)
+                },
+                onFavouriteIconClicked = {
+                    navController.navigate(ComicScreens.FavouriteScreen.name)
                 }
             )
         },
