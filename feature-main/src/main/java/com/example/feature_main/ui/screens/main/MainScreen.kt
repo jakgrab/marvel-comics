@@ -25,6 +25,7 @@ import com.example.feature_main.ui.navigation.ComicScreens
 import com.example.feature_main.ui.screens.components.ComicBooksList
 import com.example.feature_main.ui.screens.components.ComicBottomAppBar
 import com.example.feature_main.ui.screens.components.ComicTopAppBar
+import com.example.feature_main.ui.screens.utils.Destinations
 import com.example.feature_main.ui.theme.HeaderComicList
 
 
@@ -47,8 +48,6 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
     } else if (comicsData.value.data != null) {
         isDataLoading = false
     }
-
-    val fromMainScreen = true
 
     val scaffoldState = rememberScaffoldState()
     val topAppBarState = rememberTopAppBarState()
@@ -118,7 +117,8 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                     },
                     onComicClicked = { comicIndex ->
                         navController.navigate(
-                            ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                            ComicScreens.DetailsScreen.name +
+                                    "/${Destinations.MAIN_SCREEN}/$comicIndex"
                         )
                     },
                     onFavouriteClicked = { index ->

@@ -31,26 +31,24 @@ fun ComicNavigation() {
         val detailsRoute = ComicScreens.DetailsScreen.name
 
         composable(
-            route = "$detailsRoute/{fromMainScreen}/{comicIndex}",
+            route = "$detailsRoute/{previousScreen}/{comicIndex}",
             arguments = listOf(
-                navArgument(name = "fromMainScreen") {
-                    type = NavType.BoolType
-                },
                 navArgument(name = "comicIndex") {
+                    type = NavType.IntType
+                },
+                navArgument(name = "previousScreen") {
                     type = NavType.IntType
                 }
             )
         ) { navBack ->
             val index = navBack.arguments?.getInt("comicIndex")
-            val fromMainScreen = navBack.arguments?.getBoolean("fromMainScreen")
-
+            val previousScreen = navBack.arguments?.getInt("previousScreen")
             DetailsScreen(
                 mainViewModel = mainViewModel,
                 navController = navController,
                 comicIndex = index,
-                fromMainScreen = fromMainScreen
+                previousScreen = previousScreen
             )
-
         }
 
         composable(

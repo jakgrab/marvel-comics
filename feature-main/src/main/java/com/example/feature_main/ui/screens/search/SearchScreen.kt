@@ -26,13 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.core.data.model.Result
 import com.example.feature_main.R
 import com.example.feature_main.ui.navigation.ComicScreens
 import com.example.feature_main.ui.screens.components.ComicBooksList
 import com.example.feature_main.ui.screens.components.ComicBottomAppBar
 import com.example.feature_main.ui.screens.main.MainViewModel
 import com.example.feature_main.ui.screens.search.components.ComicTextField
+import com.example.feature_main.ui.screens.utils.Destinations
 import com.example.feature_main.ui.theme.CancelTextColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,8 +44,6 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     val comicsListByTitle = remember(comicsDataByTitle) {
         mainViewModel.comicsListByTitle
     }
-
-    val fromMainScreen = false
 
     var showFoundComics by remember {
         mutableStateOf(false)
@@ -183,7 +181,8 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     modifier = Modifier.weight(1f),
                     onComicClicked = { comicIndex ->
                         navController.navigate(
-                            ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                            ComicScreens.DetailsScreen.name +
+                                    "/${Destinations.SEARCH_SCREEN}/$comicIndex"
                         )
                     },
                     onFavouriteClicked = { index ->

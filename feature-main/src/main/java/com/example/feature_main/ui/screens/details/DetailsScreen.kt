@@ -34,12 +34,13 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.core.data.model.Result
+import com.example.core.data.firestore_data.ComicsData
 import com.example.feature_main.R
 import com.example.feature_main.ui.navigation.ComicScreens
 import com.example.feature_main.ui.screens.components.ComicBottomAppBar
 import com.example.feature_main.ui.screens.components.ComicTopAppBar
 import com.example.feature_main.ui.screens.main.MainViewModel
+import com.example.feature_main.ui.screens.utils.Destinations
 import com.example.feature_main.ui.screens.utils.Utils
 import com.example.feature_main.ui.theme.BottomSheetButtonColor
 import com.example.feature_main.ui.theme.ComicTitle
@@ -51,25 +52,38 @@ import kotlinx.coroutines.launch
 fun DetailsScreen(
     mainViewModel: MainViewModel,
     navController: NavController,
-    fromMainScreen: Boolean?,
+    previousScreen: Int?,
     comicIndex: Int?
 ) {
-    val comicsData: Result? = if (fromMainScreen == true) {
-        mainViewModel.comicsList.value[comicIndex!!]
-    } else {
-        mainViewModel.comicsDataByTitle.collectAsState().value.data?.data?.results?.get(comicIndex!!)
+    val comicsData: ComicsData = when (previousScreen) {
+        Destinations.MAIN_SCREEN -> {
+            val comic = mainViewModel.comicsList.value[comicIndex!!]
+            Utils.resultToComicsData(comic)
+        }
+
+        Destinations.SEARCH_SCREEN -> {
+            val comic =
+                mainViewModel.comicsDataByTitle.collectAsState().value.data?.data?.results?.get(
+                    comicIndex!!
+                )
+            Utils.resultToComicsData(comic)
+        }
+
+        Destinations.FAVOURITE_SCREEN -> mainViewModel.favouritesList[comicIndex ?: 0]
+        else -> {
+            ComicsData()
+        }
     }
 
-    val title: String =
-        comicsData?.title ?: stringResource(R.string.details_screen_no_title_available)
+    val title: String = comicsData.title.ifEmpty { stringResource(R.string.details_screen_no_title_available) }
     val description =
-        comicsData?.description ?: stringResource(R.string.details_screen_no_desc_available)
-    val numAuthors: Int = comicsData?.creators?.available ?: 0
+        comicsData.description.ifEmpty { stringResource(R.string.details_screen_no_desc_available) }
 
     val context = LocalContext.current
 
-    val authors = Utils.getAuthorsWithoutWrittenBy( numAuthors, comicsData)
-    val detailsUrl = comicsData?.urls?.get(0)?.url
+    val authors = comicsData.authors
+
+    val detailsUrl = comicsData.url
 
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState(0)
@@ -123,14 +137,8 @@ fun DetailsScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-            val imageUrl = if (comicsData?.images?.isNotEmpty() == true) {
-                val extension: String = comicsData.images[0].extension
-                val imagePath: String = comicsData.images[0].path
-                "$imagePath.$extension"
-            } else ""
-
             AsyncImage(
-                model = imageUrl.ifEmpty { R.drawable.placeholder },
+                model = comicsData.image.ifEmpty { R.drawable.placeholder },
                 contentDescription = stringResource(id = R.string.details_screen_image_desc),
                 modifier = Modifier.fillMaxHeight(),
                 alignment = Alignment.TopCenter
@@ -298,7 +306,8 @@ private fun BottomSheetButton(
         modifier = modifier
             .background(
                 color = BottomSheetButtonColor,
-                shape = RoundedCornerShape(40.dp))
+                shape = RoundedCornerShape(40.dp)
+            )
             .clickable(
                 onClick = onClick
             )
