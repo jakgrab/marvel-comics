@@ -33,5 +33,14 @@ class Utils {
                 }
             }
         }
+
+        fun getImageUrl(comic: Result): String {
+            return if (comic.images.isNotEmpty()) {
+                val extension: String = comic.images[0].extension
+                val imagePath: String = comic.images[0].path
+                "$imagePath.$extension"
+            } else ""
+        }
+
     }
 }

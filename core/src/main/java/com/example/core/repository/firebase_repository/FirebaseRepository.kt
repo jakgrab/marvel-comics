@@ -1,7 +1,9 @@
 package com.example.core.repository.firebase_repository
 
 import com.example.core.data.firestore_data.ComicsData
+import com.example.core.data.firestore_data.UserComicsData
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.Flow
 
 interface FirebaseRepository {
     suspend fun signUpNewUser(
@@ -19,9 +21,11 @@ interface FirebaseRepository {
         onError: (String) -> Unit,
     )
 
-    fun getUsersFavouriteComics(userId: String): Boolean
+    fun getUsersFavouriteComics(onSuccess: () -> Unit,  onFailure: () -> Unit): Flow<UserComicsData?>
 
-    fun deleteUsersFavouriteComics(): Boolean
+    fun deleteUsersFavouriteComics(): Flow<Boolean>
 
-    fun addOrUpdateFavouriteComics(comicsDataList: List<ComicsData>): Boolean
+    fun updateFavouriteComics(comicsDataList: List<ComicsData>): Flow<Boolean>
+
+    fun addUsersFirstFavouriteComic(comicsData: ComicsData): Flow<Boolean>
 }

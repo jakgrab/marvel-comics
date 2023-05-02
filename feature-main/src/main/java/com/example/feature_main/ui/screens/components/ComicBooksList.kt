@@ -54,7 +54,7 @@ fun ComicBooksList(
             }
 
             ComicItem(
-                comic,
+                comic = comic,
                 onComicClicked = { onComicClicked(index) },
                 onFavouriteClicked = {
                     onFavouriteClicked(index)
@@ -88,11 +88,7 @@ fun ComicItem(
 ) {
     val context = LocalContext.current
 
-    val imageUrl = if (comic.images.isNotEmpty()) {
-        val extension: String = comic.images[0].extension
-        val imagePath: String = comic.images[0].path
-        "$imagePath.$extension"
-    } else ""
+    val imageUrl = Utils.getImageUrl(comic)
 
     val description = comic.description ?: stringResource(R.string.no_description_available)
     val numAuthors: Int = comic.creators.available

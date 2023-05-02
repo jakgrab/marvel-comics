@@ -34,7 +34,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val comicsData = mainViewModel.comicsData.collectAsState()
 
-    val comicsList = remember(mainViewModel.comicsList.value) {
+    val comicsList = remember(mainViewModel.comicsList) {
         mainViewModel.comicsList
     }
 
@@ -118,8 +118,20 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                         )
                     },
                     onFavouriteClicked = { index ->
-                        comicsList.value[index].apply {
-                            isFavourite = !isFavourite
+//                        comicsList.value[index].apply {
+//                            isFavourite = !isFavourite
+//                        }
+                        val comic = comicsList.value[index]
+
+                        when(comic.isFavourite) {
+                            true -> {
+                                comic.isFavourite = false
+                                mainViewModel.deleteFromFavourites(comic)
+                            }
+                            false -> {
+                                comic.isFavourite = true
+                                mainViewModel.addComicToFavourites(comic)
+                            }
                         }
                     }
                 )
