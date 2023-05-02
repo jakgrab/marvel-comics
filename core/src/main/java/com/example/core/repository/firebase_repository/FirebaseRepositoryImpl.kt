@@ -6,10 +6,14 @@ import com.example.core.data.firestore_data.UserComicsData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 class FirebaseRepositoryImpl : FirebaseRepository {
 
     private val COLLECTION_NAME = "MARVEL_COMICS"
+    private val COMICS_LIST_FIELD = "comicsList"
 
     override suspend fun signUpNewUser(
         email: String,
@@ -46,48 +50,81 @@ class FirebaseRepositoryImpl : FirebaseRepository {
     }
 
 
-    override fun getUsersFavouriteComics(userId: String): Boolean {
-        var result = false
+    override fun getUsersFavouriteComics(
+        onSuccess: () -> Unit,
+        onFailure: () -> Unit
+    ): Flow<UserComicsData?> =
+        callbackFlow {
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "-1"
+
+            FirebaseFirestore.getInstance()
+                .collection(COLLECTION_NAME)
+                .document(userId)
+                .get()
+                .addOnSuccessListener {
+                    trySend(it.toObject(UserComicsData::class.java))
+                    onSuccess()
+
+                }.addOnFailureListener {
+                    trySend(null)
+                    onFailure()
+                }
+            awaitClose { }
+        }
+
+    override fun addUsersFirstFavouriteComic(comicsData: ComicsData): Flow<Boolean> = callbackFlow {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "-1"
+
         FirebaseFirestore.getInstance()
             .collection(COLLECTION_NAME)
-            .whereEqualTo("userId", userId)
-            .get()
+            .document(userId)
+            .set(UserComicsData(userId, listOf(comicsData)))
             .addOnSuccessListener {
-                Log.d("FireStore", "Successfully got users data")
-                result = true
-            }.addOnFailureListener {
-                Log.d("FireStore", "Successfully got users data")
-                result = false
+                trySend(true)
             }
-        return result
+            .addOnFailureListener {
+                trySend(false)
+            }
+        awaitClose { }
+
     }
 
-    override fun addOrUpdateFavouriteComics(comicsDataList: List<ComicsData>): Boolean {
-        var result = false
-        FirebaseFirestore.getInstance()
-            .collection(COLLECTION_NAME)
-            .add(
-                UserComicsData(
-                    userId = FirebaseAuth.getInstance().currentUser?.uid ?: "-1",
-                    comicsList = comicsDataList
-                )
-            )
-            .addOnSuccessListener { result = true }
-            .addOnFailureListener { result = false }
-        return result
-    }
 
-    override fun deleteUsersFavouriteComics(): Boolean {
-        var result = false
+    override fun updateFavouriteComics(comicsDataList: List<ComicsData>): Flow<Boolean> =
+        callbackFlow {
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "-1"
+
+            FirebaseFirestore.getInstance()
+                .collection(COLLECTION_NAME)
+                .document(userId)
+                .update(COMICS_LIST_FIELD, comicsDataList)
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Successfully updated user's data")
+                    trySend(true)
+                }
+                .addOnFailureListener {
+                    Log.d("Firestore", "Failure during updating user's data")
+                    trySend(false)
+                }
+            awaitClose { }
+
+        }
+
+
+    override fun deleteUsersFavouriteComics(): Flow<Boolean> = callbackFlow {
         val toDelete = hashMapOf<String, Any>(
-            "comicsList" to FieldValue.delete()
+            COMICS_LIST_FIELD to FieldValue.delete()
         )
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "-1"
+
         FirebaseFirestore.getInstance()
             .collection(COLLECTION_NAME)
-            .document(FirebaseAuth.getInstance().currentUser?.uid ?: "-1")
+            .document(userId)
             .update(toDelete)
-            .addOnSuccessListener { result = true }
-            .addOnFailureListener { result = false }
-        return result
+            .addOnSuccessListener { trySend(true) }
+            .addOnFailureListener { trySend(false) }
+
+        awaitClose { }
+
     }
 }
