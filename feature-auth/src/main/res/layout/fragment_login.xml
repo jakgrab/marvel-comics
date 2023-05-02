@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="loginViewModel"
             type="com.example.auth.fragments.login.LoginViewModel" />
@@ -36,7 +35,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-            app:layout_constraintBottom_toTopOf="@+id/btSignIn"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -87,31 +86,38 @@
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btSignIn"
-            style="@style/LoginButtonStyle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:clickable="true"
-            android:text="@string/sign_in"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btCreateAccount"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout"
+            app:layout_constraintBottom_toBottomOf="@id/btGoogleSignIn">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btCreateAccount"
-            style="@style/RegisterButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="20dp"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="@string/sign_up"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btGoogleSignIn"
-             />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btSignIn"
+                style="@style/LoginButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:clickable="true"
+                android:text="@string/sign_in"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btCreateAccount"
+                style="@style/RegisterButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginBottom="20dp"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/sign_up"
+                />
+
+        </LinearLayout>
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/btGoogleSignIn"

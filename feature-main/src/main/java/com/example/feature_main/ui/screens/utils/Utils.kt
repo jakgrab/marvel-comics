@@ -1,6 +1,7 @@
 package com.example.feature_main.ui.screens.utils
 
 import android.content.Context
+import com.example.core.data.firestore_data.ComicsData
 import com.example.core.data.model.Result
 import com.example.feature_main.R
 
@@ -33,5 +34,28 @@ class Utils {
                 }
             }
         }
+
+        fun getImageUrl(comic: Result): String {
+            return if (comic.images.isNotEmpty()) {
+                val extension: String = comic.images[0].extension
+                val imagePath: String = comic.images[0].path
+                "$imagePath.$extension"
+            } else ""
+        }
+
+        fun resultToComicsData(comic: Result?): ComicsData = ComicsData(
+            title = comic?.title ?: "",
+            description = comic?.description ?: "",
+            authors = getAuthorsWithoutWrittenBy(
+                numAuthors = comic?.creators?.available ?: 0,
+                comic = comic
+            ),
+            url = comic?.urls?.get(0)?.url ?: "",
+            image = if (comic?.images?.isNotEmpty() == true) {
+                val extension: String = comic.images[0].extension
+                val imagePath: String = comic.images[0].path
+                "$imagePath.$extension"
+            } else ""
+        )
     }
 }

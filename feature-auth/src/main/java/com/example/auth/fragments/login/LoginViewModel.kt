@@ -2,6 +2,7 @@ package com.example.auth.fragments.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.repository.firebase_repository.FirebaseRepository
 import com.example.core.repository.firebase_repository.FirebaseRepositoryImpl
 import com.example.core.sign_in.SignInResult
 import com.google.firebase.auth.FirebaseAuth
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginRepository: FirebaseRepositoryImpl,
+    private val loginRepository: FirebaseRepository,
     private val auth: FirebaseAuth,
 ) : ViewModel() {
 

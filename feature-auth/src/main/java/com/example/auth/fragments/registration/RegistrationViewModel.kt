@@ -3,6 +3,7 @@ package com.example.auth.fragments.registration
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.repository.firebase_repository.FirebaseRepository
 import com.example.core.repository.firebase_repository.FirebaseRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    private val loginRepository: FirebaseRepositoryImpl,
+    private val loginRepository: FirebaseRepository,
     private val auth: FirebaseAuth
 ) : ViewModel() {
 

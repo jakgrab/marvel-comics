@@ -1,6 +1,7 @@
 package com.example.core.di
 
 import android.content.Context
+import com.example.core.repository.firebase_repository.FirebaseRepository
 import com.example.core.repository.firebase_repository.FirebaseRepositoryImpl
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -24,7 +25,7 @@ class AuthModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseRepository(): FirebaseRepositoryImpl = FirebaseRepositoryImpl()
+    fun provideFirebaseRepository(): FirebaseRepository = FirebaseRepositoryImpl()
 
     @Singleton
     @Provides

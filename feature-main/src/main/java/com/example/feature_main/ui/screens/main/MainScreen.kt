@@ -25,6 +25,7 @@ import com.example.feature_main.ui.navigation.ComicScreens
 import com.example.feature_main.ui.screens.components.ComicBooksList
 import com.example.feature_main.ui.screens.components.ComicBottomAppBar
 import com.example.feature_main.ui.screens.components.ComicTopAppBar
+import com.example.feature_main.ui.screens.utils.Destinations
 import com.example.feature_main.ui.theme.HeaderComicList
 
 
@@ -34,7 +35,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val comicsData = mainViewModel.comicsData.collectAsState()
 
-    val comicsList = remember(mainViewModel.comicsList.value) {
+    val comicsList = remember(mainViewModel.comicsList) {
         mainViewModel.comicsList
     }
 
@@ -47,8 +48,6 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
     } else if (comicsData.value.data != null) {
         isDataLoading = false
     }
-
-    val fromMainScreen = true
 
     val scaffoldState = rememberScaffoldState()
     val topAppBarState = rememberTopAppBarState()
@@ -84,7 +83,11 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
             ComicBottomAppBar(
                 onSearchIconClicked = {
                     navController.navigate(ComicScreens.SearchScreen.name)
-                }, homeSelected = true
+                },
+                onFavouriteIconClicked = {
+                    navController.navigate(ComicScreens.FavouriteScreen.name)
+                },
+                homeSelected = true
             )
         },
     ) {
@@ -114,12 +117,23 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                     },
                     onComicClicked = { comicIndex ->
                         navController.navigate(
-                            ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                            ComicScreens.DetailsScreen.name +
+                                    "/${Destinations.MAIN_SCREEN}/$comicIndex"
                         )
                     },
                     onFavouriteClicked = { index ->
-                        comicsList.value[index].apply {
-                            isFavourite = !isFavourite
+                        val comic = comicsList.value[index]
+
+                        when (comic.isFavourite) {
+                            true -> {
+                                comic.isFavourite = false
+                                mainViewModel.deleteFromFavourites(comic)
+                            }
+
+                            false -> {
+                                comic.isFavourite = true
+                                mainViewModel.addComicToFavourites(comic)
+                            }
                         }
                     }
                 )

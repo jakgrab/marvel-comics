@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.feature_main.ui.screens.details.DetailsScreen
+import com.example.feature_main.ui.screens.favourite.FavouriteScreen
 import com.example.feature_main.ui.screens.main.MainScreen
 import com.example.feature_main.ui.screens.main.MainViewModel
 import com.example.feature_main.ui.screens.search.SearchScreen
@@ -30,30 +31,32 @@ fun ComicNavigation() {
         val detailsRoute = ComicScreens.DetailsScreen.name
 
         composable(
-            route = "$detailsRoute/{fromMainScreen}/{comicIndex}",
+            route = "$detailsRoute/{previousScreen}/{comicIndex}",
             arguments = listOf(
-                navArgument(name = "fromMainScreen") {
-                    type = NavType.BoolType
-                },
                 navArgument(name = "comicIndex") {
+                    type = NavType.IntType
+                },
+                navArgument(name = "previousScreen") {
                     type = NavType.IntType
                 }
             )
         ) { navBack ->
             val index = navBack.arguments?.getInt("comicIndex")
-            val fromMainScreen = navBack.arguments?.getBoolean("fromMainScreen")
-
+            val previousScreen = navBack.arguments?.getInt("previousScreen")
             DetailsScreen(
                 mainViewModel = mainViewModel,
                 navController = navController,
                 comicIndex = index,
-                fromMainScreen = fromMainScreen
+                previousScreen = previousScreen
             )
-
         }
 
         composable(
             route = ComicScreens.SearchScreen.name
         ) { SearchScreen(mainViewModel, navController) }
+
+        composable(route = ComicScreens.FavouriteScreen.name) {
+            FavouriteScreen(mainViewModel = mainViewModel, navController = navController)
+        }
     }
 }
