@@ -83,7 +83,7 @@ fun ComicBottomAppBar(
             icon = {
                 Icon(
                     imageVector = Icons.Default.Star,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(25.dp),
                     contentDescription = "Favourites screen icon"
                 )
             },

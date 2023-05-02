@@ -1,5 +1,6 @@
 package com.example.feature_main.ui.screens.search
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -61,7 +62,6 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     }
 
     val isResultEmpty by remember(comicsDataByTitle.value.data) {
-//        mutableStateOf(comicsDataByTitle.value.data?.data?.results?.isEmpty())
         mutableStateOf(comicsListByTitle.value.isEmpty())
     }
 
@@ -198,11 +198,13 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
             Loading()
         }
 
-        if (isResultEmpty && !searchingForComic) {
+        if (inputValue.value.isNotEmpty() && isResultEmpty && !searchingForComic) {
+            Log.d("Search", "No results found")
             NoResultsFound()
         }
 
-        if ((inputValue.value.isEmpty()) && !searchingForComic) {
+        if (inputValue.value.isEmpty() && !searchingForComic) {
+            Log.d("Search", "Initial prompt")
             InitialPrompt()
         }
     }
@@ -344,6 +346,7 @@ private fun InitialPrompt() {
             Text(
                 text = stringResource(R.string.search_screen_initial_prompt),
                 color = androidx.compose.material.MaterialTheme.colors.onBackground,
+                textAlign = TextAlign.Center ,
                 style = MaterialTheme.typography.titleLarge
             )
         }
