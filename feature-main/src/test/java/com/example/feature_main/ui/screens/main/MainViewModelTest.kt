@@ -1,15 +1,15 @@
 package com.example.feature_main.ui.screens.main
-import com.example.core.model.Characters
-import com.example.core.model.Comics
-import com.example.core.model.Creator
-import com.example.core.model.Creators
-import com.example.core.model.Data
-import com.example.core.model.Events
-import com.example.core.model.Item
-import com.example.core.model.Result
-import com.example.core.model.Series
-import com.example.core.model.Stories
-import com.example.core.model.Thumbnail
+import com.example.core.data.model.Characters
+import com.example.core.data.model.Comics
+import com.example.core.data.model.Creator
+import com.example.core.data.model.Creators
+import com.example.core.data.model.Data
+import com.example.core.data.model.Events
+import com.example.core.data.model.Item
+import com.example.core.data.model.Result
+import com.example.core.data.model.Series
+import com.example.core.data.model.Stories
+import com.example.core.data.model.Thumbnail
 import com.example.core.repository.comic_repository.ComicRepository
 import com.example.core.wrapper.DataOrException
 import com.example.feature_main.util.MainCoroutineRule
@@ -144,6 +144,8 @@ class MainViewModelTest {
                 getComicsByTitle(any())
             } returns fakeDataOrException
         }
-        viewModel = MainViewModel(comicRepository = fakeRepository)
+
+//        val googleAuthUiClient = GoogleAuthUiClient()
+//        viewModel = MainViewModel(comicRepository = fakeRepository)
     }
 }

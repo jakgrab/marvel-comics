@@ -1,12 +1,19 @@
 package com.example.feature_main.ui.screens.components
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,8 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.example.core.data.model.Result
 import com.example.feature_main.R
-import com.example.core.model.Result
 import com.example.feature_main.ui.screens.utils.Utils
 import com.example.feature_main.ui.theme.ComicAuthorList
 import com.example.feature_main.ui.theme.ComicDescriptionList
@@ -31,7 +38,8 @@ fun ComicBooksList(
     modifier: Modifier = Modifier,
     isEndReached: Boolean = false,
     loadComics: () -> Unit = {},
-    onComicClicked: (Int) -> Unit
+    onComicClicked: (Int) -> Unit,
+    onFavouriteClicked: (Int) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -41,9 +49,19 @@ fun ComicBooksList(
             if (index == 0)
                 Spacer(modifier = Modifier.height(10.dp))
 
-            ComicItem(comic) {
-                onComicClicked(index)
+            var favourite by remember {
+                mutableStateOf(comic.isFavourite)
             }
+
+            ComicItem(
+                comic,
+                onComicClicked = { onComicClicked(index) },
+                onFavouriteClicked = {
+                    onFavouriteClicked(index)
+                    favourite = !favourite
+                },
+                isFavourite = favourite
+            )
 
             if (index >= comicsList.count() - 1 && !isEndReached) {
                 loadComics()
@@ -62,7 +80,12 @@ fun ComicBooksList(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
+fun ComicItem(
+    comic: Result,
+    onComicClicked: () -> Unit,
+    onFavouriteClicked: () -> Unit,
+    isFavourite: Boolean
+) {
     val context = LocalContext.current
 
     val imageUrl = if (comic.images.isNotEmpty()) {
@@ -76,6 +99,12 @@ fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
 
     val authors = Utils.getAuthors(context, numAuthors, comic)
 
+    val starColor by animateColorAsState(
+        targetValue = if (isFavourite) {
+            Color(0xFFF1C12F)
+        } else Color.DarkGray
+    )
+
     Card(
         onClick = {
             onComicClicked()
@@ -87,35 +116,68 @@ fun ComicItem(comic: Result, onComicClicked: () -> Unit) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colors.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp, pressedElevation = 25.dp)
+        elevation = CardDefaults
+            .cardElevation(
+                defaultElevation = 10.dp,
+                pressedElevation = 25.dp
+            )
     ) {
-        Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.Start
+        ) {
             ComicThumbnail(modifier = Modifier.weight(2f), imageUrl)
-            TitleAndDescription(modifier = Modifier.weight(3f), comic.title, authors, description)
+            ComicInfo(
+                modifier = Modifier.weight(3f),
+                title = comic.title,
+                authors = authors,
+                description = description,
+                starColor = starColor,
+                onFavouriteClicked = onFavouriteClicked
+            )
         }
     }
 }
 
-
 @Composable
-fun TitleAndDescription(
+fun ComicInfo(
     modifier: Modifier = Modifier,
     title: String,
     authors: String,
-    description: String
+    description: String,
+    starColor: Color,
+    onFavouriteClicked: () -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .padding(16.dp),
+            .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        Text(
-            text = title,
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.ComicTitle
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
+            Column(Modifier.weight(4f)) {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colors.onBackground,
+                    style = MaterialTheme.typography.ComicTitle
+                )
+            }
+            Column(Modifier.weight(1f)) {
+                FavouriteStar(
+                    modifier = Modifier.size(40.dp),
+                    starColor = starColor,
+                    onClick = onFavouriteClicked
+                )
+            }
+        }
+
         Text(
             text = authors,
             color = Color.LightGray,
@@ -164,4 +226,16 @@ fun ComicThumbnail(modifier: Modifier = Modifier, imageUrl: String) {
                 )
             )
     )
+}
+
+@Composable
+fun FavouriteStar(modifier: Modifier = Modifier, starColor: Color, onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(
+            modifier = modifier,
+            imageVector = Icons.Default.Star,
+            tint = starColor,
+            contentDescription = null
+        )
+    }
 }

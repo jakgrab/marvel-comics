@@ -1,4 +1,4 @@
-package com.example.core.model
+package com.example.core.data.model
 
 data class Item(
     val name: String,

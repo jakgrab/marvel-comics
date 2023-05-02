@@ -1,7 +1,7 @@
 package com.example.core.network
 
 import com.example.core.BuildConfig
-import com.example.core.model.Comics
+import com.example.core.data.model.Comics
 import retrofit2.http.GET
 import retrofit2.http.Query
 

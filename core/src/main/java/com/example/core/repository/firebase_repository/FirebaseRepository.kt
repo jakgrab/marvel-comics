@@ -1,5 +1,6 @@
 package com.example.core.repository.firebase_repository
 
+import com.example.core.data.firestore_data.ComicsData
 import com.google.firebase.auth.FirebaseAuth
 
 interface FirebaseRepository {
@@ -17,4 +18,10 @@ interface FirebaseRepository {
         onSuccess: () -> Unit,
         onError: (String) -> Unit,
     )
+
+    fun getUsersFavouriteComics(userId: String): Boolean
+
+    fun deleteUsersFavouriteComics(): Boolean
+
+    fun addOrUpdateFavouriteComics(comicsDataList: List<ComicsData>): Boolean
 }

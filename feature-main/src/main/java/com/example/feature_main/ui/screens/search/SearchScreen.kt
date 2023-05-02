@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.core.model.Result
+import com.example.core.data.model.Result
 import com.example.feature_main.R
 import com.example.feature_main.ui.navigation.ComicScreens
 import com.example.feature_main.ui.screens.components.ComicBooksList
@@ -41,7 +41,9 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val comicsDataByTitle = mainViewModel.comicsDataByTitle.collectAsState()
 
-    var comicsList: List<Result>? = null
+    val comicsListByTitle = remember(comicsDataByTitle) {
+        mainViewModel.comicsListByTitle
+    }
 
     val fromMainScreen = false
 
@@ -56,13 +58,13 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
     if (comicsDataByTitle.value.loading == true) {
         showFoundComics = false
     } else {
-        comicsList = comicsDataByTitle.value.data?.data?.results
         searchingForComic = false
         showFoundComics = true
     }
 
     val isResultEmpty by remember(comicsDataByTitle.value.data) {
-        mutableStateOf(comicsDataByTitle.value.data?.data?.results?.isEmpty())
+//        mutableStateOf(comicsDataByTitle.value.data?.data?.results?.isEmpty())
+        mutableStateOf(comicsListByTitle.value.isEmpty())
     }
 
     var comicBookTitle by remember {
@@ -102,11 +104,10 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     )
                 } else Modifier,
                 animateSearchFieldWidth = animateSearchFieldWidth,
-                //inputValue = inputValue,
                 inputValue = inputValue.value,
                 isInputEmpty = isInputEmpty,
                 hideKeyboard = hideKeyboard,
-                onValueChange = {searchInput ->
+                onValueChange = { searchInput ->
                     mainViewModel.setSearchInputValue(searchInput)
                 },
                 onSearch = { comicTitle ->
@@ -161,7 +162,7 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
         ) {
             AnimatedVisibility(
                 visible = showFoundComics &&
-                        !comicsList.isNullOrEmpty() &&
+                        comicsListByTitle.value.isNotEmpty() &&
                         inputValue.value.isNotEmpty() &&
                         !searchingForComic,
                 enter = slideInVertically(
@@ -174,32 +175,37 @@ fun SearchScreen(mainViewModel: MainViewModel, navController: NavController) {
                     }
                 )
             ) {
-                comicsList?.let {
-                    ComicBooksList(
-                        comicsList = it,
-                        modifier = Modifier.weight(1f)
-                    ) { comicIndex ->
+                ComicBooksList(
+                    comicsList = comicsListByTitle.value,
+                    modifier = Modifier.weight(1f),
+                    onComicClicked = { comicIndex ->
                         navController.navigate(
                             ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
                         )
+                    },
+                    onFavouriteClicked = { index ->
+                        comicsListByTitle.value[index].apply {
+                            isFavourite = !isFavourite
+                        }
                     }
-                }
+                )
             }
+        }
 
-            if (searchingForComic) {
-                Loading()
-            }
+        if (searchingForComic) {
+            Loading()
+        }
 
-            if (isResultEmpty == true && !searchingForComic) {
-                NoResultsFound()
-            }
+        if (isResultEmpty && !searchingForComic) {
+            NoResultsFound()
+        }
 
-            if ((isResultEmpty == null || inputValue.value.isEmpty()) && !searchingForComic) {
-                InitialPrompt()
-            }
+        if ((inputValue.value.isEmpty()) && !searchingForComic) {
+            InitialPrompt()
         }
     }
 }
+
 
 @Composable
 private fun MarvelSearchField(

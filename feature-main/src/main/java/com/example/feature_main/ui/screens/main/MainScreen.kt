@@ -34,7 +34,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
 
     val comicsData = mainViewModel.comicsData.collectAsState()
 
-    val comicsList = remember(comicsData) {
+    val comicsList = remember(mainViewModel.comicsList.value) {
         mainViewModel.comicsList
     }
 
@@ -56,6 +56,7 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
         state = topAppBarState
     )
     val activity = LocalContext.current as? Activity
+
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -105,15 +106,23 @@ fun MainScreen(mainViewModel: MainViewModel, navController: NavController) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ComicBooksList(comicsList = comicsList.value,
+                ComicBooksList(
+                    comicsList = comicsList.value,
                     isEndReached = mainViewModel.isEndReached,
                     loadComics = {
                         mainViewModel.getComicsWithPaging()
-                    }) { comicIndex ->
-                    navController.navigate(
-                        ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
-                    )
-                }
+                    },
+                    onComicClicked = { comicIndex ->
+                        navController.navigate(
+                            ComicScreens.DetailsScreen.name + "/$fromMainScreen/$comicIndex"
+                        )
+                    },
+                    onFavouriteClicked = { index ->
+                        comicsList.value[index].apply {
+                            isFavourite = !isFavourite
+                        }
+                    }
+                )
             }
         }
     }
